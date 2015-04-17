@@ -6,7 +6,64 @@ using System.Linq;
 
 namespace XPlaneGenConsole
 {
-    internal sealed class Writer<T> where T : Datapoint<T>
+    public class FlightDataWriter<T> : IDisposable where T : Datapoint<T>
+    {
+        private BinaryWriter writer;
+        private MemoryStream stream;
+        private readonly string outputPath;
+        private readonly int bytesPerDatapoint;
+
+        public FlightDataWriter(string path = "")
+
+        {
+            // TODO: randomly generate a unique file name            
+
+            outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Data", string.IsNullOrEmpty(path) ? "data.bin" : path);
+
+
+            stream = new MemoryStream();
+            writer = new BinaryWriter(stream);
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                using (var fs = new FileStream(outputPath, FileMode.OpenOrCreate))
+                {
+                    stream.WriteTo(fs);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unable to write to file. Error: {0}", ex.Message);
+            }
+        }
+
+        public void Write(Stream stream)
+        {
+            stream.CopyTo(this.stream);
+        }
+
+        public void Write(T datapoint)
+        {
+            if (datapoint.IsValid)
+            {
+                writer.Write(datapoint.GetBytes());
+            }
+        }
+
+        public void Write(IEnumerable<T> datapoints)
+        {
+            Console.WriteLine("Writing");
+            foreach(var dp in datapoints)
+            {
+                Write(dp);
+            }
+        }
+    }
+
+    /*internal sealed class Writer<T> where T : Datapoint<T>
     {
         private Writer() { }
 
@@ -64,7 +121,7 @@ namespace XPlaneGenConsole
                     orderby dp.Flight, dp.DateTime
                     select dp;
 
-            Write(flights, Datapoint<T>.LENGTH, new BinaryWriter(File.OpenWrite(path)));
+            Write(flights, Datapoint<T>.BYTES_COUNT, new BinaryWriter(File.OpenWrite(path)));
         }
 
         private static void Write(IEnumerable<T> datapoints, int size, BinaryWriter writer)
@@ -88,20 +145,18 @@ namespace XPlaneGenConsole
                         // write bytes
                         writer.Write(dp.GetBytes());
 
-                        // Make sure the correct amount of bytes was written 
-                        if (pos + size != writer.BaseStream.Position)
-                        {
-                            // If this occurs, then the GetBytes method should be inspected
-                            Debug.WriteLine("Incorrect Offset Warning");
-                            continue;
-                        }
+                        Debug.Assert(pos + size == writer.BaseStream.Position, "The incorrect amount of bytes was written");
                     }
                 }
                 catch (IOException ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
-    }
+    }*/
 }

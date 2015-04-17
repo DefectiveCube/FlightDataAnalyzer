@@ -12,8 +12,8 @@ namespace XPlaneGenConsole
     {
         static SystemDatapoint()
         {
-            SIZE = 38;
-            LENGTH = 105;
+            FIELDS_COUNT = 38;
+            BYTES_COUNT = 105;
             FlightTimes = new ConcurrentBag<DateTime>();
         }
 
@@ -66,7 +66,7 @@ namespace XPlaneGenConsole
 
         internal override byte[] GetBytes()
         {
-            Data = new byte[LENGTH];
+            Data = new byte[BYTES_COUNT];
 
             if (IsValid)
             {
@@ -158,7 +158,7 @@ namespace XPlaneGenConsole
             // Two conditions to verify a valid row
             // 1. There must a be specific amount of CSV fields per record (defined in each type of datapoint)
             // 2. If any fields past the 3rd column are NOT string.empty AND NOT "-" then that row will be processed
-            IsValid = values.Length == SIZE && IsEmptyRow(values, 2);
+            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
 
             // If the row is 4 fields long, then that is a new flight
             if (!IsValid)

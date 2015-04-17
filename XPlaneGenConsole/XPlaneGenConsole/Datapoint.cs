@@ -17,9 +17,17 @@ namespace XPlaneGenConsole
 
         protected static DateTime ParseDateTime(string value)
         {
-            return DateTime.ParseExact(value, "yyyyMMdd H:mm:ss", CultureInfo.InvariantCulture);
+            return ParseDateTime(value, "yyyyMMdd H:mm:ss");
         }
 
+        protected static DateTime ParseDateTime(string dateTime, string format)
+        {
+            return DateTime.ParseExact(dateTime, format, CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Tries to parse value as float, otherwise returns float.NaN
+        /// </summary>
         protected static float ParseFloat(string value)
         {
             float result;
@@ -27,13 +35,19 @@ namespace XPlaneGenConsole
             return float.TryParse(value, out result) ? result : float.NaN;
         }
 
+        /// <summary>
+        /// Tries to parse value as 32-bit integer, otherwise returns int.MinValue
+        /// </summary>
         protected static int ParseInt32(string value)
         {
             int result;
 
-            return int.TryParse(value, out result) ? result : int.MinValue;         
+            return int.TryParse(value, out result) ? result : int.MinValue;
         }
 
+        /// <summary>
+        /// Tries to parse value as 16-bit integer, otherwise returns short.MinValue
+        /// </summary>
         protected static short ParseInt16(string value)
         {
             short result;
@@ -41,6 +55,9 @@ namespace XPlaneGenConsole
             return short.TryParse(value, out result) ? result : short.MinValue;
         }
 
+        /// <summary>
+        /// Tries to parse value as unsigned 16-bit integer, otherwise returns ushort.MinValue
+        /// </summary>
         protected static ushort ParseUInt16(string value)
         {
             ushort result;
@@ -48,6 +65,9 @@ namespace XPlaneGenConsole
             return ushort.TryParse(value, out result) ? result : ushort.MinValue;
         }
 
+        /// <summary>
+        /// Tries to parse value as unsigned 8-bit integer, otherwise returns byte.MinValue
+        /// </summary>
         protected static byte ParseByte(string value)
         {
             byte result;
@@ -65,13 +85,23 @@ namespace XPlaneGenConsole
             FlightTimes = new ConcurrentBag<DateTime>();
         }
 
-        internal static int SIZE { get; set; }
+        /// <summary>
+        /// The amount of CSV fields being read
+        /// </summary>
+        /// <returns></returns>
+        internal static int FIELDS_COUNT { get; set; }
 
-        internal static int LENGTH { get; set; }
+        /// <summary>
+        /// The amount of bytes in the datapoint
+        /// </summary>
+        /// <returns></returns>
+        internal static int BYTES_COUNT { get; set; }
 
         protected static int KEY { get; set; }
 
         protected static Random R { get; set; }
+
+        internal static ConcurrentBag<DateTime> FlightTimes { get; set; }
 
         /// <summary>
         /// True, if datapoint has usable data
@@ -79,30 +109,21 @@ namespace XPlaneGenConsole
         public bool IsValid { get; set; }
 
         public abstract int Flight { get; set; }
+
         public abstract int Timestamp { get; set; }
+
         public abstract DateTime DateTime { get; set; }
 
-        internal static ConcurrentBag<DateTime> FlightTimes { get; set; }
-
         internal abstract byte[] Data { get; set; }
+
         internal abstract byte[] GetBytes();
+
         internal abstract void SetBytes();
 
-        public void Load(byte[] data)
-        {
-            Data = data;
-            SetBytes();
-        }
+        public virtual void Load(byte[] data) { }
 
-        public virtual void Load(string value)
-        {
-            string[] values = value.Split(new char[] { ',' });
-            Load(values);
-        }
+        public virtual void Load(string value) { }
 
-        public virtual void Load(string[] values)
-        {
-
-        }
+        public virtual void Load(string[] values) { }
     }
 }

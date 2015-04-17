@@ -11,8 +11,8 @@ namespace XPlaneGenConsole
     {
         static FlightDatapoint()
         {
-            SIZE = 30;
-            LENGTH = 87;
+            FIELDS_COUNT = 30;
+            BYTES_COUNT = 87;
         }
 
         public FlightDatapoint() { }
@@ -58,7 +58,7 @@ namespace XPlaneGenConsole
 
         internal override byte[] GetBytes()
         {
-            this.Data = new byte[LENGTH];
+            this.Data = new byte[BYTES_COUNT];
 
             if (this.IsValid)
             {
@@ -94,7 +94,7 @@ namespace XPlaneGenConsole
 
         internal override void SetBytes()
         {
-            if (Data.Length == LENGTH)
+            if (Data.Length == BYTES_COUNT)
             {
                 this.IsValid = true;
 
@@ -135,6 +135,12 @@ namespace XPlaneGenConsole
             }
         }
 
+        public override void Load(byte[] data)
+        {
+            Data = data;
+            SetBytes();
+        }
+
         public override void Load(string value)
         {
             string[] values = value.Split(new char[] { ',' });
@@ -147,7 +153,7 @@ namespace XPlaneGenConsole
             // Two conditions to verify a valid row
             // 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
             // 2. If any fields after the 3rd element are NOT string.empty AND NOT "-" then that row will be processed
-            IsValid = values.Length == SIZE && IsEmptyRow(values, 2);
+            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
 
             // If the row is 4 fields long, then that is a new flight
             if (!IsValid)
