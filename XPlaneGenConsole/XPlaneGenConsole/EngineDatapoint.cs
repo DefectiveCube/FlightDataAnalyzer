@@ -9,12 +9,20 @@ namespace XPlaneGenConsole
 {
     public class EngineDatapoint : Datapoint<EngineDatapoint>
     {
+		public new const int BYTES_COUNT = 122;
+		public new const int FIELDS_COUNT = 33;
+
+		private const int LONG_SIZE = 1 * sizeof(long);
+		private const int INT_SIZE = 2 * sizeof(int);
+		private const int FLT_SIZE = 21 * sizeof(float);
+		private const int SHT_SIZE = 3 * sizeof(short);
+		private const int USHT_SIZE = sizeof(ushort);
+		private const int BYTE_SIZE = 4 * sizeof(byte);
+
         static EngineDatapoint()
-        {
-            FIELDS_COUNT = 33;
-            BYTES_COUNT = 112;
-            FlightTimes = new ConcurrentBag<DateTime>();
-        }
+		{
+			FlightTimes = new ConcurrentBag<DateTime> ();
+		}
 
         public EngineDatapoint() { }
         public EngineDatapoint(byte[] data)
@@ -66,27 +74,27 @@ namespace XPlaneGenConsole
                 this.DateTime = new DateTime(BitConverter.ToInt64(Data, 0));
                 this.Flight = BitConverter.ToInt32(Data, 8);
                 this.Timestamp = BitConverter.ToInt32(Data, 12);
-                this.EngineManifold = BitConverter.ToSingle(Data, 16);
-                this.EngineTIT = BitConverter.ToSingle(Data, 20);
-                this.CHT_1 = BitConverter.ToSingle(Data, 24);
-                this.CHT_2 = BitConverter.ToSingle(Data, 28);
-                this.CHT_3 = BitConverter.ToSingle(Data, 32);
-                this.CHT_4 = BitConverter.ToSingle(Data, 36);
-                this.CHT_5 = BitConverter.ToSingle(Data, 40);
-                this.CHT_6 = BitConverter.ToSingle(Data, 44);
-                this.EGT_1 = BitConverter.ToSingle(Data, 48);
-                this.EGT_2 = BitConverter.ToSingle(Data, 52);
-                this.EGT_3 = BitConverter.ToSingle(Data, 56);
-                this.EGT_4 = BitConverter.ToSingle(Data, 60);
-                this.EGT_5 = BitConverter.ToSingle(Data, 64);
-                this.EGT_6 = BitConverter.ToSingle(Data, 68);
-                this.EnginePercentPower = BitConverter.ToSingle(Data, 72);
-                this.FuelFlow = BitConverter.ToSingle(Data, 76);
-                this.FuelUsed = BitConverter.ToSingle(Data, 80);
-                this.FuelRemaining = BitConverter.ToSingle(Data, 84);
-                this.FuelEconomy = BitConverter.ToSingle(Data, 88);
-                this.BusVoltage_1 = BitConverter.ToSingle(Data, 92);
-                this.BusVoltage_2 = BitConverter.ToSingle(Data, 96);
+                this.EngineManifold = Data.GetSingle(16);
+                this.EngineTIT = Data.GetSingle(20);
+				this.CHT_1 = Data.GetSingle (24); 	
+				this.CHT_2 = Data.GetSingle (28);
+				this.CHT_3 = Data.GetSingle (32);
+				this.CHT_4 = Data.GetSingle (36);
+				this.CHT_5 = Data.GetSingle (40);
+				this.CHT_6 = Data.GetSingle (44);
+				this.EGT_1 = Data.GetSingle (48);
+				this.EGT_2 = Data.GetSingle (52);
+				this.EGT_3 = Data.GetSingle (56);
+				this.EGT_4 = Data.GetSingle (60);
+				this.EGT_5 = Data.GetSingle (64);
+				this.EGT_6 = Data.GetSingle (68);
+                this.EnginePercentPower = Data.GetSingle(72);
+                this.FuelFlow = Data.GetSingle(76);
+                this.FuelUsed = Data.GetSingle(80);
+                this.FuelRemaining = Data.GetSingle(84);
+                this.FuelEconomy = Data.GetSingle(88);
+                this.BusVoltage_1 = Data.GetSingle(92);
+                this.BusVoltage_2 = Data.GetSingle(96);
                 this.OilTemperature = BitConverter.ToInt16(Data, 100);
                 this.OilPressure = BitConverter.ToInt16(Data, 102);
                 this.EngineRPM = BitConverter.ToInt16(Data, 104);
@@ -102,29 +110,55 @@ namespace XPlaneGenConsole
         {
             this.Data = new byte[BYTES_COUNT];
 
-            if (this.IsValid)
-            {
-                //8-bytes
-                long[] longBlock = new long[] { DateTime.Ticks };
+			if (this.IsValid) {
+				//8-bytes
+				long[] longBlock = new long[] { DateTime.Ticks };
 
-                //4-bytes
-                int[] intBlock = new int[] { Flight, Timestamp };
-                float[] fltBlock = new float[] { EngineManifold, EngineTIT, CHT_1, CHT_2, CHT_3, CHT_4, CHT_5, CHT_6, EGT_1, EGT_2, EGT_3, EGT_4, EGT_5, EGT_6, EnginePercentPower, FuelFlow, FuelUsed, FuelRemaining, FuelEconomy, BusVoltage_1, BusVoltage_2 };
+				//4-bytes
+				int[] intBlock = new int[] { Flight, Timestamp };
+				float[] fltBlock = new float[] {
+					EngineManifold,
+					EngineTIT,
+					CHT_1,
+					CHT_2,
+					CHT_3,
+					CHT_4,
+					CHT_5,
+					CHT_6,
+					EGT_1,
+					EGT_2,
+					EGT_3,
+					EGT_4,
+					EGT_5,
+					EGT_6,
+					EnginePercentPower,
+					FuelFlow,
+					FuelUsed,
+					FuelRemaining,
+					FuelEconomy,
+					BusVoltage_1,
+					BusVoltage_2
+				};
 
-                //2-bytes
-                short[] shtBlock = new short[] { OilTemperature, OilPressure, EngineRPM };
-                ushort[] ushtBlock = new ushort[] { BatteryCurrent };
+				//2-bytes
+				short[] shtBlock = new short[] { OilTemperature, OilPressure, EngineRPM };
+				ushort[] ushtBlock = new ushort[] { BatteryCurrent };
 
-                //1-byte         
-                byte[] byteBlock = new byte[] { AlternatorCurrent_1, AlternatorCurrent_2, DiscreteInputs, DiscreteOutputs };
+				//1-byte         
+				byte[] byteBlock = new byte[] {
+					AlternatorCurrent_1,
+					AlternatorCurrent_2,
+					DiscreteInputs,
+					DiscreteOutputs
+				};
 
-                Buffer.BlockCopy(longBlock, 0, this.Data, 0, 1 * sizeof(long));
-                Buffer.BlockCopy(intBlock, 0, this.Data, 8, 2 * sizeof(int));
-                Buffer.BlockCopy(fltBlock, 0, this.Data, 16, 21 * sizeof(float));
-                Buffer.BlockCopy(shtBlock, 0, this.Data, 100, 3 * sizeof(short));
-                Buffer.BlockCopy(ushtBlock, 0, this.Data, 106, sizeof(ushort));
-                Buffer.BlockCopy(byteBlock, 0, this.Data, 108, 4 * sizeof(byte));
-            }
+				Buffer.BlockCopy (longBlock, 0, this.Data, 0, LONG_SIZE);
+				Buffer.BlockCopy (intBlock, 0, this.Data, 8, INT_SIZE);
+				Buffer.BlockCopy (fltBlock, 0, this.Data, 16, FLT_SIZE);
+				Buffer.BlockCopy (shtBlock, 0, this.Data, 100, SHT_SIZE);
+				Buffer.BlockCopy (ushtBlock, 0, this.Data, 106, USHT_SIZE);
+				Buffer.BlockCopy (byteBlock, 0, this.Data, 108, BYTE_SIZE);
+			}
             else
             {
                 //Debug.WriteLine("Invalid Row");
@@ -170,31 +204,31 @@ namespace XPlaneGenConsole
             OilTemperature = ParseInt16(values[3]);
             OilPressure = ParseInt16(values[4]);
             EngineRPM = ParseInt16(values[5]);
-            EngineManifold = ParseFloat(values[6]);
-            EngineTIT = ParseFloat(values[7]);
-            EGT_1 = ParseFloat(values[8]);
-            EGT_2 = ParseFloat(values[9]);
-            EGT_3 = ParseFloat(values[10]);
-            EGT_4 = ParseFloat(values[11]);
-            EGT_5 = ParseFloat(values[12]);
-            EGT_6 = ParseFloat(values[13]);
-            CHT_1 = ParseFloat(values[14]);
-            CHT_2 = ParseFloat(values[15]);
-            CHT_3 = ParseFloat(values[16]);
-            CHT_4 = ParseFloat(values[17]);
-            CHT_5 = ParseFloat(values[18]);
-            CHT_6 = ParseFloat(values[19]);
-            EnginePercentPower = ParseFloat(values[20]);
-            FuelFlow = ParseFloat(values[21]);
-            FuelUsed = ParseFloat(values[22]);
-            FuelRemaining = ParseFloat(values[23]);
+            EngineManifold = values.AsFloat(6);
+            EngineTIT = values.AsFloat(7);
+			EGT_1 = values[8].AsFloat();
+            EGT_2 = values.AsFloat(9);
+            EGT_3 = values.AsFloat(10);
+            EGT_4 = values.AsFloat(11);
+            EGT_5 = values.AsFloat(12);
+            EGT_6 = values.AsFloat(13);
+            CHT_1 = values.AsFloat(14);
+            CHT_2 = values.AsFloat(15);
+            CHT_3 = values.AsFloat(16);
+            CHT_4 = values.AsFloat(17);
+            CHT_5 = values.AsFloat(18);
+            CHT_6 = values.AsFloat(19);
+            EnginePercentPower = values.AsFloat(20);
+            FuelFlow = values.AsFloat(21);
+            FuelUsed = values.AsFloat(22);
+            FuelRemaining = values.AsFloat(23);
             // don't used item 24
-            FuelEconomy = ParseFloat(values[25]);
+            FuelEconomy = values.AsFloat(25);
             AlternatorCurrent_1 = ParseByte(values[26]);
             AlternatorCurrent_2 = ParseByte(values[27]);
             BatteryCurrent = ParseUInt16(values[28]);
-            BusVoltage_1 = ParseFloat(values[29]);
-            BusVoltage_2 = ParseFloat(values[30]);
+            BusVoltage_1 = values.AsFloat(29);
+            BusVoltage_2 = values.AsFloat(30);
             DiscreteInputs = Hexadecimal<byte>.Parse(values[31]);
             DiscreteOutputs = Hexadecimal<byte>.Parse(values[32]);
         }
