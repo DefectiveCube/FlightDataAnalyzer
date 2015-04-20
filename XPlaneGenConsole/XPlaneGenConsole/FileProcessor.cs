@@ -81,6 +81,7 @@ namespace XPlaneGenConsole
             // Read values from CSV into a datapoint type that uses primitive types for better performance
 
             //IEnumerable<T> result = new Reader<T>(File.OpenRead(path)).ReadAll();
+			var result = new FlightCSVReader(File.OpenRead(path));
 
             //Console.WriteLine(result.Count());
         }
