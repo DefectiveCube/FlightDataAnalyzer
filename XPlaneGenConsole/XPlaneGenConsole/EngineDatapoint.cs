@@ -12,12 +12,12 @@ namespace XPlaneGenConsole
 		public new const int BYTES_COUNT = 122;
 		public new const int FIELDS_COUNT = 33;
 
-		private const int LONG_SIZE = 1 * sizeof(long);
-		private const int INT_SIZE = 2 * sizeof(int);
-		private const int FLT_SIZE = 21 * sizeof(float);
-		private const int SHT_SIZE = 3 * sizeof(short);
-		private const int USHT_SIZE = sizeof(ushort);
-		private const int BYTE_SIZE = 4 * sizeof(byte);
+		private const int LONG_BLOCK_SIZE = 1 * sizeof(long);
+		private const int INT_BLOCK_SIZE = 2 * sizeof(int);
+		private const int FLOAT_BLOCK_SIZE = 21 * sizeof(float);
+		private const int SHORT_BLOCK_SIZE = 3 * sizeof(short);
+		private const int USHORT_BLOCK_SIZE = sizeof(ushort);
+		private const int BYTE_BLOCK_SIZE = 4 * sizeof(byte);
 
         static EngineDatapoint()
 		{
@@ -32,35 +32,65 @@ namespace XPlaneGenConsole
         }
 
         public override int Timestamp { get; set; }
+
         public override DateTime DateTime { get; set; }
+
         public short OilTemperature { get; set; }
+
         public short OilPressure { get; set; }
+
         public short EngineRPM { get; set; }
+
         public float EngineManifold { get; set; }
+
         public float EngineTIT { get; set; }
+
         public float CHT_1 { get; set; }
+
         public float CHT_2 { get; set; }
+
         public float CHT_3 { get; set; }
+
         public float CHT_4 { get; set; }
+
         public float CHT_5 { get; set; }
+
         public float CHT_6 { get; set; }
+
         public float EGT_1 { get; set; }
+
         public float EGT_2 { get; set; }
+
         public float EGT_3 { get; set; }
+
         public float EGT_4 { get; set; }
+
         public float EGT_5 { get; set; }
+
         public float EGT_6 { get; set; }
+
         public float EnginePercentPower { get; set; }
+
         public float FuelFlow { get; set; }
+
         public float FuelUsed { get; set; }
+
         public float FuelRemaining { get; set; }
+
         public float FuelEconomy { get; set; }
+
         public byte AlternatorCurrent_1 { get; set; }
+
         public byte AlternatorCurrent_2 { get; set; }
+
         public ushort BatteryCurrent { get; set; }
+
         public float BusVoltage_1 { get; set; }
+
         public float BusVoltage_2 { get; set; }
+
         public byte DiscreteInputs { get; set; }
+
         public byte DiscreteOutputs { get; set; }
 
         internal override byte[] Data { get; set; }
@@ -76,18 +106,18 @@ namespace XPlaneGenConsole
                 this.Timestamp = BitConverter.ToInt32(Data, 12);
                 this.EngineManifold = Data.GetSingle(16);
                 this.EngineTIT = Data.GetSingle(20);
-				this.CHT_1 = Data.GetSingle (24); 	
-				this.CHT_2 = Data.GetSingle (28);
-				this.CHT_3 = Data.GetSingle (32);
-				this.CHT_4 = Data.GetSingle (36);
-				this.CHT_5 = Data.GetSingle (40);
-				this.CHT_6 = Data.GetSingle (44);
-				this.EGT_1 = Data.GetSingle (48);
-				this.EGT_2 = Data.GetSingle (52);
-				this.EGT_3 = Data.GetSingle (56);
-				this.EGT_4 = Data.GetSingle (60);
-				this.EGT_5 = Data.GetSingle (64);
-				this.EGT_6 = Data.GetSingle (68);
+                this.CHT_1 = Data.GetSingle(24);
+                this.CHT_2 = Data.GetSingle(28);
+                this.CHT_3 = Data.GetSingle(32);
+                this.CHT_4 = Data.GetSingle (36);
+                this.CHT_5 = Data.GetSingle (40);
+                this.CHT_6 = Data.GetSingle (44);
+                this.EGT_1 = Data.GetSingle (48);
+                this.EGT_2 = Data.GetSingle (52);
+                this.EGT_3 = Data.GetSingle (56);
+                this.EGT_4 = Data.GetSingle(60);
+                this.EGT_5 = Data.GetSingle(64);
+                this.EGT_6 = Data.GetSingle(68);
                 this.EnginePercentPower = Data.GetSingle(72);
                 this.FuelFlow = Data.GetSingle(76);
                 this.FuelUsed = Data.GetSingle(80);
@@ -152,12 +182,12 @@ namespace XPlaneGenConsole
 					DiscreteOutputs
 				};
 
-				Buffer.BlockCopy (longBlock, 0, this.Data, 0, LONG_SIZE);
-				Buffer.BlockCopy (intBlock, 0, this.Data, 8, INT_SIZE);
-				Buffer.BlockCopy (fltBlock, 0, this.Data, 16, FLT_SIZE);
-				Buffer.BlockCopy (shtBlock, 0, this.Data, 100, SHT_SIZE);
-				Buffer.BlockCopy (ushtBlock, 0, this.Data, 106, USHT_SIZE);
-				Buffer.BlockCopy (byteBlock, 0, this.Data, 108, BYTE_SIZE);
+				Buffer.BlockCopy (longBlock, 0, this.Data, 0, LONG_BLOCK_SIZE);
+				Buffer.BlockCopy (intBlock, 0, this.Data, 8, INT_BLOCK_SIZE);
+				Buffer.BlockCopy (fltBlock, 0, this.Data, 16, FLOAT_BLOCK_SIZE);
+				Buffer.BlockCopy (shtBlock, 0, this.Data, 100, SHORT_BLOCK_SIZE);
+				Buffer.BlockCopy (ushtBlock, 0, this.Data, 106, USHORT_BLOCK_SIZE);
+				Buffer.BlockCopy (byteBlock, 0, this.Data, 108, BYTE_BLOCK_SIZE);
 			}
             else
             {

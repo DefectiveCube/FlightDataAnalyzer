@@ -25,27 +25,37 @@ namespace XPlaneQuery
                 return;
             }
 
-            var stream = File.OpenRead(file);
+            //var stream = File.OpenRead(file);
 
-            Console.WriteLine("File Size: {0} bytes", stream.Length);
+            //Console.WriteLine("File Size: {0} bytes", stream.Length);
 
-            Console.WriteLine("Reading");
+            //Console.WriteLine("Reading");
 
             //var reader = new FlightDataReader<FlightDatapoint>(File.OpenRead(file));
-            var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(file));
+            //var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(file));
 
-            var query = new QueryExpression<FlightDatapoint>();
+            //var query = new QueryExpression<FlightDatapoint>();
 
-            Console.WriteLine("Processing Data");
+            //Console.WriteLine("Processing Data");
 
-            query.Data = reader.ReadToEnd().ToArray();
+            //query.Data = reader.ReadToEnd().ToArray();
 
             Console.WriteLine("Calculating");
 
-            var results = query.Results().ToArray();
+            //var results = query.Results().ToArray();
 
-            Console.WriteLine(results.Count());
-            Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
+            //Console.WriteLine(results.Count());
+            //Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
+
+            var f = new Flight<EngineDatapoint, FlightDatapoint, SystemDatapoint>();
+            var importDir = @"J:\Kirk\Documents\FlightDataAnalyzer\import";
+
+            f.Import(
+                Path.Combine(importDir, "P_ENGINE.csv"),
+                Path.Combine(importDir, "P_FLIGHT.csv"),
+                Path.Combine(importDir, "P_SYSTEM.csv")
+                );
+            //f.Load()
             Console.ReadLine();
         }
     }

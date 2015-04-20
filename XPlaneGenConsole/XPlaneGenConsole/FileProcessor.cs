@@ -62,15 +62,8 @@ namespace XPlaneGenConsole
                 bool hasOutputFile = (from f in dirInfo.EnumerateFiles(prefix + ".output.bin", SearchOption.TopDirectoryOnly)
                                       select f).Count() > 0;
 
-                if (hasIndexFile)
-                {
-                    Debug.WriteLine("Found index file");
-                }
-
-                if (hasOutputFile)
-                {
-                    Debug.WriteLine("Found output file");
-                }
+                Debug.WriteLineIf(hasIndexFile, "Found index file");
+                Debug.WriteLineIf(hasOutputFile, "Found output file");
 
                 if (hasIndexFile || hasOutputFile)
                 {
@@ -81,7 +74,7 @@ namespace XPlaneGenConsole
             // Read values from CSV into a datapoint type that uses primitive types for better performance
 
             //IEnumerable<T> result = new Reader<T>(File.OpenRead(path)).ReadAll();
-			var result = new FlightCSVReader(File.OpenRead(path));
+			var result = new FlightCSVReader<T>(File.OpenRead(path));
 
             //Console.WriteLine(result.Count());
         }

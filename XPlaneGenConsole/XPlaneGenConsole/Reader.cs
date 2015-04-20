@@ -105,7 +105,7 @@ namespace XPlaneGenConsole
 
         public new T ReadLine()
         {
-            if (reader == null)
+            if (reader == null || reader.EndOfStream)
             {
                 throw new EndOfStreamException();
             }
@@ -113,11 +113,6 @@ namespace XPlaneGenConsole
             T datapoint = Activator.CreateInstance<T>();
 
             datapoint.Load(reader.ReadLine());
-
-            if (datapoint.IsValid)
-            {
-                datapoint.GetBytes();
-            }
 
             return datapoint;
         }

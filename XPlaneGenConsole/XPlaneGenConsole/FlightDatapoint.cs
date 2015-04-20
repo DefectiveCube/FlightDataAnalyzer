@@ -9,47 +9,81 @@ namespace XPlaneGenConsole
 {
     public class FlightDatapoint : Datapoint<FlightDatapoint>
     {
-        static FlightDatapoint()
-        {
-            FIELDS_COUNT = 30;
-            BYTES_COUNT = 87;
-        }
+        public new const int FIELDS_COUNT = 30;
+        public new const int BYTES_COUNT = 87;
+
+        public const int LONG_BLOCK_SIZE = 1 * sizeof(long);
+        public const int INT_BLOCK_SIZE = 2 * sizeof(int);
+        public const int FLOAT_BLOCK_SIZE = 14 * sizeof(float);
+        public const int SHORT_BLOCK_SIZE = 2 * sizeof(short);
+        public const int BOOL_BLOCK_SIZE = 1 * sizeof(bool);
+        public const int BYTE_BLOCK_SIZE = 10 * sizeof(byte);
 
         public FlightDatapoint() { }
+
         public FlightDatapoint(byte[] data)
         {
             Data = data;
             SetBytes();
         }
 
+
         public override int Timestamp { get; set; }
+
         public override DateTime DateTime { get; set; }
+
         public float NormalAcceleration { get; set; }
+
         public float LongitudinalAcceleration { get; set; }
+
         public float LateralAcceleration { get; set; }
+
         public bool ADAHRUsed { get; set; }
+
         public byte AHRSSStatus { get; set; }
+
         public float Heading { get; set; }
+
         public float Pitch { get; set; }
+
         public float Roll { get; set; }
+
         public float FlightDirectorPitch { get; set; }
+
         public float FlightDirectorRoll { get; set; }
+
         public float HeadingRate { get; set; }
+
         public short PressureAltitude { get; set; }
+
         public byte IndicatedAirspeed { get; set; }
+
         public byte TrueAirspeed { get; set; }
+
         public short VerticalSpeed { get; set; }
+
         public float GPSLatitude { get; set; }
+
         public float GPSLongitude { get; set; }
+
         public float BodyYawRate { get; set; }
+
         public float BodyPitchRate { get; set; }
+
         public float BodyRollRate { get; set; }
+
         public byte MagStatus { get; set; }
+
         public byte IRUStatus { get; set; }
+
         public byte MPUStatus { get; set; }
+
         public byte ADCStatus { get; set; }
+
         public byte AHRSSeq { get; set; }
+
         public byte ADCSeq { get; set; }
+
         public byte AHRSStartupMode { get; set; }
 
         internal override byte[] Data { get; set; }
@@ -77,12 +111,12 @@ namespace XPlaneGenConsole
                 bool[] boolBlock = new bool[] { ADAHRUsed };
                 byte[] byteBlock = new byte[] { AHRSSStatus, IndicatedAirspeed, TrueAirspeed, MagStatus, IRUStatus, MPUStatus, ADCStatus, AHRSSeq, ADCSeq, AHRSStartupMode };
 
-                Buffer.BlockCopy(longBlock, 0, Data, 0, 1 * sizeof(long));
-                Buffer.BlockCopy(intBlock, 0, Data, 8, 2 * sizeof(int));
-                Buffer.BlockCopy(fltBlock, 0, Data, 16, 14 * sizeof(float));
-                Buffer.BlockCopy(shtBlock, 0, Data, 72, 2 * sizeof(short));
-                Buffer.BlockCopy(boolBlock, 0, Data, 76, 1 * sizeof(bool));
-                Buffer.BlockCopy(byteBlock, 0, Data, 77, 10 * sizeof(byte));
+                Buffer.BlockCopy(longBlock, 0, Data, 0, LONG_BLOCK_SIZE);
+                Buffer.BlockCopy(intBlock, 0, Data, 8, INT_BLOCK_SIZE);
+                Buffer.BlockCopy(fltBlock, 0, Data, 16, FLOAT_BLOCK_SIZE);
+                Buffer.BlockCopy(shtBlock, 0, Data, 72, SHORT_BLOCK_SIZE);
+                Buffer.BlockCopy(boolBlock, 0, Data, 76, BOOL_BLOCK_SIZE);
+                Buffer.BlockCopy(byteBlock, 0, Data, 77, BYTE_BLOCK_SIZE);
             }
             else
             {
@@ -90,6 +124,39 @@ namespace XPlaneGenConsole
             }
 
             return Data;
+        }
+
+        [Flags]
+        public enum FieldsEnum
+        {
+            None,
+            Flight,
+            Timestamp,
+            NormalAcceleration,
+            LongitudinalAcceleration,
+            Heading,
+            Pitch,
+            Roll,
+            FlightDirectorPitch,
+            FlightDirectorRoll,
+            HeadingRate,
+            GPSLatitude,
+            GPSLongitude,
+            BodyYawRate,
+            BodyPitchRate,
+            BodyRollRate,
+            PressureAltitude,
+            VerticalSpeed,
+            AHRSSStatus,
+            IndicatedAirspeed,
+            TrueAirspeed,
+            MagStatus,
+            IRUStatus,
+            MPUStatus,
+            ADCStatus,
+            AHRSSeq,
+            ADCSeq,
+            AHRSStartupMode
         }
 
         internal override void SetBytes()
@@ -135,12 +202,20 @@ namespace XPlaneGenConsole
             }
         }
 
+        /// <summary>
+        /// Uses a byte array to set the backing byte array
+        /// </summary>
+        /// <param name="data"></param>
         public override void Load(byte[] data)
         {
             Data = data;
             SetBytes();
         }
 
+        /// <summary>
+        /// Uses a string to load values
+        /// </summary>
+        /// <param name="value"></param>
         public override void Load(string value)
         {
             string[] values = value.Split(new char[] { ',' });
@@ -153,6 +228,8 @@ namespace XPlaneGenConsole
             // Two conditions to verify a valid row
             // 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
             // 2. If any fields after the 3rd element are NOT string.empty AND NOT "-" then that row will be processed
+
+            //IsValid = values.Length == FIELDS_COUNT && values.All(v => !string.IsNullOrEmpty(v) && v.Equals("-");
             IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
 
             // If the row is 4 fields long, then that is a new flight
@@ -163,9 +240,8 @@ namespace XPlaneGenConsole
                     Flight = KEY = R.Next();
                     FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
                 }
-
-                // There is no further data to add
-                return;
+                
+                return; // no further information to add
             }
 
             // Assign value to flight
@@ -199,6 +275,9 @@ namespace XPlaneGenConsole
             AHRSSeq = Hexadecimal<byte>.Parse(values[26]);
             ADCSeq = ParseByte(values[27]);
             AHRSStartupMode = ParseByte(values[28]);
+
+
+            GetBytes();
         }
     }
 }

@@ -89,19 +89,22 @@ namespace XPlaneGenConsole
         /// The amount of CSV fields being read
         /// </summary>
         /// <returns></returns>
-        internal static int FIELDS_COUNT { get; set; }
+        //internal static int FIELDS_COUNT { get; set; }
 
         /// <summary>
         /// The amount of bytes in the datapoint
         /// </summary>
         /// <returns></returns>
-        internal static int BYTES_COUNT { get; set; }
+        //internal static int BYTES_COUNT { get; set; }
 
         protected static int KEY { get; set; }
 
         protected static Random R { get; set; }
 
         internal static ConcurrentBag<DateTime> FlightTimes { get; set; }
+
+        public const int BYTES_COUNT = 0;
+        public const int FIELDS_COUNT = 0;
 
         /// <summary>
         /// True, if datapoint has usable data

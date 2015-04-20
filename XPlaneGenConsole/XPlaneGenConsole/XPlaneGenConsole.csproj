@@ -45,7 +45,9 @@
     <Compile Include="Datapoint.cs" />
     <Compile Include="DatapointCollection.cs" />
     <Compile Include="EngineDatapoint.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FileProcessor.cs" />
+    <Compile Include="Flight.cs" />
     <Compile Include="FlightCSVWriter.cs" />
     <Compile Include="FlightDatapoint.cs" />
     <Compile Include="FlightFields.cs" />
@@ -58,6 +60,8 @@
     <Compile Include="SystemDatapoint.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="XPlaneDatapoint.cs" />
+    <Compile Include="XPlaneFile.cs" />
+    <Compile Include="XPlaneFileMapping.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
