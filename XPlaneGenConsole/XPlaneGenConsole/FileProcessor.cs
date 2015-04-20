@@ -80,9 +80,9 @@ namespace XPlaneGenConsole
 
             // Read values from CSV into a datapoint type that uses primitive types for better performance
 
-            IEnumerable<T> result = new Reader<T>(File.OpenRead(path)).ReadAll();
+            //IEnumerable<T> result = new Reader<T>(File.OpenRead(path)).ReadAll();
 
-            Console.WriteLine(result.Count());
+            //Console.WriteLine(result.Count());
         }
 
         public void Add(string path)

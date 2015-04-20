@@ -13,8 +13,10 @@ namespace XPlaneQuery
     {
         public static void Main(string[] args)
         {
-            var name = "test.bin";
-            var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Data", name);
+            var start = DateTime.Now;
+
+            var name = "P_FLIGHT.CSV";//"test.bin";
+            var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import", name);
 
             if (!File.Exists(file))
             {
@@ -29,15 +31,8 @@ namespace XPlaneQuery
 
             Console.WriteLine("Reading");
 
-            var reader = new FlightDataReader<FlightDatapoint>(File.OpenRead(file));
-
-
-            /*using (var writer = new FlightDataWriter<FlightDatapoint>("test.bin"))
-            {
-                writer.Write(reader.ReadToEnd().ToArray());
-            }
-
-            Console.WriteLine("Done");*/
+            //var reader = new FlightDataReader<FlightDatapoint>(File.OpenRead(file));
+            var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(file));
 
             var query = new QueryExpression<FlightDatapoint>();
 
@@ -50,6 +45,7 @@ namespace XPlaneQuery
             var results = query.Results().ToArray();
 
             Console.WriteLine(results.Count());
+            Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
             Console.ReadLine();
         }
     }
