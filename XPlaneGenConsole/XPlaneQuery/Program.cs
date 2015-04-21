@@ -13,17 +13,24 @@ namespace XPlaneQuery
     {
         public static void Main(string[] args)
         {
-            var start = DateTime.Now;
+			var name = "P_FLIGHT.CSV";
 
-            var name = "P_FLIGHT.CSV";//"test.bin";
-            var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import", name);
+			var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import", name);
 
-            if (!File.Exists(file))
+			var reader = new FlightCSVReader<FlightDatapoint> (File.OpenRead (file));
+
+			using (var writer = new FlightDataWriter<FlightDatapoint> ("Test.BIN")) {
+				writer.Write (reader.ReadToEnd ().ToArray ());
+			}
+				//var start = DateTime.Now;
+
+
+            /*if (!File.Exists(file))
             {
                 Console.WriteLine("File not found");
                 Console.ReadLine();
                 return;
-            }
+            }*/
 
             //var stream = File.OpenRead(file);
 
@@ -40,7 +47,7 @@ namespace XPlaneQuery
 
             //query.Data = reader.ReadToEnd().ToArray();
 
-            Console.WriteLine("Calculating");
+            //Console.WriteLine("Calculating");
 
             //var results = query.Results().ToArray();
 
@@ -48,14 +55,19 @@ namespace XPlaneQuery
             //Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
 
             var f = new Flight<EngineDatapoint, FlightDatapoint, SystemDatapoint>();
-            var importDir = @"J:\Kirk\Documents\FlightDataAnalyzer\import";
+			var importDir = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "import");
 
-            f.Import(
+            /*f.Import(
                 Path.Combine(importDir, "P_ENGINE.csv"),
                 Path.Combine(importDir, "P_FLIGHT.csv"),
                 Path.Combine(importDir, "P_SYSTEM.csv")
-                );
+                );*/
+
             //f.Load()
+
+			Func<FlightDatapoint,TimeSpan> duration = a => a.DateTime.Subtract (DateTime.Now);
+
+			Console.WriteLine("Done");
             Console.ReadLine();
         }
     }

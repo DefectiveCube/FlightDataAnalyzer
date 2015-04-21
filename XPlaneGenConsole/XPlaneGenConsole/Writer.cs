@@ -14,12 +14,10 @@ namespace XPlaneGenConsole
         private readonly int bytesPerDatapoint;
 
         public FlightDataWriter(string path = "")
-
         {
-            // TODO: randomly generate a unique file name            
+            // TODO: randomly generate a unique file name when no path is provided  
 
             outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Data", string.IsNullOrEmpty(path) ? "data.bin" : path);
-
 
             stream = new MemoryStream();
             writer = new BinaryWriter(stream);
@@ -27,22 +25,18 @@ namespace XPlaneGenConsole
 
         public void Dispose()
         {
-            try
-            {
-                using (var fs = new FileStream(outputPath, FileMode.OpenOrCreate))
-                {
-                    stream.WriteTo(fs);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Unable to write to file. Error: {0}", ex.Message);
-            }
+			using (var fs = new FileStream (outputPath, FileMode.OpenOrCreate)) {
+				try {
+					stream.WriteTo (fs);
+				} catch (Exception ex) {
+					Console.WriteLine ("Unable to write to file. Error: {0}", ex.Message);
+				}
+			}
         }
-
+			
         public void Write(Stream stream)
         {
-            stream.CopyTo(this.stream);
+			stream.CopyTo (this.stream);
         }
 
         public void Write(T datapoint)
@@ -55,7 +49,28 @@ namespace XPlaneGenConsole
 
         public void Write(IEnumerable<T> datapoints)
         {
-            Console.WriteLine("Writing");
+			var q = from d in datapoints
+			        group d by d.Flight into g
+			        select new
+					{
+						Flight = g.Key,
+						Start = (from t2 in g select t2.DateTime).Min (),
+						End = (from t3 in g select t3.DateTime).Max (),
+						Count = (from t4 in g select t4).Count ()					
+					};
+
+			//Console.WriteLine (q.Count ());
+
+			writer.Write (q.Count ()); // count of unique records
+
+			foreach(var item in q){
+				//Console.WriteLine ("{0} {1} {2} {3}", item.Flight, item.Count, item.Start, item.End);
+				writer.Write (item.Flight);
+				writer.Write (item.Count);			
+				writer.Write (item.Start.ToBinary ());
+				writer.Write (item.End.ToBinary ());
+			}
+
             foreach(var dp in datapoints)
             {
                 Write(dp);

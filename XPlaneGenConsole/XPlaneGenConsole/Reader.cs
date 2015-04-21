@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,8 +36,7 @@ namespace XPlaneGenConsole
 
             if (t == typeof(FlightDatapoint))
             {
-                // TODO: fix this
-                bytesToRead = 87;
+                bytesToRead = FlightDatapoint.BYTES_COUNT;
             }
             else if (t == typeof(EngineDatapoint))
             {
@@ -71,9 +71,18 @@ namespace XPlaneGenConsole
 
         public uint ReadUInt() { return reader.ReadUInt32(); }
 
+		public void ReadHeader(){
+			var uniqueRecords = reader.ReadInt32 ();
+
+
+		}
+
         public IEnumerable<T> ReadToEnd()
         {
-            var count = stream.Length / bytesToRead;
+			var count = reader.ReadInt32 ();
+
+			reader.BaseStream.Seek (count * 3 * sizeof(long), SeekOrigin.Current);
+            //var count = stream.Length / bytesToRead;
 
             Console.WriteLine(count);
 
@@ -92,15 +101,21 @@ namespace XPlaneGenConsole
     /// For reading CSV files
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class FlightCSVReader<T> : TextReader where T : Datapoint<T>
+    public class FlightCSVReader<T> : TextReader 
+		where T : Datapoint<T>
     {
+		private MemoryStream stream;
         private StreamReader reader;
+		private BinaryWriter writer;
 
         public FlightCSVReader(Stream stream)
         {
+			this.stream = new MemoryStream ();
+			writer = new BinaryWriter (this.stream);
+
             reader = new StreamReader(stream);
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
-            reader.ReadLine();
+            reader.ReadLine(); // skip first line
         }
 
         public new T ReadLine()
@@ -118,24 +133,26 @@ namespace XPlaneGenConsole
         }
 
         public new IEnumerable<T> ReadToEnd()
-        {
-            using (reader)
-            {
-                while (!reader.EndOfStream)
-                {
-                    T datapoint = Activator.CreateInstance<T>();
+		{
+			DateTime start = DateTime.Now;
 
-                    datapoint.Load(reader.ReadLine());
+			//var Create = Expression.Lambda<Func<T>> (Expression.New (typeof(T))).Compile ();
 
-                    if (datapoint.IsValid)
-                    {
-                        datapoint.GetBytes();
-                        yield return datapoint;
-                    }
-                }
-            }
+			using (reader) {
+				while (!reader.EndOfStream) {
+					T datapoint = Activator.CreateInstance<T> ();
 
-            yield break;
-        }
+					//datapoint.Load (reader.ReadLine ());
+
+					if (datapoint.IsValid) {
+						datapoint.GetBytes ();
+						yield return datapoint;
+					}
+				}
+			}
+
+			Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);
+			yield break;
+		}
     }
 }

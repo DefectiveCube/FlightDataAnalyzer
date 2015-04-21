@@ -12,21 +12,16 @@ namespace XPlaneGenConsole
         public new const int FIELDS_COUNT = 30;
         public new const int BYTES_COUNT = 87;
 
-        public const int LONG_BLOCK_SIZE = 1 * sizeof(long);
-        public const int INT_BLOCK_SIZE = 2 * sizeof(int);
-        public const int FLOAT_BLOCK_SIZE = 14 * sizeof(float);
-        public const int SHORT_BLOCK_SIZE = 2 * sizeof(short);
-        public const int BOOL_BLOCK_SIZE = 1 * sizeof(bool);
-        public const int BYTE_BLOCK_SIZE = 10 * sizeof(byte);
+        public FlightDatapoint() 
+		{ 
+			Data = new byte[BYTES_COUNT];
+		}
 
-        public FlightDatapoint() { }
-
-        public FlightDatapoint(byte[] data)
+		public FlightDatapoint(byte[] data) : base()
         {
             Data = data;
             SetBytes();
         }
-
 
         public override int Timestamp { get; set; }
 
@@ -92,35 +87,17 @@ namespace XPlaneGenConsole
 
         internal override byte[] GetBytes()
         {
-            this.Data = new byte[BYTES_COUNT];
-
-            if (this.IsValid)
+            if (IsValid)
             {
-                //8-bytes
-                long[] longBlock = new long[] { DateTime.Ticks };
+				// Irrelevant Note: I hereby claim my proficiency in being a lazy programmer with the following use of an extension method + params + generics
 
-                // 4-bytes
-                int[] intBlock = new int[] { Flight, Timestamp };
-                float[] fltBlock = new float[] { NormalAcceleration, LongitudinalAcceleration, LateralAcceleration, Heading, Pitch, Roll, FlightDirectorPitch, FlightDirectorRoll,
-                    HeadingRate, GPSLatitude, GPSLongitude, BodyYawRate, BodyPitchRate, BodyRollRate };
-
-                // 2-bytes
-                short[] shtBlock = new short[] { PressureAltitude, VerticalSpeed };
-
-                // 1-bytes
-                bool[] boolBlock = new bool[] { ADAHRUsed };
-                byte[] byteBlock = new byte[] { AHRSSStatus, IndicatedAirspeed, TrueAirspeed, MagStatus, IRUStatus, MPUStatus, ADCStatus, AHRSSeq, ADCSeq, AHRSStartupMode };
-
-                Buffer.BlockCopy(longBlock, 0, Data, 0, LONG_BLOCK_SIZE);
-                Buffer.BlockCopy(intBlock, 0, Data, 8, INT_BLOCK_SIZE);
-                Buffer.BlockCopy(fltBlock, 0, Data, 16, FLOAT_BLOCK_SIZE);
-                Buffer.BlockCopy(shtBlock, 0, Data, 72, SHORT_BLOCK_SIZE);
-                Buffer.BlockCopy(boolBlock, 0, Data, 76, BOOL_BLOCK_SIZE);
-                Buffer.BlockCopy(byteBlock, 0, Data, 77, BYTE_BLOCK_SIZE);
-            }
-            else
-            {
-                return new byte[] { };
+				Data.Copy (0, sizeof(long), DateTime.Ticks);
+				Data.Copy (8, sizeof(int), Flight, Timestamp);
+				Data.Copy (16, sizeof(float), NormalAcceleration, LongitudinalAcceleration, LateralAcceleration, Heading, Pitch, Roll, FlightDirectorPitch, FlightDirectorRoll,
+					HeadingRate, GPSLatitude, GPSLongitude, BodyYawRate, BodyPitchRate, BodyRollRate);
+				Data.Copy (72, sizeof(short), PressureAltitude, VerticalSpeed);
+				Data.Copy (76, sizeof(bool), ADAHRUsed);
+				Data.Copy (77, sizeof(byte), AHRSSStatus, IndicatedAirspeed, TrueAirspeed, MagStatus, IRUStatus, MPUStatus, ADCStatus, AHRSSeq, ADCSeq, AHRSStartupMode);
             }
 
             return Data;
@@ -160,47 +137,44 @@ namespace XPlaneGenConsole
         }
 
         internal override void SetBytes()
-        {
-            if (Data.Length == BYTES_COUNT)
-            {
-                this.IsValid = true;
+		{
+			IsValid = Data.Length == BYTES_COUNT;
 
-                this.DateTime = new DateTime(BitConverter.ToInt64(Data, 0));
-                this.Flight = BitConverter.ToInt32(Data, 8);
-                this.Timestamp = BitConverter.ToInt32(Data, 12);
-                this.NormalAcceleration = BitConverter.ToSingle(Data, 16);
-                this.LongitudinalAcceleration = BitConverter.ToSingle(Data, 20);
-                this.LateralAcceleration = BitConverter.ToSingle(Data, 24);
-                this.Heading = BitConverter.ToSingle(Data, 28);
-                this.Pitch = BitConverter.ToSingle(Data, 32);
-                this.Roll = BitConverter.ToSingle(Data, 36);
-                this.FlightDirectorPitch = BitConverter.ToSingle(Data, 40);
-                this.FlightDirectorRoll = BitConverter.ToSingle(Data, 44);
-                this.HeadingRate = BitConverter.ToSingle(Data, 48);
-                this.GPSLatitude = BitConverter.ToSingle(Data, 52);
-                this.GPSLongitude = BitConverter.ToSingle(Data, 56);
-                this.BodyYawRate = BitConverter.ToSingle(Data, 60);
-                this.BodyPitchRate = BitConverter.ToSingle(Data, 64);
-                this.BodyRollRate = BitConverter.ToSingle(Data, 68);
-                this.PressureAltitude = BitConverter.ToInt16(Data, 72);
-                this.VerticalSpeed = BitConverter.ToInt16(Data, 74);
-                this.ADAHRUsed = BitConverter.ToBoolean(Data, 76);
-                this.AHRSSStatus = Data[77];
-                this.IndicatedAirspeed = Data[78];
-                this.TrueAirspeed = Data[79];
-                this.MagStatus = Data[80];
-                this.IRUStatus = Data[81];
-                this.MPUStatus = Data[82];
-                this.ADCStatus = Data[83];
-                this.AHRSSeq = Data[84];
-                this.ADCSeq = Data[85];
-                this.AHRSStartupMode = Data[86];
-            }
-            else
-            {
-                this.IsValid = false;
-            }
-        }
+			if (!IsValid) {
+				return;
+			}
+
+			this.DateTime = new DateTime (BitConverter.ToInt64 (Data, 0));
+			this.Flight = Data.GetInt32 (8);
+			this.Timestamp = Data.GetInt32 (12);
+			this.NormalAcceleration = Data.GetSingle (16);
+			this.LongitudinalAcceleration = Data.GetSingle (20);
+			this.LateralAcceleration = Data.GetSingle (24);
+			this.Heading = Data.GetSingle (28);
+			this.Pitch = Data.GetSingle (32);
+			this.Roll = Data.GetSingle (36);
+			this.FlightDirectorPitch = Data.GetSingle (40);
+			this.FlightDirectorRoll = Data.GetSingle (44);
+			this.HeadingRate = Data.GetSingle (48);
+			this.GPSLatitude = Data.GetSingle (52);
+			this.GPSLongitude = Data.GetSingle (56);
+			this.BodyYawRate = Data.GetSingle (60);
+			this.BodyPitchRate = Data.GetSingle (64);
+			this.BodyRollRate = Data.GetSingle (68);
+			this.PressureAltitude = BitConverter.ToInt16 (Data, 72);
+			this.VerticalSpeed = BitConverter.ToInt16 (Data, 74);
+			this.ADAHRUsed = BitConverter.ToBoolean (Data, 76);
+			this.AHRSSStatus = Data [77];
+			this.IndicatedAirspeed = Data [78];
+			this.TrueAirspeed = Data [79];
+			this.MagStatus = Data [80];
+			this.IRUStatus = Data [81];
+			this.MPUStatus = Data [82];
+			this.ADCStatus = Data [83];
+			this.AHRSSeq = Data [84];
+			this.ADCSeq = Data [85];
+			this.AHRSStartupMode = Data [86];
+		}
 
         /// <summary>
         /// Uses a byte array to set the backing byte array

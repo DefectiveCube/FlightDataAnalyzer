@@ -13,19 +13,19 @@ namespace XPlaneGenConsole
         private static MethodInfo ParseMethod;
         private static Type[] acceptableTypes = new Type[] { typeof(byte), typeof(short), typeof(int), typeof(long), typeof(sbyte), typeof(ushort), typeof(uint), typeof(ulong) };
 
+		static Hexadecimal()
+		{
+			if (!acceptableTypes.Contains(typeof(T)))
+			{
+				//throw new InvalidTypeException("Invalid Type. Only integral types are allowed");
+				throw new Exception();
+			}
+
+			ParseMethod = typeof(T).GetMethod("TryParse", new Type[] { typeof(string), typeof(NumberStyles), typeof(IFormatProvider), typeof(T).MakeByRefType() });
+		}
+
         public static T Parse(string input)
         {
-            if (!acceptableTypes.Contains(typeof(T)))
-            {
-                //throw new InvalidTypeException("Invalid Type. Only integral types are allowed");
-                throw new Exception();
-            }
-
-            if (ParseMethod == null)
-            {
-                ParseMethod = typeof(T).GetMethod("TryParse", new Type[] { typeof(string), typeof(NumberStyles), typeof(IFormatProvider), typeof(T).MakeByRefType() });
-            }
-
             if (input.Trim().ToUpperInvariant().StartsWith("0x", StringComparison.OrdinalIgnoreCase))
             {
                 input = input.Substring(2);
@@ -34,18 +34,10 @@ namespace XPlaneGenConsole
             T value;
 
             object[] args = new object[] { input, NumberStyles.HexNumber, CultureInfo.CurrentCulture, null };
-            bool result = (bool)ParseMethod.Invoke(null, args);
+            
+			bool result = (bool)ParseMethod.Invoke(null, args);
 
-            if (result)
-            {
-                value = (T)args[3];
-                return value;
-            }
-            else
-            {
-                //Debug.WriteLine("[Hexadecimal.Parse] Warning: treating '" + input + "' as '" + default(T) + "'");
-                return default(T);
-            }
+			return result ? (T)args [3] : default(T);
         }
     }
 }
