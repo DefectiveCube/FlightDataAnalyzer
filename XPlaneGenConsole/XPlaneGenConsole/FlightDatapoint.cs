@@ -192,39 +192,38 @@ namespace XPlaneGenConsole
         /// <param name="value"></param>
         public override void Load(string value)
         {
-            string[] values = value.Split(new char[] { ',' });
+			string[] values = value.Split (',');
 
             Load(values);
         }
 
+		public static int Valid;
+		public static int Invalid;
+
         public override void Load(string[] values)
-        {
-            // Two conditions to verify a valid row
-            // 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
-            // 2. If any fields after the 3rd element are NOT string.empty AND NOT "-" then that row will be processed
+		{
+			// Two conditions to verify a valid row
+			// 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
+			// 2. All fields after the 3rd element should be defined. "-" signifies a null value
 
-            //IsValid = values.Length == FIELDS_COUNT && values.All(v => !string.IsNullOrEmpty(v) && v.Equals("-");
-            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
+			IsValid = values.Length == FIELDS_COUNT && !values.Skip (3).All (v => string.IsNullOrEmpty (v) || v.Equals ("-"));
 
-            // If the row is 4 fields long, then that is a new flight
-            if (!IsValid)
-            {
-                if (values.Length == 4)
-                {
-                    Flight = KEY = R.Next();
-                    FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
-                }
+			// If the row is 4 fields long, then that is a new flight
+			if (!IsValid) {
+				if (values.Length == 4) {
+					Flight = KEY = R.Next ();
+					//FlightTimes.Add (ParseDateTime (values [1] + " " + values [2]));
+				}
                 
-                return; // no further information to add
-            }
+				Invalid++;
 
-            // Assign value to flight
-            Flight = KEY;
+				// Assign value to flight
+				Flight = KEY;
 
-            Parse(values);
+				Parse (values);
 
-            GetBytes();
-        }
+			}
+		}
 
 
         public override Task LoadAsync(byte[] data)
@@ -264,34 +263,39 @@ namespace XPlaneGenConsole
 
         public void Parse(string[] values)
         {
-            Timestamp = int.Parse(values[0], CultureInfo.InvariantCulture);
-            DateTime = ParseDateTime(values[1] + " " + values[2]);
-            NormalAcceleration = ParseFloat(values[3]);
-            LongitudinalAcceleration = ParseFloat(values[4]);
-            LateralAcceleration = ParseFloat(values[5]);
-            ADAHRUsed = values[6].Equals("0") || string.IsNullOrWhiteSpace(values[6]); // can this be improved?
-            AHRSSStatus = Hexadecimal<byte>.Parse(values[7]);
-            Heading = ParseFloat(values[8]);
-            Pitch = ParseFloat(values[9]);
-            Roll = ParseFloat(values[10]);
-            FlightDirectorPitch = ParseFloat(values[11]);
-            FlightDirectorRoll = ParseFloat(values[12]);
-            HeadingRate = ParseFloat(values[13]);
-            PressureAltitude = ParseInt16(values[14]);
-            IndicatedAirspeed = ParseByte(values[15]);
-            TrueAirspeed = ParseByte(values[16]);
-            VerticalSpeed = ParseInt16(values[17]);
-            GPSLatitude = ParseFloat(values[18]);
-            GPSLongitude = ParseFloat(values[19]);
-            BodyYawRate = ParseFloat(values[20]);
-            BodyPitchRate = ParseFloat(values[21]);
-            BodyRollRate = ParseFloat(values[22]);
-            IRUStatus = Hexadecimal<byte>.Parse(values[23]);
-            MPUStatus = Hexadecimal<byte>.Parse(values[24]);
-            ADCStatus = Hexadecimal<byte>.Parse(values[25]);
-            AHRSSeq = Hexadecimal<byte>.Parse(values[26]);
-            ADCSeq = ParseByte(values[27]);
-            AHRSStartupMode = ParseByte(values[28]);
+
+				Timestamp = values.AsInt (0);
+				DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ()); //ParseDateTime (values [1] + " " + values [2]);
+				// NOTE: DateTime.ParseExact is terribly slow!
+				NormalAcceleration = values.AsFloat (3);
+				LongitudinalAcceleration = values.AsFloat (4);
+				LateralAcceleration = values.AsFloat (5);
+				ADAHRUsed = values [6].Equals ("0") || string.IsNullOrWhiteSpace (values [6]); // can this be improved?
+				AHRSSStatus = (byte)values[7].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [7]);
+				Heading = values.AsFloat (8);
+				Pitch = values.AsFloat (9);
+				Roll = values.AsFloat (10);
+				FlightDirectorPitch = values.AsFloat (11);
+				FlightDirectorRoll = values.AsFloat (12);
+				HeadingRate = values.AsFloat (13);
+				PressureAltitude = values.AsShort (14);
+				IndicatedAirspeed = ParseByte (values [15]);
+				TrueAirspeed = ParseByte (values [16]);
+				VerticalSpeed = values.AsShort (17);
+				GPSLatitude = values.AsFloat (18);
+				GPSLongitude = values.AsFloat (19);
+				BodyYawRate = values.AsFloat (20);
+				BodyPitchRate = values.AsFloat (21);
+				BodyRollRate = values.AsFloat (22);
+				IRUStatus = (byte)values [23].GetHexBytes ().FirstOrDefault (); //Hexadecimal<byte>.Parse (values [23]);
+				MPUStatus = (byte)values[24].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [24]);
+				ADCStatus = (byte)values[25].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [25]);
+				AHRSSeq = (byte)values[26].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [26]);
+				ADCSeq = ParseByte (values [27]);
+				AHRSStartupMode = ParseByte (values [28]);
+
+
+				GetBytes ();
         }
-    }
+	}
 }
