@@ -128,5 +128,11 @@ namespace XPlaneGenConsole
         public virtual void Load(string value) { }
 
         public virtual void Load(string[] values) { }
+
+        public virtual Task LoadAsync(byte[] data) { return Task.FromResult(default(object)); }
+
+        public virtual Task LoadAsync(string value) { return Task.FromResult(default(object)); }
+
+        public virtual Task LoadAsync(string[] value) { return Task.FromResult(default(object)); }
     }
 }

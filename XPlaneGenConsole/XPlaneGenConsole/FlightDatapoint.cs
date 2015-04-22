@@ -91,13 +91,13 @@ namespace XPlaneGenConsole
             {
 				// Irrelevant Note: I hereby claim my proficiency in being a lazy programmer with the following use of an extension method + params + generics
 
-				Data.Copy (0, sizeof(long), DateTime.Ticks);
-				Data.Copy (8, sizeof(int), Flight, Timestamp);
-				Data.Copy (16, sizeof(float), NormalAcceleration, LongitudinalAcceleration, LateralAcceleration, Heading, Pitch, Roll, FlightDirectorPitch, FlightDirectorRoll,
+				Data.BlockCopy (0, sizeof(long), DateTime.Ticks);
+				Data.BlockCopy (8, sizeof(int), Flight, Timestamp);
+				Data.BlockCopy (16, sizeof(float), NormalAcceleration, LongitudinalAcceleration, LateralAcceleration, Heading, Pitch, Roll, FlightDirectorPitch, FlightDirectorRoll,
 					HeadingRate, GPSLatitude, GPSLongitude, BodyYawRate, BodyPitchRate, BodyRollRate);
-				Data.Copy (72, sizeof(short), PressureAltitude, VerticalSpeed);
-				Data.Copy (76, sizeof(bool), ADAHRUsed);
-				Data.Copy (77, sizeof(byte), AHRSSStatus, IndicatedAirspeed, TrueAirspeed, MagStatus, IRUStatus, MPUStatus, ADCStatus, AHRSSeq, ADCSeq, AHRSStartupMode);
+				Data.BlockCopy (72, sizeof(short), PressureAltitude, VerticalSpeed);
+				Data.BlockCopy (76, sizeof(bool), ADAHRUsed);
+				Data.BlockCopy (77, sizeof(byte), AHRSSStatus, IndicatedAirspeed, TrueAirspeed, MagStatus, IRUStatus, MPUStatus, ADCStatus, AHRSSeq, ADCSeq, AHRSStartupMode);
             }
 
             return Data;
@@ -221,6 +221,49 @@ namespace XPlaneGenConsole
             // Assign value to flight
             Flight = KEY;
 
+            Parse(values);
+
+            GetBytes();
+        }
+
+
+        public override Task LoadAsync(byte[] data)
+        {
+            return Task.Factory.StartNew(() => Load(data));
+        }
+
+        public override async Task LoadAsync(string value)
+        {
+            string[] values = value.Split(new char[] { ',' });
+
+            await LoadAsync(values);
+        }
+
+        public override async Task LoadAsync(string[] values)
+        {
+            //IsValid = values.Length == FIELDS_COUNT && values.All(v => !string.IsNullOrEmpty(v) && v.Equals("-"));
+            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
+
+            // If the row is 4 fields long, then that is a new flight
+            if (!IsValid)
+            {
+                if (values.Length == 4)
+                {
+                    Flight = KEY = R.Next();
+                    FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
+                }
+
+                return; // no further information to add
+            }
+
+            // Assign value to flight
+            Flight = KEY;
+
+            await Task.Factory.StartNew(() => Parse(values));
+        }
+
+        public void Parse(string[] values)
+        {
             Timestamp = int.Parse(values[0], CultureInfo.InvariantCulture);
             DateTime = ParseDateTime(values[1] + " " + values[2]);
             NormalAcceleration = ParseFloat(values[3]);
@@ -249,9 +292,6 @@ namespace XPlaneGenConsole
             AHRSSeq = Hexadecimal<byte>.Parse(values[26]);
             ADCSeq = ParseByte(values[27]);
             AHRSStartupMode = ParseByte(values[28]);
-
-
-            GetBytes();
         }
     }
 }

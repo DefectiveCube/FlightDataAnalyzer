@@ -106,16 +106,37 @@ namespace XPlaneGenConsole
     {
 		private MemoryStream stream;
         private StreamReader reader;
-		private BinaryWriter writer;
 
         public FlightCSVReader(Stream stream)
         {
 			this.stream = new MemoryStream ();
-			writer = new BinaryWriter (this.stream);
 
-            reader = new StreamReader(stream);
+            stream.CopyTo(this.stream);
+
+            reader = new StreamReader(this.stream);
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
             reader.ReadLine(); // skip first line
+        }
+
+        /*public Task<IEnumerable<T>> ReadToEndAsync()
+        {
+            await reader.ReadToEndAsync();
+        }*/
+
+        public void ReadField()
+        {
+
+        }
+
+        public async new Task<T> ReadLineAsync()
+        {
+            var line = await reader.ReadLineAsync();
+
+            T datapoint = Activator.CreateInstance<T>();
+
+            datapoint.Load(line);
+
+            return datapoint;
         }
 
         public new T ReadLine()
@@ -132,8 +153,36 @@ namespace XPlaneGenConsole
             return datapoint;
         }
 
+        public async new Task<T[]> ReadToEndAsync()
+        {
+            Console.WriteLine("Started Reading");
+            DateTime start = DateTime.Now;
+            List<T> points = new List<T>();
+            T datapoint;
+
+            using (reader)
+            {
+                while (!reader.EndOfStream)
+                {
+                    datapoint = Activator.CreateInstance<T>();
+
+                    await datapoint.LoadAsync(reader.ReadLineAsync().Result);
+
+                    if (datapoint.IsValid)
+                    {
+                        datapoint.GetBytes();
+                        points.Add(datapoint);
+                    }
+                }
+            }
+
+            Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
+            return points.ToArray();
+        }
+
         public new IEnumerable<T> ReadToEnd()
 		{
+            Console.WriteLine("Started Reading");
 			DateTime start = DateTime.Now;
 
 			//var Create = Expression.Lambda<Func<T>> (Expression.New (typeof(T))).Compile ();
@@ -142,7 +191,7 @@ namespace XPlaneGenConsole
 				while (!reader.EndOfStream) {
 					T datapoint = Activator.CreateInstance<T> ();
 
-					//datapoint.Load (reader.ReadLine ());
+					datapoint.Load (reader.ReadLine ());
 
 					if (datapoint.IsValid) {
 						datapoint.GetBytes ();

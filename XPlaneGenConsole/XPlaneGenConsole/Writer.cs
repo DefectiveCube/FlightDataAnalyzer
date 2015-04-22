@@ -59,7 +59,7 @@ namespace XPlaneGenConsole
 						Count = (from t4 in g select t4).Count ()					
 					};
 
-			//Console.WriteLine (q.Count ());
+			Console.WriteLine (q.Count ());
 
 			writer.Write (q.Count ()); // count of unique records
 
@@ -71,7 +71,7 @@ namespace XPlaneGenConsole
 				writer.Write (item.End.ToBinary ());
 			}
 
-            foreach(var dp in datapoints)
+            foreach (var dp in datapoints.ToArray())
             {
                 Write(dp);
             }

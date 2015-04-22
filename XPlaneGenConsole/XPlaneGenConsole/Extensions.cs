@@ -5,7 +5,7 @@ namespace XPlaneGenConsole
 {
 	public static class Extensions
 	{
-		public static void Copy<T>(this byte[] source, int offset, int size, params T[] value)
+		public static void BlockCopy<T>(this byte[] source, int offset, int size, params T[] value)
 			where T: struct
 		{
 			Buffer.BlockCopy (value, 0, source, offset, value.Length * size);
