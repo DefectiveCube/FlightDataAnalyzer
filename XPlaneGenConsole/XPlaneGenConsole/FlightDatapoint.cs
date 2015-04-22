@@ -197,9 +197,6 @@ namespace XPlaneGenConsole
             Load(values);
         }
 
-		public static int Valid;
-		public static int Invalid;
-
         public override void Load(string[] values)
 		{
 			// Two conditions to verify a valid row
@@ -213,17 +210,18 @@ namespace XPlaneGenConsole
 				if (values.Length == 4) {
 					Flight = KEY = R.Next ();
 					//FlightTimes.Add (ParseDateTime (values [1] + " " + values [2]));
-				}
-                
-				Invalid++;
+				}               
 
 				// Assign value to flight
 				Flight = KEY;
 
-				Parse (values);
-
+                return;
 			}
-		}
+
+            Flight = KEY;
+
+            Parse(values);
+        }
 
 
         public override Task LoadAsync(byte[] data)
@@ -249,7 +247,7 @@ namespace XPlaneGenConsole
                 if (values.Length == 4)
                 {
                     Flight = KEY = R.Next();
-                    FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
+                    //FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
                 }
 
                 return; // no further information to add
@@ -263,15 +261,13 @@ namespace XPlaneGenConsole
 
         public void Parse(string[] values)
         {
-
 				Timestamp = values.AsInt (0);
-				DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ()); //ParseDateTime (values [1] + " " + values [2]);
-				// NOTE: DateTime.ParseExact is terribly slow!
+				DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());				// NOTE: DateTime.ParseExact is terribly slow!
 				NormalAcceleration = values.AsFloat (3);
 				LongitudinalAcceleration = values.AsFloat (4);
 				LateralAcceleration = values.AsFloat (5);
 				ADAHRUsed = values [6].Equals ("0") || string.IsNullOrWhiteSpace (values [6]); // can this be improved?
-				AHRSSStatus = (byte)values[7].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [7]);
+				AHRSSStatus = (byte)values[7].GetHexBytes().FirstOrDefault();
 				Heading = values.AsFloat (8);
 				Pitch = values.AsFloat (9);
 				Roll = values.AsFloat (10);
@@ -287,13 +283,12 @@ namespace XPlaneGenConsole
 				BodyYawRate = values.AsFloat (20);
 				BodyPitchRate = values.AsFloat (21);
 				BodyRollRate = values.AsFloat (22);
-				IRUStatus = (byte)values [23].GetHexBytes ().FirstOrDefault (); //Hexadecimal<byte>.Parse (values [23]);
-				MPUStatus = (byte)values[24].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [24]);
-				ADCStatus = (byte)values[25].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [25]);
-				AHRSSeq = (byte)values[26].GetHexBytes().FirstOrDefault();//Hexadecimal<byte>.Parse (values [26]);
+				IRUStatus = (byte)values [23].GetHexBytes ().FirstOrDefault ();
+				MPUStatus = (byte)values[24].GetHexBytes().FirstOrDefault();
+				ADCStatus = (byte)values[25].GetHexBytes().FirstOrDefault();
+				AHRSSeq = (byte)values[26].GetHexBytes().FirstOrDefault();
 				ADCSeq = ParseByte (values [27]);
 				AHRSStartupMode = ParseByte (values [28]);
-
 
 				GetBytes ();
         }

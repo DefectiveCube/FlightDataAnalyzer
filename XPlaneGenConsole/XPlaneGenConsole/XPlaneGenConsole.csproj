@@ -51,6 +51,7 @@
     <Compile Include="FlightCSVWriter.cs" />
     <Compile Include="FlightDatapoint.cs" />
     <Compile Include="FlightFields.cs" />
+    <Compile Include="FlightHeader.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Hexadecimal.cs" />
     <Compile Include="Program.cs" />

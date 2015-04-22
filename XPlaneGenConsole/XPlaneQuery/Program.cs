@@ -14,16 +14,29 @@ namespace XPlaneQuery
         public static void Main(string[] args)
         {
 			var name = "P_FLIGHT.CSV";
+            var import = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import");
+            var data = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "data");
+            var output = "Test.bin";
 
-			var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import", name);
+            var importFile = Path.Combine(import, name);
+            var dataFile = Path.Combine(data, output);
 
-            using (var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(file)))
-            using (var writer = new FlightDataWriter<FlightDatapoint>("Test.BIN"))
+            using (var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(importFile)))
+            using (var writer = new FlightDataWriter<FlightDatapoint>(dataFile))
             {
-                writer.Write(reader.ReadToEnd());
+                writer.Write(reader.ReadToEnd().ToArray());
             }
-				//var start = DateTime.Now;
 
+            Dictionary<int, int> flightIndex = new Dictionary<int, int>();
+
+            using(var reader2 = new FlightDataReader<FlightDatapoint>(File.OpenRead(dataFile)))
+            {
+                var flights = reader2.ReadFlightHeaders();
+
+
+            }
+
+            Console.ReadLine();
 
             /*if (!File.Exists(file))
             {
@@ -67,8 +80,8 @@ namespace XPlaneQuery
 
 			Func<FlightDatapoint,TimeSpan> duration = a => a.DateTime.Subtract (DateTime.Now);
             */
-			Console.WriteLine("Done");
-            Console.ReadLine();
+			//Console.WriteLine("Done");
+            //Console.ReadLine();
         }
     }
 }

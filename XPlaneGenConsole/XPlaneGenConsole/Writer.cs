@@ -41,17 +41,19 @@ namespace XPlaneGenConsole
 
         public void Write(T datapoint)
         {
-            if (datapoint.IsValid)
+            if (datapoint != null && datapoint.IsValid)
             {
-                writer.Write(datapoint.GetBytes());
+                writer.Write(datapoint.Data);
             }
         }
 
         public void Write(IEnumerable<T> datapoints)
         {
+            Console.WriteLine("Using {0} records", datapoints.Count(f => f.IsValid));
+
 			var q = from d in datapoints
 			        group d by d.Flight into g
-			        select new
+			        select new FlightHeader
 					{
 						Flight = g.Key,
 						Start = (from t2 in g select t2.DateTime).Min (),
@@ -59,19 +61,18 @@ namespace XPlaneGenConsole
 						Count = (from t4 in g select t4).Count ()					
 					};
 
-			Console.WriteLine (q.Count ());
+            Console.WriteLine("Writing {0} flights",q.Count());
 
 			writer.Write (q.Count ()); // count of unique records
 
 			foreach(var item in q){
-				//Console.WriteLine ("{0} {1} {2} {3}", item.Flight, item.Count, item.Start, item.End);
 				writer.Write (item.Flight);
 				writer.Write (item.Count);			
 				writer.Write (item.Start.ToBinary ());
 				writer.Write (item.End.ToBinary ());
 			}
 
-            foreach (var dp in datapoints.ToArray())
+            foreach (var dp in datapoints)
             {
                 Write(dp);
             }

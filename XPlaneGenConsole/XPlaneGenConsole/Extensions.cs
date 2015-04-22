@@ -59,10 +59,9 @@ namespace XPlaneGenConsole
 			for (; i < chrs.Length; i++) {
 				var a = chrs [i].GetHexByte ();
 				var b = chrs.Length - i - 1;
-				var c = a * (int)Math.Pow (16, b);
 									
-				yield return c;
-			}
+				yield return a * (int)Math.Pow(16, b);
+            }
 
 			yield break;
 		}
@@ -83,21 +82,30 @@ namespace XPlaneGenConsole
 			return BitConverter.GetBytes (value);
 		}
 
-		public static Single GetSingle(this byte[] data, int index){
-			return BitConverter.ToSingle (data, index);
-		}
+        public static Single GetSingle(this IEnumerable<byte> data, int index = 0)
+        {
+            return BitConverter.ToSingle(data.ToArray(), index);
+        }
 
-		public static double GetDouble(this byte[] data, int index){
-			return BitConverter.ToSingle (data, index);
-		}
+        public static double GetDouble(this IEnumerable<byte> data, int index = 0)
+        {
+            return BitConverter.ToSingle(data.ToArray(), index);
+        }
 
-		public static int GetInt16(this byte[] data, int index){
-			return BitConverter.ToInt16 (data, index);
-		}
+        public static short GetInt16(this IEnumerable<byte> data, int index = 0)
+        {
+            return BitConverter.ToInt16(data.ToArray(), index);
+        }
 
-		public static int GetInt32(this byte[] data, int index){
-			return BitConverter.ToInt32 (data, index);
-		}
+        public static int GetInt32(this IEnumerable<byte> data, int index = 0)
+        {
+            return BitConverter.ToInt32(data.ToArray(), index);
+        }
+
+        public static long GetInt64(this IEnumerable<byte> data, int index = 0)
+        {
+            return BitConverter.ToInt64(data.ToArray(), index);
+        }
 
 		/*public static bool TryParse(this string value, out byte num){
 				
