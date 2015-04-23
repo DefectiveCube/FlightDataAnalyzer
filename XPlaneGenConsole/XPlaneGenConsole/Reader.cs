@@ -293,6 +293,8 @@ namespace XPlaneGenConsole
 
         public new IEnumerable<T> ReadToEnd()
 		{
+			var start = DateTime.Now;;
+
 			using (reader) {
 				while (!reader.EndOfStream) {
                     T datapoint = Activator.CreateInstance<T> ();
@@ -305,6 +307,7 @@ namespace XPlaneGenConsole
 				}
 			}
 
+			Console.WriteLine ("Read: {0}",DateTime.Now.Subtract (start).TotalSeconds);
 			yield break;
 		}
     }

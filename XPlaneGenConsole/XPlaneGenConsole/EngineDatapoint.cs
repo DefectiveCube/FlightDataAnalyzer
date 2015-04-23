@@ -12,28 +12,11 @@ namespace XPlaneGenConsole
 		public new const int BYTES_COUNT = 122;
 		public new const int FIELDS_COUNT = 33;
 
-		private const int LONG_BLOCK_SIZE = 1 * sizeof(long);
-		private const int INT_BLOCK_SIZE = 2 * sizeof(int);
-		private const int FLOAT_BLOCK_SIZE = 21 * sizeof(float);
-		private const int SHORT_BLOCK_SIZE = 3 * sizeof(short);
-		private const int USHORT_BLOCK_SIZE = sizeof(ushort);
-		private const int BYTE_BLOCK_SIZE = 4 * sizeof(byte);
-
-        static EngineDatapoint()
-		{
-			FlightTimes = new ConcurrentBag<DateTime> ();
-		}
-
-        public EngineDatapoint() { }
-        public EngineDatapoint(byte[] data)
-        {
-            this.Data = data;
-            SetBytes();
-        }
-
-        public override int Timestamp { get; set; }
-
-        public override DateTime DateTime { get; set; }
+		public EngineDatapoint() : base(FIELDS_COUNT,BYTES_COUNT)
+		{ }
+			
+		public EngineDatapoint(byte[] data) : base(FIELDS_COUNT,BYTES_COUNT,data)
+		{ }
 
         public short OilTemperature { get; set; }
 
@@ -93,10 +76,6 @@ namespace XPlaneGenConsole
 
         public byte DiscreteOutputs { get; set; }
 
-        internal override byte[] Data { get; set; }
-
-        public override int Flight { get; set; }
-
         internal override void SetBytes()
         {
             if (Data.Length == EngineDatapoint.BYTES_COUNT)
@@ -138,129 +117,54 @@ namespace XPlaneGenConsole
 
         internal override byte[] GetBytes()
         {
-            this.Data = new byte[BYTES_COUNT];
-
-			if (this.IsValid) {
-				//8-bytes
-				long[] longBlock = new long[] { DateTime.Ticks };
-
-				//4-bytes
-				int[] intBlock = new int[] { Flight, Timestamp };
-				float[] fltBlock = new float[] {
-					EngineManifold,
-					EngineTIT,
-					CHT_1,
-					CHT_2,
-					CHT_3,
-					CHT_4,
-					CHT_5,
-					CHT_6,
-					EGT_1,
-					EGT_2,
-					EGT_3,
-					EGT_4,
-					EGT_5,
-					EGT_6,
-					EnginePercentPower,
-					FuelFlow,
-					FuelUsed,
-					FuelRemaining,
-					FuelEconomy,
-					BusVoltage_1,
-					BusVoltage_2
-				};
-
-				//2-bytes
-				short[] shtBlock = new short[] { OilTemperature, OilPressure, EngineRPM };
-				ushort[] ushtBlock = new ushort[] { BatteryCurrent };
-
-				//1-byte         
-				byte[] byteBlock = new byte[] {
-					AlternatorCurrent_1,
-					AlternatorCurrent_2,
-					DiscreteInputs,
-					DiscreteOutputs
-				};
-
-				Buffer.BlockCopy (longBlock, 0, this.Data, 0, LONG_BLOCK_SIZE);
-				Buffer.BlockCopy (intBlock, 0, this.Data, 8, INT_BLOCK_SIZE);
-				Buffer.BlockCopy (fltBlock, 0, this.Data, 16, FLOAT_BLOCK_SIZE);
-				Buffer.BlockCopy (shtBlock, 0, this.Data, 100, SHORT_BLOCK_SIZE);
-				Buffer.BlockCopy (ushtBlock, 0, this.Data, 106, USHORT_BLOCK_SIZE);
-				Buffer.BlockCopy (byteBlock, 0, this.Data, 108, BYTE_BLOCK_SIZE);
+			if (IsValid) {
+				Data.BlockCopy (0, sizeof(long), DateTime.Ticks);
+				Data.BlockCopy (8, sizeof(int), Flight, Timestamp);
+				Data.BlockCopy (16, sizeof(float), EngineManifold, EngineTIT, CHT_1, CHT_2, CHT_3, CHT_4, CHT_5, CHT_6, EGT_1, EGT_2, EGT_3, EGT_4, EGT_5, EGT_6,
+					EnginePercentPower, FuelFlow, FuelUsed, FuelRemaining, FuelEconomy, BusVoltage_1, BusVoltage_2);
+				Data.BlockCopy (100, sizeof(short), OilTemperature, OilPressure, EngineRPM);
+				Data.BlockCopy (106, sizeof(ushort), BatteryCurrent);
+				Data.BlockCopy (108, sizeof(byte), AlternatorCurrent_1, AlternatorCurrent_2, DiscreteInputs, DiscreteOutputs);
 			}
-            else
-            {
-                //Debug.WriteLine("Invalid Row");
-                return new byte[] { };
-            }
 
-            return this.Data;
+			return Data;
         }
 
-        public override void Load(string value)
-        {
-            string[] values = value.Split(new char[] { ',' });
-
-            Load(values);
-        }
-
-        public override void Load(string[] values)
-        {
-            // Two conditions to process a valid row
-            // 1. There must a be specific amount of CSV fields per record (statically defined in each type of datapoint<T>)
-            // 2. If any fields past the 3rd column are NOT string.empty AND NOT "-" then that row will be processed
-            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
-
-            // If the row is 4 fields long, then that is a new flight
-            if (!IsValid)
-            {
-                if (values.Length == 4)
-                {
-                    Flight = KEY = R.Next();
-                    FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
-                }
-
-                // There is no further data to add
-                return;
-            }
-
-            // Assign value to flight
-            Flight = KEY;
-
-            // Assign fields
-            Timestamp = int.Parse(values[0], CultureInfo.InvariantCulture);
-            DateTime = ParseDateTime(values[1] + " " + values[2]);
-            OilTemperature = ParseInt16(values[3]);
-            OilPressure = ParseInt16(values[4]);
-            EngineRPM = ParseInt16(values[5]);
-            EngineManifold = values.AsFloat(6);
-            EngineTIT = values.AsFloat(7);
+		protected override void Parse (string[] values)
+		{
+			// Assign fields
+			Timestamp = values[0].AsInt(); //int.Parse(values[0], CultureInfo.InvariantCulture);
+			DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());//ParseDateTime(values[1] + " " + values[2]);
+			OilTemperature = values [3].AsShort (); //ParseInt16(values[3]);
+			OilPressure = values[4].AsShort();//ParseInt16(values[4]);
+			EngineRPM = values[5].AsShort();//ParseInt16(values[5]);
+			EngineManifold = values.AsFloat(6);
+			EngineTIT = values.AsFloat(7);
 			EGT_1 = values[8].AsFloat();
-            EGT_2 = values.AsFloat(9);
-            EGT_3 = values.AsFloat(10);
-            EGT_4 = values.AsFloat(11);
-            EGT_5 = values.AsFloat(12);
-            EGT_6 = values.AsFloat(13);
-            CHT_1 = values.AsFloat(14);
-            CHT_2 = values.AsFloat(15);
-            CHT_3 = values.AsFloat(16);
-            CHT_4 = values.AsFloat(17);
-            CHT_5 = values.AsFloat(18);
-            CHT_6 = values.AsFloat(19);
-            EnginePercentPower = values.AsFloat(20);
-            FuelFlow = values.AsFloat(21);
-            FuelUsed = values.AsFloat(22);
-            FuelRemaining = values.AsFloat(23);
-            // don't used item 24
-            FuelEconomy = values.AsFloat(25);
-            AlternatorCurrent_1 = ParseByte(values[26]);
-            AlternatorCurrent_2 = ParseByte(values[27]);
-            BatteryCurrent = ParseUInt16(values[28]);
-            BusVoltage_1 = values.AsFloat(29);
-            BusVoltage_2 = values.AsFloat(30);
-            DiscreteInputs = Hexadecimal<byte>.Parse(values[31]);
-            DiscreteOutputs = Hexadecimal<byte>.Parse(values[32]);
-        }
+			EGT_2 = values.AsFloat(9);
+			EGT_3 = values.AsFloat(10);
+			EGT_4 = values.AsFloat(11);
+			EGT_5 = values.AsFloat(12);
+			EGT_6 = values.AsFloat(13);
+			CHT_1 = values.AsFloat(14);
+			CHT_2 = values.AsFloat(15);
+			CHT_3 = values.AsFloat(16);
+			CHT_4 = values.AsFloat(17);
+			CHT_5 = values.AsFloat(18);
+			CHT_6 = values.AsFloat(19);
+			EnginePercentPower = values.AsFloat(20);
+			FuelFlow = values.AsFloat(21);
+			FuelUsed = values.AsFloat(22);
+			FuelRemaining = values.AsFloat(23);
+			// don't used item 24
+			FuelEconomy = values.AsFloat(25);
+			AlternatorCurrent_1 = ParseByte(values[26]);
+			AlternatorCurrent_2 = ParseByte(values[27]);
+			BatteryCurrent = ParseUInt16(values[28]);
+			BusVoltage_1 = values.AsFloat(29);
+			BusVoltage_2 = values.AsFloat(30);
+			DiscreteInputs = Hexadecimal<byte>.Parse(values[31]);
+			DiscreteOutputs = Hexadecimal<byte>.Parse(values[32]);
+		}
     }
 }

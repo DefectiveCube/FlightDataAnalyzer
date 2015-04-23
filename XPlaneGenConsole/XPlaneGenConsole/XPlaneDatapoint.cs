@@ -44,5 +44,29 @@ namespace XPlaneGenConsole
 
 
         */
+
+		public bool IsNoseGearDown{ get; set; }
+		public bool IsLeftGearDown{ get; set; }
+		public bool IsRightGearDown{ get; set; }
+
+
+		public void SetThrottleRatio(params float[] values){
+			
+		}
+
+		public void SetPropellerRPM(params byte[] values){
+
+		}
+
+		public void SetPropellerDegree(params short[] values){
+
+		}
+
+		public void SetN1(params byte[] values){ }
+		public void SetN2(params byte[] values){ }
+		public void SetFuelFlow(params float[] values){}
+		public void SetTurboInletTemp(params short[] values){}
+		public void SetExhaustGasTemp(params float[] values){}
+		public void SetCylinderHeadTemp(params float[] values){}
     }
 }

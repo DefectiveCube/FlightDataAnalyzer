@@ -13,6 +13,7 @@ namespace XPlaneQuery
     {
         public static void Main(string[] args)
         {
+			//var f = new FlightDatapoint (new byte[]{ });
 			var name = "P_FLIGHT.CSV";
             var import = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import");
             var data = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "data");
@@ -20,22 +21,31 @@ namespace XPlaneQuery
 
             var importFile = Path.Combine(import, name);
             var dataFile = Path.Combine(data, output);
-
+			var start = DateTime.Now;
             using (var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(importFile)))
             using (var writer = new FlightDataWriter<FlightDatapoint>(dataFile))
             {
                 writer.Write(reader.ReadToEnd().ToArray());
             }
-
+			Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);
+			/*
             Dictionary<int, int> flightIndex = new Dictionary<int, int>();
 
             using(var reader2 = new FlightDataReader<FlightDatapoint>(File.OpenRead(dataFile)))
             {
                 var flights = reader2.ReadFlightHeaders();
 
+				int offset = flights.Count () * 24 + 4;
 
+				foreach (var f in flights) {
+					flightIndex.Add (f.Flight, offset);
+
+					offset += f.Count * FlightDatapoint.BYTES_COUNT;
+				}
             }
+*/
 
+			var tempConv = "f => (f - 32) * 5 / 9";
             Console.ReadLine();
 
             /*if (!File.Exists(file))

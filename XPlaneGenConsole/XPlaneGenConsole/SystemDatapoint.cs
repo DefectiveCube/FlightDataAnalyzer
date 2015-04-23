@@ -13,17 +13,11 @@ namespace XPlaneGenConsole
         public new const int BYTES_COUNT = 105;
         public new const int FIELDS_COUNT = 38;
 
-        public SystemDatapoint() { }
+		public SystemDatapoint() : base(FIELDS_COUNT,BYTES_COUNT)
+		{ }
 
-        public SystemDatapoint(byte[] data)
-        {
-            Data = data;
-            SetBytes();
-        }
-
-        public override int Timestamp { get; set; }
-
-        public override DateTime DateTime { get; set; }
+		public SystemDatapoint(byte[] data) : base(FIELDS_COUNT,BYTES_COUNT,data)
+		{ }
 
         public byte AirTemperature { get; set; }
 
@@ -90,49 +84,26 @@ namespace XPlaneGenConsole
         public short FmsCourse { get; set; }
 
         public float MagVariance { get; set; }
-
-        internal override byte[] Data { get; set; }
-        
-        public override int Flight { get; set; }
-
+		        
         internal override byte[] GetBytes()
         {
-            Data = new byte[BYTES_COUNT];
-
             if (IsValid)
             {
-                //8-bytes
-                long[] longBlock = new long[] { DateTime.Ticks };
 
-                //4-bytes
-                int[] intBlock = new int[] { Flight, Timestamp, NavFreq };
-                float[] fltBlock = new float[] { LocalizerDeviation, GlideslopeDeviation, CrossTrackDeviation, AltimeterSetting,
-                    DistanceToActiveWaypoint, GPSHorizontalProtLimit, GPSVerticalProtLimit, HPL_SBAS, VPL_SBAS, HFQM, VFQM, MagVariance };
+				Data.BlockCopy (0, sizeof(long), DateTime.Ticks);
+				Data.BlockCopy (8, sizeof(int), Flight, Timestamp, NavFreq);
+				Data.BlockCopy (20, sizeof(float), LocalizerDeviation, GlideslopeDeviation, CrossTrackDeviation, AltimeterSetting,
+					DistanceToActiveWaypoint, GPSHorizontalProtLimit, GPSVerticalProtLimit, HPL_SBAS, VPL_SBAS, HFQM, VFQM, MagVariance);
+				Data.BlockCopy (68, sizeof(short), GroundTrack, VerticalDeviation, AltBug, VSIBug, HdgBug, NavAidBrg, OBS, DesiredTrack, 
+					CourseDeviation, GPSAltitude, FmsCourse);
+				Data.BlockCopy (90, sizeof(bool), FlightDirector);
+				Data.BlockCopy (91, sizeof(byte), AirTemperature, Groundspeed, NavigationMode, GPSSelect, CrsSelect, NavType, GPSState);
 
-                //2-bytes
-                short[] shtBlock = new short[] { GroundTrack, VerticalDeviation, AltBug, VSIBug, HdgBug, NavAidBrg, OBS, DesiredTrack, CourseDeviation, GPSAltitude, FmsCourse };
-
-                //1-byte
-                bool[] boolBlock = new bool[] { FlightDirector };
-                byte[] byteBlock = new byte[] { AirTemperature, Groundspeed, NavigationMode, GPSSelect, CrsSelect, NavType, GPSState };
-
-                Buffer.BlockCopy(longBlock, 0, Data, 0, 1 * sizeof(long));
-                Buffer.BlockCopy(intBlock, 0, Data, 8, 3 * sizeof(int));
-                Buffer.BlockCopy(fltBlock, 0, Data, 20, 12 * sizeof(float));
-                Buffer.BlockCopy(shtBlock, 0, Data, 68, 11 * sizeof(short));
-                Buffer.BlockCopy(boolBlock, 0, Data, 90, 1);
-                Buffer.BlockCopy(byteBlock, 0, Data, 91, 6 * sizeof(byte));
-
-                if (!string.IsNullOrWhiteSpace(ActiveWaypoint))
-                {
-                    byte[] waypoint = Encoding.UTF8.GetBytes(ActiveWaypoint);
-
-                    Buffer.BlockCopy(waypoint, 0, Data, 97, waypoint.Length < 8 ? waypoint.Length : 8);
-                }
-            }
-            else
-            {
-                return new byte[] { };
+				// If ActiveWaypoint is NOT null or whitespace, then copy the up to 8 bytes
+				// else copy 8 bytes (all 0's) to overwrite any pre-existing data
+				var check = !string.IsNullOrWhiteSpace (ActiveWaypoint);
+				byte[] waypoint = check ? Encoding.UTF8.GetBytes (ActiveWaypoint) : new byte[8];
+				Buffer.BlockCopy (waypoint, 0, Data, 97, waypoint.Length < 8 ? waypoint.Length : 8);
             }
 
             return Data;
@@ -177,74 +148,44 @@ namespace XPlaneGenConsole
             this.GPSState = Data[95];
         }
 
-        public override void Load(string value)
-        {
-            string[] values = value.Split(new char[] { ',' });
-
-            Load(values);
-        }
-
-        public override void Load(string[] values)
-        {
-            // Two conditions to verify a valid row
-            // 1. There must a be specific amount of CSV fields per record (defined in each type of datapoint)
-            // 2. If any fields past the 3rd column are NOT string.empty AND NOT "-" then that row will be processed
-            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
-
-            // If the row is 4 fields long, then that is a new flight
-            if (!IsValid)
-            {
-                if (values.Length == 4)
-                {
-                    Flight = KEY = R.Next();
-                    FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
-                }
-
-                // There is no further data to add
-                return;
-            }
-
-            // Assign value to flight
-            Flight = KEY;
-
-            Timestamp = int.Parse(values[0], CultureInfo.InvariantCulture);
-            DateTime = ParseDateTime(values[1] + " " + values[2]);
-            AirTemperature = ParseByte(values[3]);
-            LocalizerDeviation = ParseFloat(values[4]);
-            GlideslopeDeviation = ParseFloat(values[5]);
-            FlightDirector = values[6].Trim() != "0"; // probably needs to be examined further
-            //AutopilotMode - column 7 is not used
-            Groundspeed = ParseByte(values[8]);
-            GroundTrack = ParseInt16(values[9]);
-            CrossTrackDeviation = ParseFloat(values[10]);
-            VerticalDeviation = ParseInt16(values[11]);
-            AltimeterSetting = ParseFloat(values[12]);
-            AltBug = ParseInt16(values[13]);
-            VSIBug = ParseInt16(values[14]);
-            HdgBug = ParseInt16(values[15]);
-            NavigationMode = ParseByte(values[17]);
-            ActiveWaypoint = values[18].Trim();
-            GPSSelect = ParseByte(values[19]);
-            NavAidBrg = ParseInt16(values[20]);
-            OBS = ParseInt16(values[21]);
-            DesiredTrack = ParseInt16(values[22]);
-            NavFreq = ParseInt32(values[23]);
-            CrsSelect = ParseByte(values[24]);
-            NavType = ParseByte(values[25]);
-            CourseDeviation = ParseInt16(values[26]);
-            GPSAltitude = ParseInt16(values[27]);
-            DistanceToActiveWaypoint = ParseFloat(values[28]);
-            GPSState = ParseByte(values[29]);
-            GPSHorizontalProtLimit = ParseFloat(values[30]);
-            GPSVerticalProtLimit = ParseFloat(values[31]);
-            HPL_SBAS = ParseFloat(values[32]);
-            VPL_SBAS = ParseFloat(values[33]);
-            HFQM = ParseFloat(values[34]);
-            VFQM = ParseFloat(values[35]);
-            FmsCourse = ParseInt16(values[36]);
-            MagVariance = ParseFloat(values[37]);
-
-            GetBytes();
-        }
+		protected override void Parse (string[] values)
+		{
+			Timestamp = int.Parse(values[0], CultureInfo.InvariantCulture);
+			DateTime = ParseDateTime(values[1] + " " + values[2]);
+			AirTemperature = ParseByte(values[3]);
+			LocalizerDeviation = values [4].AsFloat (); //ParseFloat(values[4]);
+			GlideslopeDeviation = values[5].AsFloat(); //ParseFloat(values[5]);
+			FlightDirector = values[6].Trim() != "0"; // probably needs to be examined further
+			//AutopilotMode - column 7 is not used
+			Groundspeed = ParseByte(values[8]);
+			GroundTrack = ParseInt16(values[9]);
+			CrossTrackDeviation = ParseFloat(values[10]);
+			VerticalDeviation = ParseInt16(values[11]);
+			AltimeterSetting = ParseFloat(values[12]);
+			AltBug = ParseInt16(values[13]);
+			VSIBug = ParseInt16(values[14]);
+			HdgBug = ParseInt16(values[15]);
+			NavigationMode = ParseByte(values[17]);
+			ActiveWaypoint = values[18].Trim();
+			GPSSelect = ParseByte(values[19]);
+			NavAidBrg = ParseInt16(values[20]);
+			OBS = ParseInt16(values[21]);
+			DesiredTrack = ParseInt16(values[22]);
+			NavFreq = ParseInt32(values[23]);
+			CrsSelect = ParseByte(values[24]);
+			NavType = ParseByte(values[25]);
+			CourseDeviation = ParseInt16(values[26]);
+			GPSAltitude = ParseInt16(values[27]);
+			DistanceToActiveWaypoint = ParseFloat(values[28]);
+			GPSState = ParseByte(values[29]);
+			GPSHorizontalProtLimit = ParseFloat(values[30]);
+			GPSVerticalProtLimit = ParseFloat(values[31]);
+			HPL_SBAS = ParseFloat(values[32]);
+			VPL_SBAS = ParseFloat(values[33]);
+			HFQM = ParseFloat(values[34]);
+			VFQM = ParseFloat(values[35]);
+			FmsCourse = ParseInt16(values[36]);
+			MagVariance = ParseFloat(values[37]);
+		}
     }
 }

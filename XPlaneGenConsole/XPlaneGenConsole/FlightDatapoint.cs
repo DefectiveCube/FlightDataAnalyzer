@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -9,23 +10,16 @@ namespace XPlaneGenConsole
 {
     public class FlightDatapoint : Datapoint<FlightDatapoint>
     {
+		public static FieldsEnum ParseFieldFlags = FieldsEnum.All;
+
         public new const int FIELDS_COUNT = 30;
         public new const int BYTES_COUNT = 87;
 
-        public FlightDatapoint() 
-		{ 
-			Data = new byte[BYTES_COUNT];
-		}
+		public FlightDatapoint() : base(FIELDS_COUNT,BYTES_COUNT)
+		{ }
 
-		public FlightDatapoint(byte[] data) : base()
-        {
-            Data = data;
-            SetBytes();
-        }
-
-        public override int Timestamp { get; set; }
-
-        public override DateTime DateTime { get; set; }
+		public FlightDatapoint(byte[] data) : base(FIELDS_COUNT,BYTES_COUNT,data)
+		{ }
 
         public float NormalAcceleration { get; set; }
 
@@ -81,10 +75,6 @@ namespace XPlaneGenConsole
 
         public byte AHRSStartupMode { get; set; }
 
-        internal override byte[] Data { get; set; }
-
-        public override int Flight { get; set; }
-
         internal override byte[] GetBytes()
         {
             if (IsValid)
@@ -111,6 +101,7 @@ namespace XPlaneGenConsole
             Timestamp,
             NormalAcceleration,
             LongitudinalAcceleration,
+			LateralAcceleration,
             Heading,
             Pitch,
             Roll,
@@ -133,7 +124,8 @@ namespace XPlaneGenConsole
             ADCStatus,
             AHRSSeq,
             ADCSeq,
-            AHRSStartupMode
+            AHRSStartupMode,
+			All = Flight | Timestamp | NormalAcceleration | LongitudinalAcceleration | Heading | Pitch | Roll | FlightDirectorPitch | FlightDirectorRoll
         }
 
         internal override void SetBytes()
@@ -175,122 +167,93 @@ namespace XPlaneGenConsole
 			this.ADCSeq = Data [85];
 			this.AHRSStartupMode = Data [86];
 		}
+					
+		bool HasFlag(FieldsEnum e){
+			return ParseFieldFlags.HasFlag (e);
+		}
 
-        /// <summary>
-        /// Uses a byte array to set the backing byte array
-        /// </summary>
-        /// <param name="data"></param>
-        public override void Load(byte[] data)
+        protected override void Parse(string[] values)
         {
-            Data = data;
-            SetBytes();
-        }
-
-        /// <summary>
-        /// Uses a string to load values
-        /// </summary>
-        /// <param name="value"></param>
-        public override void Load(string value)
-        {
-			string[] values = value.Split (',');
-
-            Load(values);
-        }
-
-        public override void Load(string[] values)
-		{
-			// Two conditions to verify a valid row
-			// 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
-			// 2. All fields after the 3rd element should be defined. "-" signifies a null value
-
-			IsValid = values.Length == FIELDS_COUNT && !values.Skip (3).All (v => string.IsNullOrEmpty (v) || v.Equals ("-"));
-
-			// If the row is 4 fields long, then that is a new flight
-			if (!IsValid) {
-				if (values.Length == 4) {
-					Flight = KEY = R.Next ();
-					//FlightTimes.Add (ParseDateTime (values [1] + " " + values [2]));
-				}               
-
-				// Assign value to flight
-				Flight = KEY;
-
-                return;
-			}
-
-            Flight = KEY;
-
-            Parse(values);
-        }
-
-
-        public override Task LoadAsync(byte[] data)
-        {
-            return Task.Factory.StartNew(() => Load(data));
-        }
-
-        public override async Task LoadAsync(string value)
-        {
-            string[] values = value.Split(new char[] { ',' });
-
-            await LoadAsync(values);
-        }
-
-        public override async Task LoadAsync(string[] values)
-        {
-            //IsValid = values.Length == FIELDS_COUNT && values.All(v => !string.IsNullOrEmpty(v) && v.Equals("-"));
-            IsValid = values.Length == FIELDS_COUNT && IsEmptyRow(values, 2);
-
-            // If the row is 4 fields long, then that is a new flight
-            if (!IsValid)
-            {
-                if (values.Length == 4)
-                {
-                    Flight = KEY = R.Next();
-                    //FlightTimes.Add(ParseDateTime(values[1] + " " + values[2]));
-                }
-
-                return; // no further information to add
-            }
-
-            // Assign value to flight
-            Flight = KEY;
-
-            await Task.Factory.StartNew(() => Parse(values));
-        }
-
-        public void Parse(string[] values)
-        {
-				Timestamp = values.AsInt (0);
-				DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());				// NOTE: DateTime.ParseExact is terribly slow!
+			Timestamp = values.AsInt (0);
+			DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());				// NOTE: DateTime.ParseExact is terribly slow!
+		
+			//if (HasFlag (FieldsEnum.NormalAcceleration))
 				NormalAcceleration = values.AsFloat (3);
-				LongitudinalAcceleration = values.AsFloat (4);
-				LateralAcceleration = values.AsFloat (5);
-				ADAHRUsed = values [6].Equals ("0") || string.IsNullOrWhiteSpace (values [6]); // can this be improved?
-				AHRSSStatus = (byte)values[7].GetHexBytes().FirstOrDefault();
-				Heading = values.AsFloat (8);
-				Pitch = values.AsFloat (9);
-				Roll = values.AsFloat (10);
-				FlightDirectorPitch = values.AsFloat (11);
-				FlightDirectorRoll = values.AsFloat (12);
-				HeadingRate = values.AsFloat (13);
-				PressureAltitude = values.AsShort (14);
-				IndicatedAirspeed = ParseByte (values [15]);
-				TrueAirspeed = ParseByte (values [16]);
-				VerticalSpeed = values.AsShort (17);
-				GPSLatitude = values.AsFloat (18);
-				GPSLongitude = values.AsFloat (19);
-				BodyYawRate = values.AsFloat (20);
-				BodyPitchRate = values.AsFloat (21);
-				BodyRollRate = values.AsFloat (22);
-				IRUStatus = (byte)values [23].GetHexBytes ().FirstOrDefault ();
-				MPUStatus = (byte)values[24].GetHexBytes().FirstOrDefault();
-				ADCStatus = (byte)values[25].GetHexBytes().FirstOrDefault();
-				AHRSSeq = (byte)values[26].GetHexBytes().FirstOrDefault();
-				ADCSeq = ParseByte (values [27]);
-				AHRSStartupMode = ParseByte (values [28]);
 
-				GetBytes ();
+			//if (HasFlag (FieldsEnum.LongitudinalAcceleration))
+				LongitudinalAcceleration = values.AsFloat (4);
+		
+			//if (HasFlag (FieldsEnum.LateralAcceleration))
+				LateralAcceleration = values.AsFloat (5);
+
+			//if(HasFlag(FieldsEnum.ADAHRUsed))
+				ADAHRUsed = values [6].Equals ("0") || string.IsNullOrWhiteSpace (values [6]); // can this be improved?
+				
+			//if (HasFlag (FieldsEnum.AHRSSStatus))
+				AHRSSStatus = (byte)values[7].GetHexBytes().FirstOrDefault();
+
+			//if (HasFlag (FieldsEnum.Heading))
+				Heading = values.AsFloat (8);
+
+			//if (HasFlag (FieldsEnum.Pitch))
+				Pitch = values.AsFloat (9);
+
+			//if (HasFlag (FieldsEnum.Roll))
+				Roll = values.AsFloat (10);
+
+			//if (HasFlag (FieldsEnum.FlightDirectorPitch))
+				FlightDirectorPitch = values.AsFloat (11);
+
+			//if (HasFlag (FieldsEnum.FlightDirectorRoll))
+				FlightDirectorRoll = values.AsFloat (12);
+
+			//if (HasFlag (FieldsEnum.HeadingRate))
+				HeadingRate = values.AsFloat (13);
+
+			//if (HasFlag (FieldsEnum.PressureAltitude))
+				PressureAltitude = values.AsShort (14);
+
+			//if (HasFlag (FieldsEnum.IndicatedAirspeed))
+				IndicatedAirspeed = ParseByte (values [15]);
+
+			//if (HasFlag (FieldsEnum.TrueAirspeed))
+				TrueAirspeed = ParseByte (values [16]);
+
+			//if(HasFlag(FieldsEnum.VerticalSpeed))
+				VerticalSpeed = values.AsShort (17);
+
+			//if(HasFlag(FieldsEnum.GPSLatitude))
+				GPSLatitude = values.AsFloat (18);
+
+			//if (HasFlag (FieldsEnum.GPSLongitude))
+				GPSLongitude = values.AsFloat (19);
+
+			//if(HasFlag(FieldsEnum.BodyYawRate))
+				BodyYawRate = values.AsFloat (20);
+
+			//if(HasFlag(FieldsEnum.BodyPitchRate))
+				BodyPitchRate = values.AsFloat (21);
+
+			//if (HasFlag (FieldsEnum.BodyRollRate))
+				BodyRollRate = values.AsFloat (22);
+
+			//if (HasFlag (FieldsEnum.IRUStatus))
+				IRUStatus = (byte)values [23].GetHexBytes ().FirstOrDefault ();
+
+			//if (HasFlag (FieldsEnum.MPUStatus))
+				MPUStatus = (byte)values [24].GetHexBytes ().FirstOrDefault ();
+
+			//if (HasFlag (FieldsEnum.ADCStatus))
+				ADCStatus = (byte)values [25].GetHexBytes ().FirstOrDefault ();
+
+			//if (HasFlag (FieldsEnum.AHRSSeq))
+				AHRSSeq = (byte)values [26].GetHexBytes ().FirstOrDefault ();
+
+			//if (HasFlag (FieldsEnum.ADCSeq))
+				ADCSeq = ParseByte (values [27]);
+
+			//if (HasFlag (FieldsEnum.AHRSStartupMode))
+				AHRSStartupMode = ParseByte (values [28]);
         }
 	}
 }

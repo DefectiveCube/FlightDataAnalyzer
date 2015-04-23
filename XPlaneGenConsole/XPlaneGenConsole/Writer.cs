@@ -49,7 +49,9 @@ namespace XPlaneGenConsole
 
         public void Write(IEnumerable<T> datapoints)
         {
-            Console.WriteLine("Using {0} records", datapoints.Count(f => f.IsValid));
+			var start = DateTime.Now;
+
+            //Console.WriteLine("Using {0} records", datapoints.Count(f => f.IsValid));
 
 			var q = from d in datapoints
 			        group d by d.Flight into g
@@ -61,7 +63,7 @@ namespace XPlaneGenConsole
 						Count = (from t4 in g select t4).Count ()					
 					};
 
-            Console.WriteLine("Writing {0} flights",q.Count());
+            //Console.WriteLine("Writing {0} flights",q.Count());
 
 			writer.Write (q.Count ()); // count of unique records
 
@@ -76,6 +78,8 @@ namespace XPlaneGenConsole
             {
                 Write(dp);
             }
+
+			Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);
         }
     }
 

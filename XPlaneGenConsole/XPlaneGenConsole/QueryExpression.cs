@@ -22,6 +22,8 @@ namespace XPlaneGenConsole
             get { return Data.AsQueryable(); }
         }
 
+		public string QueryString { get; set; }
+
         public IEnumerable<T> Results()
         {
             foreach (var datapoint in Evaluate())
@@ -32,6 +34,13 @@ namespace XPlaneGenConsole
             yield break;
         }
 
+		public void BuildQuery()
+		{
+			//var pe = Expression.Parameter (typeof(T), "flight");
+
+			//var lambda = Expression.Lambda<Func<T, bool>> (exp, new ParameterExpression[]{ pe });
+		}
+
         public IQueryable<T> Evaluate()
         {
             var pe = Expression.Parameter(typeof(T), "flight");
@@ -39,6 +48,8 @@ namespace XPlaneGenConsole
             var left = Expression.Property(pe, typeof(T).GetProperty("VerticalSpeed"));
             var right = Expression.Constant((short)0);
             var exp = Expression.GreaterThan(left, right);
+
+			//Expression.
 
             var lamdba = Expression.Lambda<Func<T, bool>>(exp, new ParameterExpression[] { pe });
             var whereCall = Expression.Call(typeof(Queryable), "Where", new Type[] { Query.ElementType }, Query.Expression, lamdba);
