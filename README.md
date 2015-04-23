@@ -1,17 +1,27 @@
 # XPlaneGen
 
 ## Purpose
-The main purpose of this project is to convert flight data files (currently CSV files) into a Flight Data Replay (FDR) file for XPlane to utilize.
+The purpose of this project is to store flight data in a structured binary format, instead of text-based formats.
 
-## Process
-Compute-bound processes are speed-up by converting textual data from source files into an intermediate binary form. Additional, queries against data (see XPlaneQuery) are due to this action.
+## Processing
+__Status__: Alpha
+
+Compute-bound processes are sped-up by converting textual data from source files into an intermediate binary form. Flight data is typically not structured in an efficient manner, relegating any analysis to inefficient linear searches. Significant lookup speeds are attained due to efficient structuring. Additional, LINQ queries (see XPlaneQuery) are made possible due to this action as processed data is strongly-typed.
+
+## XPlane Flight Data Recorder
+__Status__: Design
+
+Processed data can be converted into a FDR file (a CSV file) for XPlane to playback.
 
 ## XPlaneQuery
 __Status__: Experimental
 
-This module allows for analysis of data
+This module allows for analysis of data by using LINQ expressions.
 
-- Selection (e.g. "where Speed > 0")
+## ExParse
+__Status__: Experimental/Design
+
+A lightweight expression parsing library used for converting string inputs into lambda expressions. These expressions are used to provide enhanced conversions for datapoints (e.g. converting a processed datapoint into an XPlane FDR datapoint). Current design is only for a very small subset of syntax (e.g. no method invocation, and readonly access).
 
 ## Limitations
-Currently, only one format is supported.
+Currently, only one specific format is supported.
