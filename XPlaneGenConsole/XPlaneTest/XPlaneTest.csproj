@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FDAEB20A-30FC-4AC0-A07D-C29C9C855703}</ProjectGuid>
+    <ProjectGuid>{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ExParseTest</RootNamespace>
-    <AssemblyName>ExParseTest</AssemblyName>
+    <RootNamespace>XPlaneTest</RootNamespace>
+    <AssemblyName>XPlaneTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -39,11 +39,5 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExParse\ExParse.csproj">
-      <Project>{ABA38AB8-8313-4B9D-899E-24CADF6D1DCD}</Project>
-      <Name>ExParse</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>
