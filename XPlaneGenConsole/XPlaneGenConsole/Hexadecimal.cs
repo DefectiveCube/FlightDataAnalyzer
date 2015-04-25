@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
+	[Obsolete()]
     internal class Hexadecimal<T> where T : struct
     {
         private static MethodInfo ParseMethod;
@@ -31,7 +32,7 @@ namespace XPlaneGenConsole
                 input = input.Substring(2);
             }
 
-            T value;
+            //T value;
 
             object[] args = new object[] { input, NumberStyles.HexNumber, CultureInfo.CurrentCulture, null };
             

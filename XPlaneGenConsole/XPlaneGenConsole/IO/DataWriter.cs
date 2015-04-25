@@ -6,14 +6,15 @@ using System.Linq;
 
 namespace XPlaneGenConsole
 {
-    public class FlightDataWriter<T> : IDisposable where T : Datapoint<T>
+    public class DataWriter<T> : IDisposable 
+		where T : BinaryDatapoint
     {
         private BinaryWriter writer;
         private MemoryStream stream;
         private readonly string outputPath;
-        private readonly int bytesPerDatapoint;
+		//private readonly int bytesPerDatapoint = 10;
 
-        public FlightDataWriter(string path = "")
+        public DataWriter(string path = "")
         {
             // TODO: randomly generate a unique file name when no path is provided  
 

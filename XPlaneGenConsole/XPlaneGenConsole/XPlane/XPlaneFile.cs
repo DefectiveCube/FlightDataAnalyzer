@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    public class Flight { }
-
-    public class Flight<T> : Flight
-        where T : BinaryDatapoint
-    {
-		public List<T> Data { get; protected set; }
-
-    }
-
+	public class XPlaneFile
+	{
+		public XPlaneDataWriter Writer{ get; set; }
+	}
 }

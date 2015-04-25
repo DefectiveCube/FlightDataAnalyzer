@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,21 +15,66 @@ namespace XPlaneQuery
     {
         public static void Main(string[] args)
         {
+			//Console.WriteLine ("query v1.0");
+
+
+			// 1. Select Data Source
+				// 1. Engine
+				// 2. Flight
+				// 3. System
+			// 2. Projection
+			// 3. Selection
+			// 4. Execute Query
+			// 5. Change Output
+			// 6. Exit
+
+
+			//Map<SystemDatapoint,XPlaneDatapoint>.Associate ("AirTemperature", "Temperature");
+
+			Fahrenheit f = 10.0;
+
+			var list = new List<Expression> ();
+
+			list.Add (QueryBuilder.Build ("3 + 4"));
+			list.Add (QueryBuilder.Build ("3 - 4"));
+			list.Add (QueryBuilder.Build ("3 * 4"));
+			list.Add (QueryBuilder.Build ("3 / 4"));
+			list.Add (QueryBuilder.Build ("3 % 4"));
+				
+			list.Add (QueryBuilder.Build ("3 * (4 + 2)"));
+
+			foreach (var exp in list) {
+				Console.WriteLine (exp.ToString ());
+			}
+				
+			Console.WriteLine (QueryBuilder.Build ("3 + 4", typeof(FlightDatapoint),typeof(EngineDatapoint)));
+
 			//var f = new FlightDatapoint (new byte[]{ });
 			var name = "P_FLIGHT.CSV";
+			var output = "Test.bin";
+
             var import = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import");
             var data = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "data");
-            var output = "Test.bin";
 
             var importFile = Path.Combine(import, name);
             var dataFile = Path.Combine(data, output);
+
 			var start = DateTime.Now;
-            using (var reader = new FlightCSVReader<FlightDatapoint>(File.OpenRead(importFile)))
-            using (var writer = new FlightDataWriter<FlightDatapoint>(dataFile))
-            {
-                writer.Write(reader.ReadToEnd().ToArray());
-            }
-			Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);
+			using (var reader = new CSVReader<FlightDatapoint> (File.OpenRead (importFile)))
+			using (var writer = new DataWriter<FlightDatapoint> (dataFile)) {
+				writer.Write (reader.ReadToEnd ().ToArray ());
+			}
+
+			//Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);
+
+			/*using (var reader = new DataReader<FlightDatapoint> (File.OpenRead (dataFile))) {
+				
+			}*/
+
+
+
+
+
 			/*
             Dictionary<int, int> flightIndex = new Dictionary<int, int>();
 
@@ -45,7 +92,7 @@ namespace XPlaneQuery
             }
 */
 
-			var tempConv = "f => (f - 32) * 5 / 9";
+			//var tempConv = "f => (f - 32) * 5 / 9";
             Console.ReadLine();
 
             /*if (!File.Exists(file))

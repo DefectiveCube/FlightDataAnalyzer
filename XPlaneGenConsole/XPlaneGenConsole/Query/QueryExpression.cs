@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    public class QueryExpression<T> where T : Datapoint<T>
+	[Obsolete()]
+    public class QueryExpression<T>
     {
         public QueryExpression() { }
 
@@ -36,9 +37,7 @@ namespace XPlaneGenConsole
 
 		public void BuildQuery()
 		{
-			//var pe = Expression.Parameter (typeof(T), "flight");
-
-			//var lambda = Expression.Lambda<Func<T, bool>> (exp, new ParameterExpression[]{ pe });
+			//var exp = QueryBuilder.Build (QueryString);
 		}
 
         public IQueryable<T> Evaluate()

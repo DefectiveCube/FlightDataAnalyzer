@@ -5,15 +5,11 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneGenConsole", "XPlaneGenConsole\XPlaneGenConsole.csproj", "{7EF97CE7-DC97-4839-88A6-D4475F451B15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneTest", "XPlaneTest\XPlaneTest.csproj", "{F63EA7B0-A978-48FE-92F9-8C3B51F5307C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneQuery", "XPlaneQuery\XPlaneQuery.csproj", "{81F0782D-80DC-4786-9300-5868369EE8BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneService", "XPlaneService\XPlaneService.csproj", "{B99F625B-CEAF-4524-B288-6A04F12FD6AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExParse", "ExParse\ExParse.csproj", "{ABA38AB8-8313-4B9D-899E-24CADF6D1DCD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExParseTest", "ExParseTest\ExParseTest.csproj", "{FDAEB20A-30FC-4AC0-A07D-C29C9C855703}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneTest", "XPlaneTest\XPlaneTest.csproj", "{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,22 +25,14 @@ Global
 		{81F0782D-80DC-4786-9300-5868369EE8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81F0782D-80DC-4786-9300-5868369EE8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81F0782D-80DC-4786-9300-5868369EE8BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABA38AB8-8313-4B9D-899E-24CADF6D1DCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABA38AB8-8313-4B9D-899E-24CADF6D1DCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABA38AB8-8313-4B9D-899E-24CADF6D1DCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABA38AB8-8313-4B9D-899E-24CADF6D1DCD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B99F625B-CEAF-4524-B288-6A04F12FD6AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B99F625B-CEAF-4524-B288-6A04F12FD6AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B99F625B-CEAF-4524-B288-6A04F12FD6AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B99F625B-CEAF-4524-B288-6A04F12FD6AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F63EA7B0-A978-48FE-92F9-8C3B51F5307C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F63EA7B0-A978-48FE-92F9-8C3B51F5307C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F63EA7B0-A978-48FE-92F9-8C3B51F5307C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F63EA7B0-A978-48FE-92F9-8C3B51F5307C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDAEB20A-30FC-4AC0-A07D-C29C9C855703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDAEB20A-30FC-4AC0-A07D-C29C9C855703}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDAEB20A-30FC-4AC0-A07D-C29C9C855703}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDAEB20A-30FC-4AC0-A07D-C29C9C855703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

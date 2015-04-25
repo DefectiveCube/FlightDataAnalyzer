@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    public sealed class FileProcessor<T> where T : Datapoint<T>
+    public sealed class FileProcessor<T> where T : BinaryDatapoint
     {
         public readonly string prefix;
-        Task task;
+        //Task task;
         ConcurrentBag<Task> tasks;
         ConcurrentQueue<string> fileQueue = new ConcurrentQueue<string>();
         CancellationTokenSource CancelToken;

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    public class FlightCSVWriter : StreamWriter
+    public class CSVWriter : StreamWriter
     {
-        public FlightCSVWriter(Stream stream) : base(stream)
+        public CSVWriter(Stream stream) : base(stream)
         {
 
         }

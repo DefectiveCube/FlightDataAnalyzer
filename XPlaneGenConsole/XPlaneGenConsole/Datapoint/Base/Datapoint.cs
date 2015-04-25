@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace XPlaneGenConsole
+{
+	internal static class DatapointExtensions
+	{
+
+		// Datapoint
+		// BinaryDatapoint
+		// BinaryDatapoint<T>
+		// EngineDatapoint, FlightDatapoint, SystemDatapoint
+
+		// TextDatapoint<T>
+		// EngineTextDatapoint, FlightTextDatapoint, SystemTextDatapoint
+	}
+
+    public abstract class Datapoint
+    {
+		[Obsolete()]
+        protected static ushort ParseUInt16(string value)
+        {
+            ushort result;
+
+            return ushort.TryParse(value, out result) ? result : ushort.MinValue;
+        }
+
+		public Datapoint()
+		{
+
+		}
+
+		public Datapoint(int fields, int bytes)
+		{
+			FIELDS_COUNT = fields;
+			BYTES_COUNT = bytes;
+
+		}
+
+		/// <summary>
+		/// The amount of bytes in the datapoint
+		/// </summary>
+		/// <returns></returns>
+		public readonly int BYTES_COUNT = 0;
+
+		/// <summary>
+		/// The amount of CSV fields being read
+		/// </summary>
+		/// <returns></returns>
+		public readonly int FIELDS_COUNT = 0;
+
+		//public abstract Datapoint Create ();
+    }
+
+	/*
+	[Obsolete()]
+	public abstract class Datapoint<T>
+    {
+        static Datapoint()
+        {
+            R = new Random();
+            KEY = R.Next();
+        }
+
+		protected static int KEY { get; set; }
+
+        protected static Random R { get; set; }
+
+		/// <summary>
+		/// The amount of bytes in the datapoint
+		/// </summary>
+		/// <returns></returns>
+        public readonly int BYTES_COUNT = 0;
+
+		/// <summary>
+		/// The amount of CSV fields being read
+		/// </summary>
+		/// <returns></returns>
+		public readonly int FIELDS_COUNT = 0;
+
+		protected Datapoint() { }
+
+		protected Datapoint(int fields, int bytes, byte[] data = null)
+		{
+			BYTES_COUNT = bytes;
+			FIELDS_COUNT = fields;
+
+			Data = new byte[BYTES_COUNT];
+
+			if (data != null) {
+				Load (data);
+				//SetBytes ();
+			}
+		}
+
+        /// <summary>
+        /// True, if datapoint has usable data
+        /// </summary>
+        public bool IsValid { get; set; }
+
+		public virtual int Flight { get; protected set; }
+
+		public virtual int Timestamp { get; protected set; }
+
+		public virtual DateTime DateTime { get; protected set;}
+
+        public virtual byte[] Data { get; protected set; }
+
+		public virtual void Load(byte[] data) { 
+			// TODO: ensure data is valid
+			Data = data;
+
+			//SetBytes ();
+		}
+
+		public virtual void Load(string value) { 
+			var values = value.Split (',');
+
+			Load (values);
+		}
+
+		public virtual void Load(string[] values) { 
+			// Two conditions to verify a valid row
+			// 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
+			// 2. All fields after the 3rd element should be defined. "-" signifies a null value
+
+			IsValid = values.Length == FIELDS_COUNT && !values.Skip (3).All (v => string.IsNullOrEmpty (v) || v.Equals ("-"));
+		
+			// If the row is 4 fields long, then that is a new flight
+			if (!IsValid) {
+				if (values.Length == 4) {
+					KEY = R.Next ();
+					//FlightTimes.Add (ParseDateTime (values [1] + " " + values [2]));
+				}               
+
+				return;
+			}
+
+			Flight = KEY;
+
+			//Parse(values);
+
+			//GetBytes ();
+		}
+
+        public virtual Task LoadAsync(byte[] data) { 
+			return Task.FromResult(default(object)); 
+		}
+
+        public virtual Task LoadAsync(string value) { 
+			return Task.Factory.StartNew (() => Load (value));
+		}
+
+        public virtual Task LoadAsync(string[] value) { 
+			return Task.FromResult (default(object));
+			//return Task.Factory.StartNew (() => Parse (value));
+		}
+
+    }
+    */
+}

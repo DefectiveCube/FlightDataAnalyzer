@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace XPlaneGenConsole
@@ -45,6 +46,27 @@ namespace XPlaneGenConsole
 			default:
 				throw new ArgumentOutOfRangeException ();
 			}
+		}
+		public static IEnumerable<T> GetHexBytes<T>(this string value)
+			where T: struct
+		{
+			if (value.Equals ("-")) {
+				yield break;
+			}
+
+			char[] chrs = value.ToCharArray ();
+			int i = chrs [1] == 'x' || chrs [1] == 'X' ? 2 : 0;
+
+			for (; i < chrs.Length; i++) {
+				var a = chrs [i].GetHexByte ();
+				var b = chrs.Length - i - 1;
+				var c = a * (int)Math.Pow (16, b);
+				var d = (T)Convert.ChangeType (c, typeof(T));
+
+				yield return d;
+			}
+
+			yield break;
 		}
 
 		public static IEnumerable<int> GetHexBytes(this string value)
@@ -117,7 +139,7 @@ namespace XPlaneGenConsole
 
 		public static bool TryParseHex(this string value, out byte num){
 			num = 0;
-			var b = value.GetHexBytes ().ToArray ();
+			//var b = value.GetHexBytes ().ToArray ();
 
 
 			return true;
@@ -167,6 +189,19 @@ namespace XPlaneGenConsole
 			return true;
 		}
 
+		public static bool TryParse(this string value, out ushort num)
+		{
+			num = 0;
+			int _num = 0;
+
+			if (TryParse (value, out num) && _num < ushort.MaxValue) {
+				num = (ushort)_num;
+				return true;
+			}
+
+			return false;
+		}
+
 		public static bool TryParse(this string value, out uint num){
 			num = 0;
 
@@ -182,6 +217,12 @@ namespace XPlaneGenConsole
 			}
 
 			return true;
+		}
+
+		public static bool TryParse(this string value, out ulong num){
+			num = 0L;
+
+			return false;
 		}
 
 		public static bool TryParse(this string value, out float num){
@@ -251,10 +292,23 @@ namespace XPlaneGenConsole
 			return ts;
 		}
 
+		public static byte AsByte(this string value, byte defaultValue = byte.MinValue){
+			byte result = defaultValue;
+
+			//return value.TryParse(
+
+			return result;
+		}
+
+		public static ushort AsUShort(this string value, ushort defaultValue = ushort.MinValue){
+			ushort result;
+
+			return value.TryParse (out result) ? result : defaultValue;
+		}
+
 		public static short AsShort(this string value, short falseValue = short.MinValue){
 			short result;
 
-			//return short.TryParse(value, out result) ? result : falseValue;
 			return value.TryParse(out result) ? result : falseValue;
 		}
 
@@ -266,27 +320,14 @@ namespace XPlaneGenConsole
 		{
 			int result;
 
-			//return int.TryParse (value, out result) ? result : falseValue;
-
 			return value.TryParse (out result) ? result : falseValue;
 		}
 
-		public static int AsInt(this string[] values, int index, int falseValue = int.MinValue){
-
-			return AsInt (values [index], falseValue);
-		}
-
-		public static float AsFloat(this string value, float falseValue = float.NaN)
+		public static float AsFloat(this string value, float defaultValue = float.NaN)
 		{
 			float result;
 
-			//return float.TryParse (value, out result) ? result : falseValue;
-			return value.TryParse(out result) ? result : falseValue;
-		}
-
-		public static float AsFloat(this string[] values, int index, float falseValue = float.NaN)
-		{
-			return AsFloat (values [index], falseValue);
+			return value.TryParse(out result) ? result : defaultValue;
 		}
 	}
 }

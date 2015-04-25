@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,6 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,13 +22,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -39,33 +37,60 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\packages\MathNet.Numerics.3.6.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Console.cs" />
-    <Compile Include="Datapoint.cs" />
-    <Compile Include="DatapointCollection.cs" />
-    <Compile Include="EngineDatapoint.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
-    <Compile Include="FlightCSVWriter.cs" />
-    <Compile Include="FlightDatapoint.cs" />
-    <Compile Include="FlightFields.cs" />
     <Compile Include="FlightHeader.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Hexadecimal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryExpression.cs" />
-    <Compile Include="Reader.cs" />
-    <Compile Include="SystemDatapoint.cs" />
-    <Compile Include="Writer.cs" />
-    <Compile Include="XPlaneDatapoint.cs" />
-    <Compile Include="XPlaneFile.cs" />
-    <Compile Include="XPlaneFileMapping.cs" />
+    <Compile Include="ICsvMapping.cs" />
+    <Compile Include="Mapping\Map.cs" />
+    <Compile Include="Mapping\Mapping.cs" />
+    <Compile Include="Query\QueryExpression.cs" />
+    <Compile Include="Query\QueryBuilder.cs" />
+    <Compile Include="Query\QueryToken.cs" />
+    <Compile Include="Query\QueryOperator.cs" />
+    <Compile Include="Query\QueryFunction.cs" />
+    <Compile Include="Datapoint\EngineDatapoint.cs" />
+    <Compile Include="Datapoint\FlightDatapoint.cs" />
+    <Compile Include="Datapoint\SystemDatapoint.cs" />
+    <Compile Include="XPlane\XPlaneDatapoint.cs" />
+    <Compile Include="XPlane\XPlaneFile.cs" />
+    <Compile Include="Datapoint\FlightFields.cs" />
+    <Compile Include="Datapoint\EngineFields.cs" />
+    <Compile Include="Datapoint\SystemFields.cs" />
+    <Compile Include="IO\DataWriter.cs" />
+    <Compile Include="IO\CSVWriter.cs" />
+    <Compile Include="IO\CSVAttribute.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="IO\CSVReader.cs" />
+    <Compile Include="IO\DataReader.cs" />
+    <Compile Include="Query\Query.cs" />
+    <Compile Include="XPlane\XPlaneHeader.cs" />
+    <Compile Include="XPlane\XPlaneFileEnding.cs" />
+    <Compile Include="XPlane\XPlaneDataWriter.cs" />
+    <Compile Include="XPlane\XPlaneDataReader.cs" />
+    <Compile Include="Singleton.cs" />
+    <Compile Include="Datapoint\Base\BinaryDatapoint.cs" />
+    <Compile Include="Datapoint\Base\Datapoint.cs" />
+    <Compile Include="Datapoint\IDatapointParse.cs" />
+    <Compile Include="IO\CSVDirection.cs" />
+    <Compile Include="IO\CSVFile.cs" />
+    <Compile Include="Datapoint\Base\TextDatapoint.cs" />
+    <Compile Include="Data\Temperature.cs" />
+    <Compile Include="Data\Temperature\Fahrenheit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -75,4 +100,17 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Mapping\" />
+    <Folder Include="Query\" />
+    <Folder Include="Datapoint\" />
+    <Folder Include="XPlane\" />
+    <Folder Include="IO\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="XPlane\FDR\" />
+    <Folder Include="XPlane\Net\" />
+    <Folder Include="Datapoint\Base\" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\Temperature\" />
+  </ItemGroup>
 </Project>

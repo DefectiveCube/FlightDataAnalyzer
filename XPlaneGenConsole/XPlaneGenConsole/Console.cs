@@ -11,11 +11,11 @@ namespace XPlaneGenConsole
         const string name = "Flight Data Analyzer";
         const double version = 0.01;
 
-        string[] validKeys = new[] { "-e", "-f", "-s" };
+        //string[] validKeys = new[] { "-e", "-f", "-s" };
 
-        FileProcessor<FlightDatapoint> flightProcessor = new FileProcessor<FlightDatapoint>();
-        FileProcessor<EngineDatapoint> engineProcessor = new FileProcessor<EngineDatapoint>();
-        FileProcessor<SystemDatapoint> systemProcessor = new FileProcessor<SystemDatapoint>();
+        //FileProcessor<FlightTextDatapoint> flightProcessor = new FileProcessor<FlightTextDatapoint>();
+        //FileProcessor<EngineTextDatapoint> engineProcessor = new FileProcessor<EngineTextDatapoint>();
+        //FileProcessor<SystemDatapoint> systemProcessor = new FileProcessor<SystemDatapoint>();
 
         int Menu()
         {
@@ -96,27 +96,27 @@ namespace XPlaneGenConsole
                 switch (file.Key)
                 {
                     case "engine":
-                        engineProcessor.Add(file.Value);
+                        //engineProcessor.Add(file.Value);
                         break;
                     case "flight":
-                        flightProcessor.Add(file.Value);
+                        //flightProcessor.Add(file.Value);
                         break;
                     case "system":
-                        systemProcessor.Add(file.Value);
+                        //systemProcessor.Add(file.Value);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(file.Key);
                 }
             }
 
-            engineProcessor.Start();
+            /*engineProcessor.Start();
             systemProcessor.Start();
             flightProcessor.Start();
 
             engineProcessor.WaitAll();
             systemProcessor.WaitAll();
-            flightProcessor.WaitAll();
-
+            flightProcessor.WaitAll();*/
+			
             Console.WriteLine("Press enter to exit");
             Console.Read();
         }
