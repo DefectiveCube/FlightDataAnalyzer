@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Globalization;
 
-namespace XPlaneGenConsole
+namespace XPlaneGenConsole.Data
 {
 	public struct Fahrenheit : ITemperature
 	{
@@ -18,7 +17,17 @@ namespace XPlaneGenConsole
 			this.value = value;
 		}
 
-		public TypeCode GetTypeCode()
+        public override bool Equals(object obj)
+        {
+            return value == ((Fahrenheit)obj).value;
+        }
+
+        public override int GetHashCode()
+        {
+            return Convert.ToInt32(value);
+        }
+
+        public TypeCode GetTypeCode()
 		{
 			return TypeCode.Single;
 		}
@@ -177,5 +186,13 @@ namespace XPlaneGenConsole
 		{
 			return value.value;
 		}
-	}
+
+        public static implicit operator Fahrenheit(Celsius value)
+        {
+            var temp = new Fahrenheit();
+            temp.value = value.value * 9.0f / 5.0f + 32;
+
+            return temp;
+        }
+    }
 }

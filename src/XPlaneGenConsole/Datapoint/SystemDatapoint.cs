@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-	public sealed class SystemDatapoint : BinaryDatapoint, IDatapointParse
+	public sealed class SystemDatapoint : BinaryDatapoint
 	{
-		public new const int BYTES_COUNT = 105;
-		public new const int FIELDS_COUNT = 38;
+		public const int BYTES_COUNT = 105;
+		public const int FIELDS_COUNT = 38;
 
-		public SystemDatapoint() : base(BYTES_COUNT)
+		public SystemDatapoint()
 		{
 
 		}

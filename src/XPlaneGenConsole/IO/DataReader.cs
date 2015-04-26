@@ -15,13 +15,11 @@ namespace XPlaneGenConsole
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DataReader<T> : IDisposable
-        where T : BinaryDatapoint
+        where T : BinaryDatapoint, new()
     {
         private BinaryReader reader;
         private MemoryStream stream;
         private readonly int bytesToRead;
-
-		public IQueryable<T> Query{ get; private set; }
 
         public bool EndOfStream
         {
@@ -45,25 +43,8 @@ namespace XPlaneGenConsole
             this.stream.Seek(0, SeekOrigin.Begin);
 
             reader = new BinaryReader(this.stream);
-
-			Type t = typeof(T);
-
-            if (t == typeof(FlightDatapoint))
-            {
-                bytesToRead = FlightDatapoint.BYTES_COUNT;
-            }
-            else if (t == typeof(EngineDatapoint))
-            {
-                bytesToRead = EngineDatapoint.BYTES_COUNT;
-            }
-            else if (t == typeof(SystemDatapoint))
-            {
-                bytesToRead = SystemDatapoint.BYTES_COUNT;
-            }
-            else
-            {
-                throw new Exception();
-            }
+            
+            bytesToRead = BinaryDatapoint.GetByteCount<T>();
         }
 
         public T Read()

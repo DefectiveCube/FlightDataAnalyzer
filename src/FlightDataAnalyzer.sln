@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneGenConsole", "XPlaneGenConsole\XPlaneGenConsole.csproj", "{7EF97CE7-DC97-4839-88A6-D4475F451B15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneGen", "XPlaneGenConsole\XPlaneGen.csproj", "{7EF97CE7-DC97-4839-88A6-D4475F451B15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneQuery", "XPlaneQuery\XPlaneQuery.csproj", "{81F0782D-80DC-4786-9300-5868369EE8BB}"
 EndProject
@@ -36,8 +36,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

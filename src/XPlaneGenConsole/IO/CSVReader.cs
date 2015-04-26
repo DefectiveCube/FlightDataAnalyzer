@@ -14,13 +14,11 @@ namespace XPlaneGenConsole
 	/// For reading CSV files
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class CSVReader<T> : TextReader 
-		where T : BinaryDatapoint
+	public class CSVReader<T> : IDisposable
+		where T : CsvDatapoint, new()
 	{
 		private MemoryStream stream;
 		private StreamReader reader;
-
-		//private Func<T> Create = Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
 
 		public bool EndOfStream {
 			get { return reader.BaseStream.Position >= reader.BaseStream.Length; }
@@ -37,14 +35,14 @@ namespace XPlaneGenConsole
 			reader.ReadLine(); // skip first line
 		}
 
-	/*public Task<IEnumerable<T>> ReadToEndAsync()
+        public void Dispose()
         {
-            await reader.ReadToEndAsync();
-        }*/
 
-		public new void Read(){
+        }
 
-		}
+        public void Load(string value) { }
+
+        public void Load(string[] values) { }
 
 		public int ReadInt32(int min = 0, int max = 1)
 		{
@@ -57,6 +55,11 @@ namespace XPlaneGenConsole
 
 			return value;
 		}
+
+        public Tuple<int,string> ReadFieldWithIndex(int min = 0, int max = 1)
+        {
+            return new Tuple<int, string>(0, string.Empty);
+        }
 
 		public string ReadField(int min = 0, int max = 1)
 		{
@@ -100,6 +103,7 @@ namespace XPlaneGenConsole
 
 			int p = reader.Peek();
 
+            // read through any commas and control characters
 			while(p == 44 || p < 32)
 			{
 				reader.Read();
@@ -109,7 +113,7 @@ namespace XPlaneGenConsole
 			return sb.ToString();
 		}
 
-		public async new Task<T> ReadLineAsync()
+		/*public async new Task<T> ReadLineAsync()
 		{
 			var line = await reader.ReadLineAsync();
 
@@ -118,23 +122,18 @@ namespace XPlaneGenConsole
 			datapoint.Load (line);
 
 			return datapoint.IsValid ? datapoint : null;
-		}
+		}*/
 
-		public new T ReadLine()
+		public T ReadLine()
 		{
 			T datapoint = Activator.CreateInstance<T>();
 
 			datapoint.Load(reader.ReadLine());
 
-			if (datapoint.IsValid)
-			{
-				return datapoint;
-			}
-
 			return datapoint.IsValid ? datapoint : null;
 		}
 
-		public async new Task<T[]> ReadToEndAsync()
+		/*public async new Task<T[]> ReadToEndAsync()
 		{
 			var start = DateTime.Now;
 
@@ -171,9 +170,9 @@ namespace XPlaneGenConsole
 			}
 
 			return points.ToArray();
-		}
+		}*/
 
-		public IEnumerable<T> ReadAll(){
+		/*public IEnumerable<T> ReadAll(){
 			var result = ReadToEndAsync ().Result;
 
 			foreach (var t in result) {
@@ -183,9 +182,9 @@ namespace XPlaneGenConsole
 			}
 
 			yield break;
-		}
+		}*/
 
-		public new IEnumerable<T> ReadToEnd()
+		public IEnumerable<T> ReadToEnd()
 		{
 			var start = DateTime.Now;;
 
@@ -193,11 +192,12 @@ namespace XPlaneGenConsole
 				while (!reader.EndOfStream) {
 					T datapoint = Activator.CreateInstance<T> ();
 
-					datapoint.Load (reader.ReadLine ());
+                    datapoint.Load(reader.ReadLine());
 
-					if (datapoint.IsValid) {
-						yield return datapoint;
-					}
+                    if (datapoint.IsValid)
+                    {
+                        yield return datapoint;
+                    }				
 				}
 			}
 

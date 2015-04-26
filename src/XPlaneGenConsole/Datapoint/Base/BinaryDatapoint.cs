@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace XPlaneGenConsole
@@ -6,30 +8,29 @@ namespace XPlaneGenConsole
 	/// <summary>
 	/// Represents a datapoint using binary types to store information
 	/// </summary>
-	public abstract class BinaryDatapoint : Datapoint
-	{ 	
-		private Random r;
+	public abstract class BinaryDatapoint : Datapoint<BinaryDatapoint>
+	{
+        private static Dictionary<Type, int> byteCounts = new Dictionary<Type, int>();
 
-		public BinaryDatapoint(int bytes)
-		{
-			//BYTES_COUNT = bytes;
-			r = new Random();
-		}
+        protected static void AddByteCount(Type t, int value)
+        {
+            if (!byteCounts.ContainsKey(t))
+            {
+                byteCounts.Add(t, value);
+            }
+        }
 
-		protected int Key { get; set; }
-		protected virtual int Fields{ get; set; }
-		protected virtual int Bytes{ get; set ;}
+        public static int GetByteCount<T>()
+            where T : BinaryDatapoint, new()
+        {
+            int value = 0;
 
-		/// <summary>
-		/// True, if datapoint has usable data
-		/// </summary>
-		public bool IsValid { get; set; }
+            byteCounts.TryGetValue(typeof(T), out value);
 
-		public virtual int Flight { get; internal set; }
+            return value;
+        }
 
-		public virtual int Timestamp { get; internal set; }
-
-		public virtual DateTime DateTime { get; internal set;}
+        protected int Bytes{ get; set ;}
 
 		public virtual byte[] Data { get; internal set; }
 
@@ -40,7 +41,7 @@ namespace XPlaneGenConsole
 			SetBytes ();
 		}
 
-		public virtual void Load(string value){
+		/*public virtual void Load(string value){
 			var values = value.Split (',');
 
 			Load (values);
@@ -68,10 +69,10 @@ namespace XPlaneGenConsole
 			Flight = Key;
 
 			(this as IDatapointParse).Parse (values);
-		}
+		}*/
 
-		internal virtual byte[] GetBytes (){return new byte[]{};}
+        internal virtual byte[] GetBytes() { return new byte[] { }; }
 
-		internal virtual void SetBytes (){}
+        internal virtual void SetBytes() { }
 	}
 }

@@ -9,6 +9,6 @@ namespace XPlaneGenConsole
 {
 	public class XPlaneFile
 	{
-		public XPlaneDataWriter Writer{ get; set; }
+		//public XPlaneDataWriter Writer{ get; set; }
 	}
 }

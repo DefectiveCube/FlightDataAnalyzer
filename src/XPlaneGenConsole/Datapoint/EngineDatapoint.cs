@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace XPlaneGenConsole
 {
-	public sealed class EngineDatapoint : BinaryDatapoint, IDatapointParse
+	public sealed class EngineDatapoint : BinaryDatapoint
 	{
-		public new const int BYTES_COUNT = 122;
-		public new const int FIELDS_COUNT = 33;
+		public const int BYTES_COUNT = 122;
+		public const int FIELDS_COUNT = 33;
 
-		public EngineDatapoint () : base (BYTES_COUNT)
+		internal EngineDatapoint () 
 		{
 
 		}

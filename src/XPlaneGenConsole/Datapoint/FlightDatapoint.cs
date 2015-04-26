@@ -10,10 +10,10 @@ namespace XPlaneGenConsole
 {
 	public sealed class FlightDatapoint : BinaryDatapoint
 	{
-		public new const int FIELDS_COUNT = 30;
-		public new const int BYTES_COUNT = 87;
+		public const int FIELDS_COUNT = 30;
+		public const int BYTES_COUNT = 87;
 
-		public FlightDatapoint() : base(BYTES_COUNT)
+		public FlightDatapoint()
 		{
 			
 		}
@@ -127,38 +127,6 @@ namespace XPlaneGenConsole
 			this.AHRSSeq = Data [84];
 			this.ADCSeq = Data [85];
 			this.AHRSStartupMode = Data [86];
-		}
-
-		public void Parse(string[] values)
-		{
-				Timestamp = values [0].AsInt ();
-				DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());		
-				NormalAcceleration = values[3].AsFloat ();
-				LongitudinalAcceleration = values[4].AsFloat ();
-				LateralAcceleration = values[5].AsFloat ();
-				ADAHRUsed = values [6].Equals ("0") || string.IsNullOrWhiteSpace (values [6]); // can this be improved?
-				AHRSSStatus = values[7].GetHexBytes<byte>().FirstOrDefault();
-				Heading = values[8].AsFloat ();
-				Pitch = values[9].AsFloat ();
-				Roll = values[10].AsFloat ();
-				FlightDirectorPitch = values[11].AsFloat ();
-				FlightDirectorRoll = values[12].AsFloat ();
-				HeadingRate = values[13].AsFloat ();
-				PressureAltitude = values.AsShort (14);
-				IndicatedAirspeed = values[15].AsByte();//ParseByte (values [15]);
-				TrueAirspeed = values[16].AsByte();//ParseByte (values [16]);
-				VerticalSpeed = values.AsShort (17);
-				GPSLatitude = values[18].AsFloat ();
-				GPSLongitude = values[19].AsFloat ();
-				BodyYawRate = values[20].AsFloat ();
-				BodyPitchRate = values[21].AsFloat ();
-				BodyRollRate = values[22].AsFloat ();
-				IRUStatus = values [23].GetHexBytes<byte> ().FirstOrDefault(); 
-				MPUStatus = values [24].GetHexBytes<byte>().FirstOrDefault ();
-				ADCStatus = values [25].GetHexBytes<byte>().FirstOrDefault ();
-				AHRSSeq = values [26].GetHexBytes<byte>().FirstOrDefault ();
-				ADCSeq = values[27].AsByte();//ParseByte (values [27]);
-				AHRSStartupMode = values[28].AsByte();//ParseByte (values [28]);
 		}
 	}
 }

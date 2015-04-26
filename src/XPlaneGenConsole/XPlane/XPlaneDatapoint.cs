@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using XPlaneGenConsole.Data;
+using XPlaneGenConsole.Attributes;
+
 namespace XPlaneGenConsole
 {
-	[CSVFile(CSVDirection.Out,false)]
-    public class XPlaneDatapoint : BinaryDatapoint
+    public sealed class XPlaneDatapoint : XPlaneBaseDatapoint
     {
-		public XPlaneDatapoint() : base(0)
+		public XPlaneDatapoint() : base()
 		{
 
 		}
@@ -27,17 +29,20 @@ namespace XPlaneGenConsole
 		[CSV(0)]
 		public TimeSpan Duration{ get; set; }
 
-		public int Temperature{ get; set; }
+		public Celsius Temperature{ get; set; }
 
 		public float Longitude{ get; set; }
 
 		public float Latitude{ get; set; }
 
+        /// <summary>
+        /// Height about mean sea level, in true feet. 
+        /// </summary>
 		public int HeightMeanSeaLevel{ get; set; }
 
 		public int HeightRadioAltimeter{ get; set; }
-
-		public float AileronDeflection{ get; set; }
+		
+        public float AileronDeflection{ get; set; }
 
 		public float ElevatorDeflection{ get; set; }
 
@@ -48,7 +53,7 @@ namespace XPlaneGenConsole
 		/// <summary>
 		/// Roll. In degrees (-180 to +180)
 		/// </summary>
-		public float Roll { get; set; }
+		public Ratio Roll { get; set; }
 
 		/// <summary>
 		/// Heading. In degrees (0 to 360 (exclusive))
@@ -60,6 +65,10 @@ namespace XPlaneGenConsole
 		/// </summary>
 		public int IndicatedSpeed{ get; set; }
 
+        /// <summary>
+        /// Indicated Vertical speed. Feet per minute
+        /// </summary>
+        /// <returns></returns>
 		public int VerticalSpeed{ get; set; }
 
 		public int IndicatedSlip{ get; set; }
@@ -72,11 +81,21 @@ namespace XPlaneGenConsole
 
 		public bool Stall{ get; set; }
 
-		/*
+        /*
 		flap rqst
 		flap actul
 		slat ratio
 		sbrk ratio
+        */
+        /// <summary>
+        /// 0.0 : Retracted
+        /// 1.0 : Extended
+        /// 1.5 : Ground-Deployed
+        /// </summary>
+        /// <returns></returns>
+        public int SpeedBrakeRatio { get;set; }
+
+            /*
 		gear handl*/
 
 		public bool IsNoseGearDown{ get; set; }
@@ -85,24 +104,83 @@ namespace XPlaneGenConsole
 
 		public bool IsRightGearDown{ get; set; }
 
-		/*elev trim
-		NAV-1 frq
-		NAV-2 frq
-		NAV-1 type
-		NAV-2 type
-		OBS-1 deg
-		OBS-2 deg
-		DME-1 nm
-		DME-2 nm
-		NAV-1 h-def
-		NAV-2 h-def
-		NAV-1 ntf
-		NAV-2 ntf
-		NAV-1 v-def
-		NAV-2 v-def
-		OM over
-		MM over
-		IM over*/
+        /*elev trim*/
+        /// <summary>
+        /// 5-Digit Integer.
+        /// </summary>
+        /// <returns></returns>
+        public int Nav1_Frequency { get; set; }
+		
+        /// <summary>
+        /// 5-Digit Integer
+        /// </summary>
+        /// <returns></returns>
+        public int Nav2_Frequency { get; set; }
+
+        /// <summary>
+        /// None = 0
+        /// NDB = 2
+        /// VOR = 3
+        /// LOC = 5
+        /// ILS = 10
+        /// </summary>
+        /// <returns></returns>
+        public int Nav1_Type { get; set; }
+
+        public int Nav2_Type { get; set; }
+
+        /// <summary>
+        /// Degrees : 0 to 360
+        /// </summary>
+        /// <returns></returns>
+        public int OBS1 { get; set; }
+
+        /// <summary>
+        /// In Degrees. 0 to 360
+        /// </summary>
+        /// <returns></returns>
+        public int OBS2 { get; set; }
+
+        /// <summary>
+        /// 0.0: no DME found
+        /// > 0.0: receiving data
+        /// </summary>
+        /// <returns></returns>
+        public float DME1 { get; set; }
+
+        public float DME2 { get; set; }
+
+        /// <summary>
+        /// -2.5 to 2.5. Localizer Deflection
+        /// </summary>
+        /// <returns></returns>
+        public float Nav1_HorizontalDeflection { get; set; }
+
+        public float Nav2_HorizontalDeflection { get; set; }
+
+        /// <summary>
+        /// 0 : Nav
+        /// 1 : To
+        /// 2 : From
+        /// </summary>
+        /// <returns></returns>
+        public int Nav1_Mode { get; set; }
+
+        public int Nav2_Mode { get; set; }
+
+        /// <summary>
+        /// -2.5 to 2.5. Glideslope Deflection
+        /// </summary>
+        /// <returns></returns>
+        public float Nav1_VerticalDeflection { get; set; }
+
+        public float Nav2_VerticalDeflection { get; set; }
+
+        public bool OM { get; set; }
+
+        public bool MM { get; set; }
+
+        public bool IM { get; set; }
 
 		public bool FlightDirectorEnabled{ get; set; }
 
@@ -134,9 +212,10 @@ namespace XPlaneGenConsole
 
 		public float Barometer{ get; set; }
 
-		/*
-		DH ft
-		*/
+        /// <summary>
+        /// Decision height, dialed into the radio alt., feet AGL
+        /// </summary>
+        public int DecisionHeight { get; set; }
 
 		public bool MasterCaution{ get; set; }
 
@@ -145,13 +224,14 @@ namespace XPlaneGenConsole
 		public bool GPWS{ get; set; }
 
 		// Mmode 0-4
-		public byte Mmode{ get; set; }
+		public byte MapMode{ get; set; }
 
 		// Mrang 0-6
-		public byte Mrang{ get; set; }
+		public byte MapRange{ get; set; }
 
 		public sbyte ThrottleRatio{ get; set; }
 
+        public int PropellerRPMCommand { get; set; }
 		/*
 		 * prop cntrl
 		 * prop cntrl

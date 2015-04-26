@@ -48,9 +48,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XPlaneGenConsole\XPlaneGenConsole.csproj">
+    <ProjectReference Include="..\XPlaneGenConsole\XPlaneGen.csproj">
       <Project>{7EF97CE7-DC97-4839-88A6-D4475F451B15}</Project>
-      <Name>XPlaneGenConsole</Name>
+      <Name>XPlaneGen</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7EF97CE7-DC97-4839-88A6-D4475F451B15}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XPlaneGenConsole</RootNamespace>
     <AssemblyName>XPlaneGenConsole</AssemblyName>
@@ -29,6 +29,9 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,7 +46,27 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\RangeAttribute.cs" />
+    <Compile Include="BinaryFile.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="Datapoint\Base\CSVDatapoint.cs" />
+    <Compile Include="Datapoint\Base\DatapointFactory.cs" />
+    <Compile Include="Datapoint\Conversion\Conversion.cs" />
+    <Compile Include="Datapoint\Csv\EngineCsvDatapoint.cs" />
+    <Compile Include="Datapoint\Csv\FlightCsvDatapoint.cs" />
+    <Compile Include="Datapoint\Csv\SystemCsvDatapoint.cs" />
+    <Compile Include="Data\Angle\ArcDegree.cs" />
+    <Compile Include="Data\Angle\ArcMinute.cs" />
+    <Compile Include="Data\Angle\ArcSecond.cs" />
+    <Compile Include="Data\Angle\Radian.cs" />
+    <Compile Include="Data\Bias.cs" />
+    <Compile Include="Data\GPS.cs" />
+    <Compile Include="Data\Range.cs" />
+    <Compile Include="Data\Ratio.cs" />
+    <Compile Include="Data\Semicircle.cs" />
+    <Compile Include="Data\Temperature\Celsius.cs" />
+    <Compile Include="Data\Temperature\Kelvin.cs" />
+    <Compile Include="Factory.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="FlightHeader.cs" />
@@ -62,11 +85,11 @@
     <Compile Include="Datapoint\EngineDatapoint.cs" />
     <Compile Include="Datapoint\FlightDatapoint.cs" />
     <Compile Include="Datapoint\SystemDatapoint.cs" />
+    <Compile Include="TextFile.cs" />
+    <Compile Include="XPlane\XPlaneCommentDatapoint.cs" />
+    <Compile Include="XPlane\XPlaneBaseDatapoint.cs" />
     <Compile Include="XPlane\XPlaneDatapoint.cs" />
     <Compile Include="XPlane\XPlaneFile.cs" />
-    <Compile Include="Datapoint\FlightFields.cs" />
-    <Compile Include="Datapoint\EngineFields.cs" />
-    <Compile Include="Datapoint\SystemFields.cs" />
     <Compile Include="IO\DataWriter.cs" />
     <Compile Include="IO\CSVWriter.cs" />
     <Compile Include="IO\CSVAttribute.cs" />
@@ -76,20 +99,18 @@
     <Compile Include="Query\Query.cs" />
     <Compile Include="XPlane\XPlaneHeader.cs" />
     <Compile Include="XPlane\XPlaneFileEnding.cs" />
-    <Compile Include="XPlane\XPlaneDataWriter.cs" />
-    <Compile Include="XPlane\XPlaneDataReader.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Datapoint\Base\BinaryDatapoint.cs" />
     <Compile Include="Datapoint\Base\Datapoint.cs" />
-    <Compile Include="Datapoint\IDatapointParse.cs" />
     <Compile Include="IO\CSVDirection.cs" />
     <Compile Include="IO\CSVFile.cs" />
     <Compile Include="Datapoint\Base\TextDatapoint.cs" />
-    <Compile Include="Data\Temperature.cs" />
+    <Compile Include="Data\ITemperature.cs" />
     <Compile Include="Data\Temperature\Fahrenheit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DatapointDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -101,16 +122,7 @@
   </Target>
   -->
   <ItemGroup>
-    <Folder Include="Mapping\" />
-    <Folder Include="Query\" />
-    <Folder Include="Datapoint\" />
-    <Folder Include="XPlane\" />
-    <Folder Include="IO\" />
-    <Folder Include="Extensions\" />
     <Folder Include="XPlane\FDR\" />
     <Folder Include="XPlane\Net\" />
-    <Folder Include="Datapoint\Base\" />
-    <Folder Include="Data\" />
-    <Folder Include="Data\Temperature\" />
   </ItemGroup>
 </Project>

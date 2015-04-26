@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using XPlaneGenConsole;
+using XPlaneGenConsole.Data;
 
 namespace XPlaneQuery
 {
-    public class Program
+    public class QueryProgram
     {
         public static void Main(string[] args)
         {
@@ -32,10 +33,11 @@ namespace XPlaneQuery
 			//Map<SystemDatapoint,XPlaneDatapoint>.Associate ("AirTemperature", "Temperature");
 
 			Fahrenheit f = 10.0;
+            Celsius c = f;
 
 			var list = new List<Expression> ();
 
-			list.Add (QueryBuilder.Build ("3 + 4"));
+			/*list.Add (QueryBuilder.Build ("3 + 4"));
 			list.Add (QueryBuilder.Build ("3 - 4"));
 			list.Add (QueryBuilder.Build ("3 * 4"));
 			list.Add (QueryBuilder.Build ("3 / 4"));
@@ -47,9 +49,8 @@ namespace XPlaneQuery
 				Console.WriteLine (exp.ToString ());
 			}
 				
-			Console.WriteLine (QueryBuilder.Build ("3 + 4", typeof(FlightDatapoint),typeof(EngineDatapoint)));
+			Console.WriteLine (QueryBuilder.Build ("3 + 4", typeof(FlightDatapoint),typeof(EngineDatapoint)));*/
 
-			//var f = new FlightDatapoint (new byte[]{ });
 			var name = "P_FLIGHT.CSV";
 			var output = "Test.bin";
 
@@ -59,10 +60,16 @@ namespace XPlaneQuery
             var importFile = Path.Combine(import, name);
             var dataFile = Path.Combine(data, output);
 
+            Conversion<FlightCsvDatapoint, FlightDatapoint> con = new Conversion<FlightCsvDatapoint, FlightDatapoint>();
+            //con.Add(new delegate(Extensions.AsInt))
+            
+
+
 			var start = DateTime.Now;
-			using (var reader = new CSVReader<FlightDatapoint> (File.OpenRead (importFile)))
+			using (var reader = new CSVReader<FlightCsvDatapoint> (File.OpenRead (importFile)))
 			using (var writer = new DataWriter<FlightDatapoint> (dataFile)) {
-				writer.Write (reader.ReadToEnd ().ToArray ());
+                //reader.ReadToEnd().ToArray();
+				//writer.Write (reader.ReadToEnd ().ToArray ());
 			}
 
 			//Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);

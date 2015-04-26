@@ -9,6 +9,18 @@ namespace XPlaneGenConsole
 {
 	public static class Extensions
 	{
+        public static List<Delegate> ConversionList()
+        {
+            var list = Singleton<List<Delegate>>.Instance;
+
+            Func<string, int, int> asInt = AsInt;
+
+            list.Add(asInt);
+
+
+            return Singleton<List<Delegate>>.Instance;
+        }
+
 		public static void BlockCopy<T>(this byte[] source, int offset, int size, params T[] value)
 			where T: struct
 		{
@@ -281,6 +293,16 @@ namespace XPlaneGenConsole
 
 			return dt;
 		}
+
+        public static DateTime AsDateTime(this string value, string span)
+        {
+            return AsDateTime(value, span.AsTimeSpan());
+        }
+
+        public static DateTime AsDateTime(this string value, TimeSpan ts)
+        {
+            return AsDateTime(value).Add(ts);
+        }
 
 		public static TimeSpan AsTimeSpan(this string value){
 			var ts = new TimeSpan (

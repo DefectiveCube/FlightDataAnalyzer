@@ -11,7 +11,10 @@ namespace XPlaneGenConsole
 	{
 		private static readonly Lazy<T> instance = new Lazy<T> (() => Activator.CreateInstance<T> ());
 
-		protected Singleton(){}
+		public Singleton()
+        {
+
+        }
 
 		public static T Instance
 		{ 
