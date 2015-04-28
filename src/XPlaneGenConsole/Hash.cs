@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace XPlaneGenConsole
 {
-    public sealed class Hash
+    /*public sealed class Hash
     {
         private Hash() { }
 
@@ -21,5 +21,5 @@ namespace XPlaneGenConsole
         {
             return new SHA1Managed().ComputeHash(data);
         }
-    }
+    }*/
 }

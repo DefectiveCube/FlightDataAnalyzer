@@ -15,7 +15,7 @@ namespace XPlaneGenConsole
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class CSVReader<T> : IDisposable
-		where T : CsvDatapoint, new()
+		where T : CsvDatapoint<T>, new()
 	{
 		private MemoryStream stream;
 		private StreamReader reader;
@@ -40,10 +40,6 @@ namespace XPlaneGenConsole
 
         }
 
-        public void Load(string value) { }
-
-        public void Load(string[] values) { }
-
 		public int ReadInt32(int min = 0, int max = 1)
 		{
 			int value;
@@ -58,7 +54,9 @@ namespace XPlaneGenConsole
 
         public Tuple<int,string> ReadFieldWithIndex(int min = 0, int max = 1)
         {
-            return new Tuple<int, string>(0, string.Empty);
+            throw new NotSupportedException();
+
+            //return new Tuple<int, string>(0, string.Empty);
         }
 
 		public string ReadField(int min = 0, int max = 1)
@@ -128,6 +126,8 @@ namespace XPlaneGenConsole
 		{
 			T datapoint = Activator.CreateInstance<T>();
 
+
+            
 			datapoint.Load(reader.ReadLine());
 
 			return datapoint.IsValid ? datapoint : null;
@@ -190,9 +190,9 @@ namespace XPlaneGenConsole
 
 			using (reader) {
 				while (!reader.EndOfStream) {
-					T datapoint = Activator.CreateInstance<T> ();
+                    T datapoint = CsvDatapoint<T>.Factory.CreateFromString(reader.ReadLine());
 
-                    datapoint.Load(reader.ReadLine());
+                    //datapoint.Load(reader.ReadLine());
 
                     if (datapoint.IsValid)
                     {

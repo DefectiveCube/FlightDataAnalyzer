@@ -23,6 +23,7 @@ namespace XPlaneGenConsole
         {
             this.stream = new MemoryStream();
             stream.CopyTo(this.stream);
+            stream.Close();
             writer = new BinaryWriter(this.stream);
         }
 

@@ -34,15 +34,15 @@ namespace XPlaneGenConsole
 
         public void Process(string path, CancellationTokenSource token = default(CancellationTokenSource))
         {
-            var hash = BitConverter.ToString(Hash.ComputeSHA1Hash(path)).Replace("-", string.Empty);
-            var dir = Path.Combine(new[] { Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "data", hash });
+            //var hash = BitConverter.ToString(Hash.ComputeSHA1Hash(path)).Replace("-", string.Empty);
+            //var dir = Path.Combine(new[] { Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "data", hash });
 
-            Debug.WriteLine(string.Format("Directory: {0}", path));
-            Debug.WriteLine(string.Format("Hash: {0}", hash));
+            //Debug.WriteLine(string.Format("Directory: {0}", path));
+            //Debug.WriteLine(string.Format("Hash: {0}", hash));
 
             // TODO: check cancel token
 
-            Process(path, dir, token);
+            //Process(path, dir, token);
         }
 
         public void Process(string path, string directory, CancellationTokenSource token = default(CancellationTokenSource))
