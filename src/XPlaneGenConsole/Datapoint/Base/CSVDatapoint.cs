@@ -12,6 +12,7 @@ namespace XPlaneGenConsole
         public static CsvFactory<T> Factory;
 
         protected static int Key;
+
         protected static Random r;
 
         public int Fields { get; protected set; }

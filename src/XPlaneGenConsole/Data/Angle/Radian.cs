@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole.Data.Angle
 {
-    class Radian
-    {
-    }
+	public struct Radian
+	{
+
+	}
 }

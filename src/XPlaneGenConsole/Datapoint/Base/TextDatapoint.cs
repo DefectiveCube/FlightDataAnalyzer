@@ -8,10 +8,5 @@ namespace XPlaneGenConsole
 	public abstract class TextDatapoint : Datapoint<TextDatapoint>
 	{
         public virtual IEnumerable<string> Value { get { return new string[] { }; } }
-
-        public virtual void Load(XmlDocument document)
-        {
-
-        }
 	}
 }

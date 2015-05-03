@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -16,6 +15,82 @@ namespace XPlaneQuery
     {
         public static void Main(string[] args)
         {
+			//var t1 = Term.Parse ("2x", "x");
+			//var t2 = Term.Parse ("3x", "x");
+			//var t3 = t1 * t2;
+
+			//var t = Equation.Parse ("4*x^2 + 3*x^2", "x");
+			//var s = Equation.Parse ("4*x^2 + 3*x^3 * 4*x^2 + 3*x^3", "x");
+			//var s = Equation.Parse ("4 + 3", "x");
+			//var r = Equation.Parse ("(x) * (1)", "x");
+
+			//r = r.ToGeneralForm ();
+
+			//var qt = Equation.Parse ("(x-1) * 4", "x");
+			//var e = Equation.Parse ("(x-1) * (x-2) * ((x-1) * (x-2))", "x");
+			var q = Equation.Parse ("(x-1) * (x-2) * (x-1)", "x");
+
+			//q = q.ToGeneralForm ();
+			//var eq = Equation.Parse ("(x-1) * (x-3) * (x-4) * (x-6)", "x");
+
+			//var eq1 = eq.ToGeneralForm ();
+
+			//var exp = eq1.CompiledExpression.Compile ();
+
+			/*Console.WriteLine (exp.ToString ());
+
+			foreach (var num in Enumerable.Range(1,6)) {
+				Console.WriteLine (exp (num));
+			}*/
+
+
+			//var eq = Equation.Parse ("x^2 * x^2", "x");
+			// (x-1) * (x-3) * (x-4) * (x-6)
+
+			/*
+			 * (x-1) * (x-3) = x^2 -4x 3
+			 * 
+			 * (x-4) * (x-6) = x^2 -10x 24
+			 */ 
+
+
+			// x^4 	-10x^3 	24x^2
+			// 		-4x^3 	40x^2 	-96x
+			// 				3x^2 	-30x 	72
+
+			// x^4 -14x^3 67x^2 -126x 72
+
+
+			/*
+			(x^2 -4x 3) * (x-4) = x^3 -4x^2 3x -4x^2 -16x -12
+
+				x^3 -8x^2 -13x -12 * (x-6)
+
+
+				x^4 -8x^3 -13x^2 -12x
+				-6x^3 48x^2 78x 72
+
+				x^4 -14x^3 35x^2 66x 72
+
+			*/
+/*			Term a = new Term () {
+				Coefficient = 1,
+				Identifier = "x",
+				Exponent = 2
+			};
+
+			Console.WriteLine (a.GetExpression ().ToString ());
+
+			var func = a.GetExpression ().Compile ();
+
+			var result = func (2);*/
+			//Term f = new Term (){ Coefficient = 24, Identifier = "x", Exponent = 0 };
+				
+			//Console.WriteLine ((a * d).ToString ());
+			//Console.WriteLine ((b * d).ToString ());
+			//Console.WriteLine(
+
+
 			//Console.WriteLine ("query v1.0");
 
 
@@ -32,8 +107,8 @@ namespace XPlaneQuery
 
 			//Map<SystemDatapoint,XPlaneDatapoint>.Associate ("AirTemperature", "Temperature");
 
-			Fahrenheit f = 10.0;
-            Celsius c = f;
+			//Fahrenheit f = 10.0;
+            //Celsius c = f;
 
 			var list = new List<Expression> ();
 

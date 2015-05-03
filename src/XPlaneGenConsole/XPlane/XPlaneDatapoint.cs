@@ -77,7 +77,7 @@ namespace XPlaneGenConsole
 
 		public float Mach{ get; set; }
 
-		public short AngleOfAttack { get; set; }
+		public Angle AngleOfAttack { get; set; }
 
 		public bool Stall{ get; set; }
 
@@ -109,13 +109,13 @@ namespace XPlaneGenConsole
         /// 5-Digit Integer.
         /// </summary>
         /// <returns></returns>
-        public int Nav1_Frequency { get; set; }
+        public Frequency Nav1_Frequency { get; set; }
 		
         /// <summary>
         /// 5-Digit Integer
         /// </summary>
         /// <returns></returns>
-        public int Nav2_Frequency { get; set; }
+        public Frequency Nav2_Frequency { get; set; }
 
         /// <summary>
         /// None = 0
@@ -125,21 +125,21 @@ namespace XPlaneGenConsole
         /// ILS = 10
         /// </summary>
         /// <returns></returns>
-        public int Nav1_Type { get; set; }
+        public NavType Nav1_Type { get; set; }
 
-        public int Nav2_Type { get; set; }
+        public NavType Nav2_Type { get; set; }
 
         /// <summary>
         /// Degrees : 0 to 360
         /// </summary>
         /// <returns></returns>
-        public int OBS1 { get; set; }
+        public Angle OBS1 { get; set; }
 
         /// <summary>
         /// In Degrees. 0 to 360
         /// </summary>
         /// <returns></returns>
-        public int OBS2 { get; set; }
+        public Angle OBS2 { get; set; }
 
         /// <summary>
         /// 0.0: no DME found
@@ -164,9 +164,9 @@ namespace XPlaneGenConsole
         /// 2 : From
         /// </summary>
         /// <returns></returns>
-        public int Nav1_Mode { get; set; }
+        public NavMode Nav1_Mode { get; set; }
 
-        public int Nav2_Mode { get; set; }
+        public NavMode Nav2_Mode { get; set; }
 
         /// <summary>
         /// -2.5 to 2.5. Glideslope Deflection
@@ -278,17 +278,17 @@ namespace XPlaneGenConsole
 		/// <summary>
 		/// Turbine Inlet Temp. Per Engine. In Celsius
 		/// </summary>
-		public int TurboInletTemp{ get; set; }
+		public Celsius TurboInletTemp{ get; set; }
 
 		/// <summary>
 		/// Exhaust Gas Temperature. Per Engine. In Celsius
 		/// </summary>
-		public int ExhaustGasTemp{ get; set; }
+		public Celsius ExhaustGasTemp{ get; set; }
 
 		/// <summary>
 		/// Cylinder Head Temperature. Per Engine. In Celsius
 		/// </summary>
-		public int CylinderHeadTemp{ get; set; }
+		public Celsius CylinderHeadTemp{ get; set; }
 
 
 		internal override byte[] GetBytes ()
