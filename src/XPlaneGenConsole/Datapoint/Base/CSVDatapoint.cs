@@ -9,11 +9,11 @@ namespace XPlaneGenConsole
     public abstract class CsvDatapoint<T> : TextDatapoint
         where T : CsvDatapoint<T>, new()
     {
-        public static CsvFactory<T> Factory;
+        public static CsvFactory<T> Factory = new CsvFactory<T>();
 
         protected static int Key;
 
-        protected static Random r;
+        protected static Random r = new Random();
 
         public int Fields { get; protected set; }
 

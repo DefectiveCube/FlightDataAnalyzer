@@ -9,49 +9,55 @@ using System.Text;
 
 namespace XPlaneGenConsole
 {
-	public class QueryBuilder
-	{
-		private static readonly Dictionary<string,QueryOperations> ops;
+    public class QueryBuilder
+    {
+        private static readonly Dictionary<string, QueryOperations> ops;
 
-		static QueryBuilder()
-		{
-			ops = QueryOperator.Operations;
+        static QueryBuilder()
+        {
+            ops = QueryOperator.Operations;
 
-			if (ops == null || ops.Count == 0) {
-				throw new Exception ("No Operations Loaded");
-			}
-		}
+            if (ops == null || ops.Count == 0) {
+                throw new Exception("No Operations Loaded");
+            }
+        }
 
-		private static IEnumerable<ParameterExpression> BuildParameters(params Type[] parameters)
-		{
-			var names = 
-				from l in Enumerable.Range (97, parameters.Count ())
-				select new {
-					Type = parameters [l - 97],
-					Value = new String ((char)l, 1)
-				};
+        private static IEnumerable<ParameterExpression> BuildParameters(params Type[] parameters)
+        {
+            var names =
+                from l in Enumerable.Range(97, parameters.Count())
+                select new {
+                               Type = parameters[l - 97],
+                               Value = new String((char)l, 1)
+                };
 
-			foreach (var p in names) {
-				yield return Expression.Parameter (p.Type, p.Value);
-			}
+            foreach (var p in names) {
+                yield return Expression.Parameter(p.Type, p.Value);
+            }
 
-			yield break;
+            yield break;
 
-		}
-		public static Expression Build(string query, params Type[] parameters)
-		{
-			var lambda = Expression.Lambda (Build (query), BuildParameters (parameters).ToArray ());
+        }
+        public static Expression Build(string query, params Type[] parameters)
+        {
+            var lambda = Expression.Lambda(Build(query), BuildParameters(parameters).ToArray());
 
-			return lambda;
-		}
+            return lambda;
+        }
 
-		public static Expression Build(string query)
+        /*public static Expression<Func<T, double>> Build(string query, T input, params Type[] parameters)
+            where T : struct
+        {
+            throw new NotSupportedException();
+        }*/
+
+        public static Expression Build(string query)
 		{
 			var builder = new QueryBuilder (query);
 			var stack = new Stack<QueryToken> ();
 			var queue = new Queue<QueryToken> ();
 			var eval = new Stack<Expression> ();
-			var last = TokenType.None;
+            var last = TokenType.None;
 			QueryToken value;
 
 			while (!builder.IsEmpty) {
@@ -78,6 +84,18 @@ namespace XPlaneGenConsole
 					}
 				}
 
+
+                if(last != TokenType.Field)
+                {
+                    value = builder.ReadField();
+
+                    if(value.Token == TokenType.Field)
+                    {
+                        queue.Enqueue(value);
+                        last = value.Token;
+                        continue;
+                    }
+                }
 				value = builder.ReadGroupingSymbol ();
 
 				if (value.Token == TokenType.Grouping) {
@@ -124,7 +142,7 @@ namespace XPlaneGenConsole
 			while (queue.Count > 0) {
 				var e = queue.Dequeue ();
 
-				if (e.Token == TokenType.Operand) {
+				if (e.Token == TokenType.Operand || e.Token == TokenType.Field) {
 					eval.Push (e.GetExpression ());
 				} else if (e.Token == TokenType.Operator) {
 					var right = eval.Pop ();
@@ -203,13 +221,20 @@ namespace XPlaneGenConsole
 				return TokenType.Operand;
 			}
 
-			if (c == '(' || c == ')') {
-				return TokenType.Grouping;
-			}
+            if (Char.IsLetter(c))
+            {
+                return TokenType.Field;
+            }
 
-			if (c == ',') {
-				return TokenType.Separator;
-			}
+            switch(c)
+            {                
+                case '(':
+                case ')':
+                    return TokenType.Grouping;
+                case ',':
+                    return TokenType.Separator;
+            }
+
 
 			return TokenType.None;
 		}
@@ -335,9 +360,11 @@ namespace XPlaneGenConsole
 
 			while (e == TokenType.Field) {
 				sb.Append (Read ());
+                e = Evaluate();
 			}
 
-			return QueryToken.Empty;
+
+            return sb.Length == 0 ? QueryToken.Empty : new QueryFieldToken(sb.ToString());
 		}
 
 		QueryToken ReadProperty()

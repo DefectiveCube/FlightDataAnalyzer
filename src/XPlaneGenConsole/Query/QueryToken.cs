@@ -35,7 +35,6 @@ namespace XPlaneGenConsole
 	}
 
 	public class QueryToken<T> : QueryToken
-		where T: struct
 	{
 		public readonly T ParsedValue;
 
@@ -47,7 +46,13 @@ namespace XPlaneGenConsole
 
 		public override Expression GetExpression ()
 		{
-			return Token == TokenType.Operand ? Expression.Constant(ParsedValue) :  base.GetExpression ();
+            switch (Token)
+            {
+                case TokenType.Operand:
+                    return Expression.Constant(ParsedValue);
+                default:
+                    return base.GetExpression();
+            }
 		}
 
 		public override string ToString ()
@@ -55,4 +60,19 @@ namespace XPlaneGenConsole
 			return ParsedValue.ToString ();
 		}
 	}
+
+    public class QueryFieldToken : QueryToken
+    {
+        public readonly string Value;
+
+        public QueryFieldToken(string value) : base(TokenType.Field)
+        {
+            Value = value;
+        }
+
+        public override Expression GetExpression()
+        {
+            return Expression.Parameter(typeof(double), Value);
+        }
+    }
 }

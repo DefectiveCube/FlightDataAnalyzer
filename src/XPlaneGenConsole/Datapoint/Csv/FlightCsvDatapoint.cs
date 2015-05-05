@@ -53,13 +53,8 @@ namespace XPlaneGenConsole
             Flight = Key;
 
             this.values = values;
-            //(this as IDatapointParse).Parse(values);
         }
 
-        public static void BuildConversionList()
-        {
-            Func<string, int, int> asInt = Extensions.AsInt;
-        }
         public void Parse(string[] values)
         {
             /*Timestamp = values[0].AsInt();

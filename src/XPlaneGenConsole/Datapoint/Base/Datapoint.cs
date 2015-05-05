@@ -12,8 +12,11 @@ namespace XPlaneGenConsole
     {
         public int Flight { get; protected set; }
 
+        [CsvField(0)]
         public int Timestamp { get; internal set; }
 
+        [CsvField(1,typeof(DateTime))]
+        [CsvField(2,typeof(TimeSpan))]
         public DateTime DateTime { get; internal set; }
 
         /// <summary>

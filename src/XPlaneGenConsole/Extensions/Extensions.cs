@@ -4,21 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using UnitsNet;
 
 namespace XPlaneGenConsole
 {
 	public static class Extensions
 	{
-        public static List<Delegate> ConversionList()
-        {
-            var list = Singleton<List<Delegate>>.Instance;
-
-            Func<string, int, int> asInt = AsInt;
-
-            list.Add(asInt);
-
-
-            return Singleton<List<Delegate>>.Instance;
+        public static double GForces(this Acceleration source) {
+            return source.MeterPerSecondSquared * 9.81;
         }
 
 		public static void BlockCopy<T>(this byte[] source, int offset, int size, params T[] value)
@@ -283,6 +276,29 @@ namespace XPlaneGenConsole
 
 			return true;
 		}
+
+        public static dynamic As(this string value, Type type)
+        {
+            var t = type.Name;
+
+            switch (t)
+            {
+                case "Byte":
+                    return value.AsByte();
+                case "Int16":
+                    return value.AsShort();
+                case "Int32":
+                    return value.AsInt();
+                case "Single":
+                    return value.AsFloat();
+                case "DateTime":
+                    return value.AsDateTime();
+                case "TimeSpan":
+                    return value.AsTimeSpan();
+                default:
+                    throw new Exception();
+            }
+        }
 
 		public static DateTime AsDateTime(this string value){
 			var dt = new DateTime (

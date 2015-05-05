@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using XPlaneGenConsole.Data;
-using XPlaneGenConsole.Attributes;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace XPlaneGenConsole
 {
@@ -26,50 +26,54 @@ namespace XPlaneGenConsole
         DATA
         */
 
-		[CSV(0)]
 		public TimeSpan Duration{ get; set; }
 
-		public Celsius Temperature{ get; set; }
+        [Format(TemperatureUnit.DegreeFahrenheit)]
+		public Temperature Temperature{ get; set; }
 
-		public float Longitude{ get; set; }
+		public float Longitude{ get; set; }       
 
 		public float Latitude{ get; set; }
 
         /// <summary>
         /// Height about mean sea level, in true feet. 
         /// </summary>
-		public int HeightMeanSeaLevel{ get; set; }
+        [Format(LengthUnit.Foot)]
+		public Length HeightMeanSeaLevel{ get; set; }
 
 		public int HeightRadioAltimeter{ get; set; }
 		
-        public float AileronDeflection{ get; set; }
+        public Ratio AileronDeflection{ get; set; }
 
-		public float ElevatorDeflection{ get; set; }
+		public Ratio ElevatorDeflection { get; set; }
 
-		public float RudderDeflection{ get; set; }
+		public Ratio RudderDeflection { get; set; }
 
-		public float Pitch{ get; set; }
+        [Format(AngleUnit.Degree)]
+        public Angle Pitch{ get; set; }
 
-		/// <summary>
-		/// Roll. In degrees (-180 to +180)
-		/// </summary>
-		public Ratio Roll { get; set; }
+        /// <summary>
+        /// Roll. In degrees (-180 to +180)
+        /// </summary>
+        [Format(AngleUnit.Degree)]
+        public Angle Roll { get; set; }
 
-		/// <summary>
-		/// Heading. In degrees (0 to 360 (exclusive))
-		/// </summary>
-		public float Heading { get; set; }
+        /// <summary>
+        /// Heading. In degrees (0 to 360)
+        /// </summary>
+        [Format(AngleUnit.Degree)]
+        public Angle Heading { get; set; }
 
 		/// <summary>
 		/// Knots Indicated Air Speed
 		/// </summary>
-		public int IndicatedSpeed{ get; set; }
+		public Speed IndicatedSpeed{ get; set; }
 
         /// <summary>
         /// Indicated Vertical speed. Feet per minute
         /// </summary>
         /// <returns></returns>
-		public int VerticalSpeed{ get; set; }
+		public Speed VerticalSpeed { get; set; }
 
 		public int IndicatedSlip{ get; set; }
 
@@ -77,7 +81,8 @@ namespace XPlaneGenConsole
 
 		public float Mach{ get; set; }
 
-		public Angle AngleOfAttack { get; set; }
+        [Format(AngleUnit.Degree)]
+        public Angle AngleOfAttack { get; set; }
 
 		public bool Stall{ get; set; }
 
@@ -133,12 +138,14 @@ namespace XPlaneGenConsole
         /// Degrees : 0 to 360
         /// </summary>
         /// <returns></returns>
+        [Format(AngleUnit.Degree)]
         public Angle OBS1 { get; set; }
 
         /// <summary>
         /// In Degrees. 0 to 360
         /// </summary>
         /// <returns></returns>
+        [Format(AngleUnit.Degree)]
         public Angle OBS2 { get; set; }
 
         /// <summary>
@@ -154,9 +161,15 @@ namespace XPlaneGenConsole
         /// -2.5 to 2.5. Localizer Deflection
         /// </summary>
         /// <returns></returns>
-        public float Nav1_HorizontalDeflection { get; set; }
+        [Format(RatioUnit.Percent)]
+        public Ratio Nav1_HorizontalDeflection { get; set; }
 
-        public float Nav2_HorizontalDeflection { get; set; }
+        /// <summary>
+        /// -2.5 to 2.5. Localizer Deflection
+        /// </summary>
+        /// <returns></returns>
+        [Format(RatioUnit.Percent)]
+        public Ratio Nav2_HorizontalDeflection { get; set; }
 
         /// <summary>
         /// 0 : Nav
@@ -184,9 +197,11 @@ namespace XPlaneGenConsole
 
 		public bool FlightDirectorEnabled{ get; set; }
 
-		public float FlightDirectorPitch{ get; set; }
+        [Format(AngleUnit.Degree)]
+        public Angle FlightDirectorPitch{ get; set; }
 
-		public float FlightDirectorRoll { get; set; }
+        [Format(AngleUnit.Degree)]
+		public Angle FlightDirectorRoll { get; set; }
 
 		public bool KTMAC { get; set; }
 
@@ -210,12 +225,14 @@ namespace XPlaneGenConsole
 
 		public int AltimeterSelect{ get; set; }
 
-		public float Barometer{ get; set; }
+        [Format(PressureUnit.Psi)]
+		public Pressure Barometer{ get; set; }
 
         /// <summary>
         /// Decision height, dialed into the radio alt., feet AGL
-        /// </summary>
-        public int DecisionHeight { get; set; }
+        /// </summary
+        [Format(LengthUnit.Foot)]
+        public Length DecisionHeight { get; set; }
 
 		public bool MasterCaution{ get; set; }
 
@@ -229,19 +246,22 @@ namespace XPlaneGenConsole
 		// Mrang 0-6
 		public byte MapRange{ get; set; }
 
-		public sbyte ThrottleRatio{ get; set; }
+        [Format(RatioUnit.Percent)]
+		public Ratio ThrottleRatio{ get; set; }
 
         public int PropellerRPMCommand { get; set; }
-		/*
+        /*
 		 * prop cntrl
 		 * prop cntrl
 		 * prop cntrl
 		 * prop cntrl
-		 */ 
+		 */
 
-		public int PropellerRPM{ get; set; }
+        [Format(RotationalSpeedUnit.RevolutionPerMinute)]
+        public RotationalSpeed PropellerRPM { get; set; }
 
-		public int PropellerDegree{ get; set; }
+        [Format(AngleUnit.Degree)]
+		public Angle PropellerDegree{ get; set; }
 
 		/// <summary>
 		/// N1 is the low-pressure spool. Percentage
@@ -249,7 +269,8 @@ namespace XPlaneGenConsole
 		/// <remarks>
 		/// source: http://www.airliners.net/aviation-forums/tech_ops/read.main/159683/
 		/// </remarks>
-		public byte N1{ get; set; }
+		[Format(RatioUnit.Percent)]
+        public Ratio N1{ get; set; }
 
 		/// <summary>
 		/// N2 is the high-pressure spool. Percentage
@@ -257,39 +278,44 @@ namespace XPlaneGenConsole
 		/// <remarks>
 		/// source: http://www.airliners.net/aviation-forums/tech_ops/read.main/159683/
 		/// </remarks>
-		public byte N2 { get; set; }
+		[Format(RatioUnit.Percent)]
+        public Ratio N2 { get; set; }
 
 		// MPR inch
 		public int MPressureRatio{ get; set; }
 
 		// EPR ind
-		public int EnginePressureRatio{ get; set; }
+		public Ratio EnginePressureRatio{ get; set; }
 
 		/// <summary>
 		/// Torque. Per Engine. ft/lbs
 		/// </summary>
-		public int Torque{ get; set; }
+        [Format(TorqueUnit.Undefined)]
+        public Torque Torque{ get; set; }
 
 		/// <summary>
 		/// Fuel Flow. Per Engine. Pounds per Hour
 		/// </summary>
-		public int FuelFlow{ get; set; }
+		[Format(MassUnit.Pound)]
+        public Ratio FuelFlow{ get; set; }
 
-		/// <summary>
-		/// Turbine Inlet Temp. Per Engine. In Celsius
-		/// </summary>
-		public Celsius TurboInletTemp{ get; set; }
+        /// <summary>
+        /// Turbine Inlet Temp. Per Engine. In Celsius
+        /// </summary>
+        [Format(TemperatureUnit.DegreeCelsius)]
+        public Temperature TurboInletTemp{ get; set; }
 
-		/// <summary>
-		/// Exhaust Gas Temperature. Per Engine. In Celsius
-		/// </summary>
-		public Celsius ExhaustGasTemp{ get; set; }
+        /// <summary>
+        /// Exhaust Gas Temperature. Per Engine. In Celsius
+        /// </summary>
+        [Format(TemperatureUnit.DegreeCelsius)]
+        public Temperature ExhaustGasTemp { get; set; }
 
 		/// <summary>
 		/// Cylinder Head Temperature. Per Engine. In Celsius
 		/// </summary>
-		public Celsius CylinderHeadTemp{ get; set; }
-
+		[Format(TemperatureUnit.DegreeCelsius)]
+        public Temperature CylinderHeadTemp { get; set; }
 
 		internal override byte[] GetBytes ()
 		{

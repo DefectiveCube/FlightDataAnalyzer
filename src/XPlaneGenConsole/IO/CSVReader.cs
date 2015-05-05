@@ -125,8 +125,6 @@ namespace XPlaneGenConsole
 		public T ReadLine()
 		{
 			T datapoint = Activator.CreateInstance<T>();
-
-
             
 			datapoint.Load(reader.ReadLine());
 
@@ -187,12 +185,11 @@ namespace XPlaneGenConsole
 		public IEnumerable<T> ReadToEnd()
 		{
 			var start = DateTime.Now;;
+            var list = new List<T>();
 
 			using (reader) {
 				while (!reader.EndOfStream) {
                     T datapoint = CsvDatapoint<T>.Factory.CreateFromString(reader.ReadLine());
-
-                    //datapoint.Load(reader.ReadLine());
 
                     if (datapoint.IsValid)
                     {
@@ -202,7 +199,7 @@ namespace XPlaneGenConsole
 			}
 
 			Console.WriteLine ("Read: {0}",DateTime.Now.Subtract (start).TotalSeconds);
-			yield break;
+            yield break;
 		}
 	}
 }

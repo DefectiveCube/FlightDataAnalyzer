@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneService", "XPlaneServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneTest", "XPlaneTest\XPlaneTest.csproj", "{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "builder\Builder.csproj", "{E6546B09-9C50-452D-AAAE-28D15B555DA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C570F3DB-162A-4EE7-9FD8-89DACB5615E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
