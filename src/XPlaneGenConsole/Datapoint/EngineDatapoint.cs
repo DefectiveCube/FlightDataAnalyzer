@@ -10,6 +10,8 @@ using UnitsNet.Units;
 
 namespace XPlaneGenConsole
 {
+	[CsvRecord(EngineDatapoint.FIELDS_COUNT)]
+	[Serializable()]
 	public sealed class EngineDatapoint : BinaryDatapoint
 	{
 		public const int BYTES_COUNT = 122;

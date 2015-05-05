@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class CsvFieldAttribute : Attribute
     {
         public readonly int Index;
         public readonly Type Type;
 
+		public CsvFieldAttribute(){
+
+
+		}
         public CsvFieldAttribute(int index)
         {
             Index = index;
         }
 
+		[Obsolete()]
         public CsvFieldAttribute(int index, Type type) : this(index)
         {
             Type = type;

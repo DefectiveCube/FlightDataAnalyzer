@@ -4,6 +4,9 @@ using UnitsNet.Units;
 
 namespace XPlaneGenConsole
 {
+	/// <summary>
+	/// Defines the type of unit to use. If undefined, a string representing a lambda should be used. Otherwise, the value is ignored
+	/// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     internal class FormatAttribute : Attribute
     {
@@ -12,6 +15,12 @@ namespace XPlaneGenConsole
         public readonly int value;
         public Func<double, double> conversion;
 
+		/// <summary>
+		/// Defines the unit type to use
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <param name="conversion">Conversion.</param>
+		/// <param name="value">Value.</param>
         private FormatAttribute(Type type, string conversion, int value)
         {
             this.type = type;

@@ -32,7 +32,7 @@ namespace XPlaneGenConsole
         /// <summary>
         /// Colletion of Funcs used to import various datatypes
         /// </summary>
-        private static Dictionary<Type, Delegate> ImportFuncs;
+        private static Dictionary<Type, Invocation> ImportFuncs;
 
         /// <summary>
         /// Collection of Actions used to invoke the setter (through compiled expressions)
@@ -43,7 +43,7 @@ namespace XPlaneGenConsole
         {
             IndexDict = new Dictionary<string, HashSet<int>>();
             //PropertyDict = new Dictionary<Tuple<string, int>, Tuple<CsvFieldAttribute, PropertyInfo>>();
-            ImportFuncs = new Dictionary<Type, Delegate>();
+            ImportFuncs = new Dictionary<Type, Invocation>();
             ImportSetters = new Dictionary<string, Dictionary<int, Delegate>>();
 
             LoadImportFunctions();
@@ -56,12 +56,12 @@ namespace XPlaneGenConsole
 
         private static void Build()
         {
-            ImportSetters.Add(typeof(Temperature).FullName, new Dictionary<int, Delegate>());
-
         }
 
         private static void LoadImportFunctions()
         {
+			var fp = new FlightDatapoint ();
+
             Load<byte>();
             Load<short>();
             Load<int>();
@@ -80,26 +80,34 @@ namespace XPlaneGenConsole
             Load<Temperature, TemperatureUnit>((value, e) => Temperature.From(value.AsFloat(), e));
             Load<Torque, TorqueUnit>((value, e) => Torque.From(value.AsFloat(), e));
             Load<Volume, VolumeUnit>((value, e) => Volume.From(value.AsFloat(), e));
-        }
+
+			//var pitch = (Angle)ImportFuncs [typeof(Angle)].Invoke ("10.0", AngleUnit.Degree);
+
+			//Invocations<Angle,AngleUnit,float>.Get ();
+
+			//Setter<FlightDatapoint,Angle> ("Pitch").Invoke (fp, pitch);
+		}
 
         private static void Load<TType, TEnum>(Func<string, TEnum, TType> func)
             where TType : struct
             where TEnum : struct, IConvertible
         {
-            ImportFuncs.Add(typeof(TType), func);
+			var i = Invocation.Use<string,TEnum,TType> (func);
+			ImportFuncs.Add (typeof(TType), i);
         }
 
-        private static void Load<TOut>()
+        private static void Load<TResult>()
         {
-            ImportFuncs.Add(typeof(TOut), Func<string, TOut> b = value => value.As(typeof(TOut)));
-        }
+			Func<string, TResult> func = value => value.As (typeof(TResult));
+
+			var i = Invocation.Use<string,TResult> (func);
+			ImportFuncs.Add (typeof(TResult), i);
+		}
 
         private static void LoadReflectionProperties<T, U>()
             where T : BinaryDatapoint, new()
             where U : TextDatapoint, new()
         {
-            //var setter = Setter<T, Angle>("Pitch");
-
             T dp = Activator.CreateInstance<T>();
 
             var type = typeof(T);
@@ -107,42 +115,12 @@ namespace XPlaneGenConsole
 
             foreach (var field in GetFields(type))
             {
-                ImportSetters[type.FullName][field.Item2] = Setter<T>("", field.Item4);
-                var typeName = field.Item4.Name;
+				Invocation invoke;
 
-                switch (typeName)
-                {
-                    case "Angle":
-                        var func = ImportFuncs[field.Item4];
-//                        Setter<T, Angle>(field.Item1)(dp, ((Func<string, Angle>)func)("");
-                        break;
-                    default:
-                        break;
-
-                }
-//                var s = Setter<T>("", field.Item4) as Func<,>;
-
-                var del = ImportFuncs[field.Item4];
-
-                if(del != null)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-                var pType = field.Item4;
-//Setter<BinaryDatapoint,
-
-//                ImportSetters[type.FullName].Add(field.Item2, 
+				if (!ImportFuncs.TryGetValue (field.Item4, out invoke)) {
+					throw new KeyNotFoundException (string.Format ("No value on key: {0}", field.Item4.Name));
+				}					
             }
-            // We only need to obtain the setters on the properties being changed
-            //Setter<T, Temperature>("Temperature");
-
-                // Property Type
-
-
-
-
-
-
 
             Debug.Write("Finished Reflecting Class: ");
             Debug.WriteLine(type.Name);
@@ -168,39 +146,55 @@ namespace XPlaneGenConsole
                     format = prop.GetCustomAttribute<FormatAttribute>();    // FormatAttribute describes the unit type, so parsing is correct. Optional: a func string (for conversion from unsupported units)
 
                     foreach (var attr in attrs) {
-                        sorted.Add(attr.Index, new Tuple<string, int, int, Type>(prop.Name, attr.Index, format.value, prop.PropertyType));
+						sorted.Add(attr.Index, new Tuple<string, int, int, Type>(prop.Name, attr.Index, format != null ? format.value : 0, prop.PropertyType));
                     }
                 }
             }
 
             return sorted.Values.ToArray();
         }
-
-        private static Action<T, U> Setter<T, U>(string pName)
+			
+        internal static Action<T, U> Setter<T, U>(string pName)
             where T : BinaryDatapoint, new()
         {
             var p = Expression.Parameter(typeof(T));
             var p2 = Expression.Parameter(typeof(U), pName);
-            var getter = Expression.Property(p, pName);
 
-            return Expression.Lambda<Action<T, U>>(Expression.Assign(getter, p2), p, p2).Compile();
+			try{
+				var getter = Expression.Property(p, pName);
+				return Expression.Lambda<Action<T, U>>(Expression.Assign(getter, p2), p, p2).Compile();
+			}catch(Exception ex){
+				Debug.WriteLine (ex.Message);
+				Debug.WriteLine (ex.StackTrace);
+			}
+
+			return null;
         }
 
-        static Delegate Setter<T>(string name, Type type)
+        static dynamic Setter<T>(string name, Type type)
             where T : BinaryDatapoint, new()
-        {
-            var typeName = type.Name;
+		{
+			var typeName = type.Name;
 
-            switch (typeName)
-            {
-                case "Angle":
-                    return Setter<T, Angle>(name);
-                case "Acceleration":
-                    return Setter<T, Acceleration>(name);
-                default:
-                    return null;
-            }
-        }
+			switch (typeName) {
+			case "Angle":
+				return Setter<T, Angle> (name);
+			case "Acceleration":
+				return Setter<T, Acceleration> (name);
+			case "ElectricCurrent":
+				return Setter<T, ElectricCurrent> (name);
+			case "ElectricPotential":
+				return Setter<T, ElectricPotential> (name);
+			case "Temperature":
+				return Setter<T,Temperature> (name);
+			case "Torque":				
+				return Setter<T,Torque> (name);
+			case "Volume":
+				return Setter<T,Volume> (name);
+			default:
+				return null;
+			}
+		}
 
         public static IEnumerable<T> Convert<T, U>(IEnumerable<U> data)
             where T : BinaryDatapoint, new()
@@ -209,14 +203,21 @@ namespace XPlaneGenConsole
             // Obtain all the prop. info
 
             var type = typeof(T);
+			var keys = ImportSetters [type.FullName].Keys;
+
             foreach(U dp in data)
             {
                 if (!dp.IsValid)
                 {
+					Debug.WriteLine ("Skipping invalid data record");
                     continue;
                 }
 
                 var newDp = Activator.CreateInstance<T>();
+
+				foreach(var key in keys){
+					var del = ImportSetters [type.FullName] [key];
+				}
 
 
                 yield return newDp;

@@ -41,6 +41,9 @@
       <HintPath>..\packages\MathNet.Numerics.3.6.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="UnitsNet">
+      <HintPath>..\packages\UnitsNet.3.12.0\lib\net35\UnitsNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RangeAttribute.cs" />
@@ -52,16 +55,6 @@
     <Compile Include="Datapoint\Csv\EngineCsvDatapoint.cs" />
     <Compile Include="Datapoint\Csv\FlightCsvDatapoint.cs" />
     <Compile Include="Datapoint\Csv\SystemCsvDatapoint.cs" />
-    <Compile Include="Data\Angle\ArcMinute.cs" />
-    <Compile Include="Data\Angle\ArcSecond.cs" />
-    <Compile Include="Data\Angle\Radian.cs" />
-    <Compile Include="Data\Bias.cs" />
-    <Compile Include="Data\GPS.cs" />
-    <Compile Include="Data\Range.cs" />
-    <Compile Include="Data\Ratio.cs" />
-    <Compile Include="Data\Semicircle.cs" />
-    <Compile Include="Data\Temperature\Celsius.cs" />
-    <Compile Include="Data\Temperature\Kelvin.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
@@ -101,20 +94,17 @@
     <Compile Include="IO\CSVDirection.cs" />
     <Compile Include="IO\CSVFile.cs" />
     <Compile Include="Datapoint\Base\TextDatapoint.cs" />
-    <Compile Include="Data\ITemperature.cs" />
-    <Compile Include="Data\Temperature\Fahrenheit.cs" />
     <Compile Include="Datapoint\Csv\CsvFactory.cs" />
     <Compile Include="XPlane\NavType.cs" />
     <Compile Include="XPlane\Frequency.cs" />
-    <Compile Include="Data\Angle\Angle.cs" />
     <Compile Include="XPlane\NavMode.cs" />
-    <Compile Include="Data\Clamp.cs" />
-    <Compile Include="Data\Angle\Degree.cs" />
-    <Compile Include="Data\Mass\Mass.cs" />
-    <Compile Include="Data\Length\Length.cs" />
-    <Compile Include="Data\Intepolation.cs" />
-    <Compile Include="Data\Math\Equation.cs" />
-    <Compile Include="Data\Math\Term.cs" />
+    <Compile Include="Attributes\CsvFieldAttribute.cs" />
+    <Compile Include="Attributes\GraphAttribute.cs" />
+    <Compile Include="Attributes\FormatAttribute.cs" />
+    <Compile Include="Attributes\StorageAttribute.cs" />
+    <Compile Include="Datapoint\Conversion\Invocation.cs" />
+    <Compile Include="Datapoint\Csv\CsvParser.cs" />
+    <Compile Include="Attributes\CsvRecordAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -132,8 +122,5 @@
   <ItemGroup>
     <Folder Include="XPlane\FDR\" />
     <Folder Include="XPlane\Net\" />
-    <Folder Include="Data\Mass\" />
-    <Folder Include="Data\Length\" />
-    <Folder Include="Data\Math\" />
   </ItemGroup>
 </Project>

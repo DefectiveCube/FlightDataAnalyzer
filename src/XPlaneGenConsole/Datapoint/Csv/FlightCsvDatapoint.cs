@@ -25,16 +25,12 @@ namespace XPlaneGenConsole
         public override void Load(string value)
         {
             Load(value.Split(','));
-
-            //var Factory = new DatapointFactory<FlightDatapoint>();
-
-            //Factory.Create()
         }
 
         public override void Load(string[] values)
         {
             // Two conditions to verify a valid row
-            // 1. There must a be specific amount of CSV fields per record (there is a constant value (SIZE) defined in each type of datapoint)
+            // 1. There must a be specific amount of CSV fields per record (there is a constant value defined in each type of datapoint)
             // 2. All fields after the 3rd element should be defined. "-" signifies a null value
 
             IsValid = values.Length == Fields && !values.Skip(3).All(v => string.IsNullOrEmpty(v) || v.Equals("-"));

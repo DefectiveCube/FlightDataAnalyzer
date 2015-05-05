@@ -32,6 +32,13 @@ namespace XPlaneQuery
 
             //Conversion.Convert<FlightDatapoint, FlightCsvDatapoint>(new FlightCsvDatapoint[] { });
 
+			var parser = CsvParser.GetParser<FlightDatapoint,FlightCsvDatapoint> ();
+			var dp = new FlightDatapoint ();
+
+
+
+			parser (dp, Enumerable.Range (1, 30).Select (x => (double)x).ToArray ());
+
 			var name = "P_FLIGHT.CSV";
 			var output = "Test.bin";
 

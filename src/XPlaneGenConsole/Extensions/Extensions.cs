@@ -230,8 +230,16 @@ namespace XPlaneGenConsole
 			return false;
 		}
 
-		public static bool TryParse(this string value, out float num){
+		public static bool TryParse(this string value, out float num)
+		{
 			num = 0.0f;
+			double v = double.NaN;
+
+			return TryParse (value, out v);
+		}
+
+		public static bool TryParse(this string value, out double num){
+			num = 0.0;
 
 			bool negate = value.ToCharArray()[0].Equals('-');
 			bool leftSide = true;
@@ -277,6 +285,11 @@ namespace XPlaneGenConsole
 			return true;
 		}
 
+		public static dynamic As<T>(this string value)
+		{
+			return As (value, typeof(T));
+		}
+
         public static dynamic As(this string value, Type type)
         {
             var t = type.Name;
@@ -291,6 +304,8 @@ namespace XPlaneGenConsole
                     return value.AsInt();
                 case "Single":
                     return value.AsFloat();
+			case "Double":
+				return value.AsDouble ();
                 case "DateTime":
                     return value.AsDateTime();
                 case "TimeSpan":
@@ -366,6 +381,12 @@ namespace XPlaneGenConsole
 			float result;
 
 			return value.TryParse(out result) ? result : defaultValue;
+		}
+
+		public static double AsDouble(this string value, double defaultValue = double.NaN){
+			double result;
+
+			return value.TryParse (out result) ? result : defaultValue;
 		}
 	}
 }
