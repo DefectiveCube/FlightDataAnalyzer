@@ -1,0 +1,765 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Language"
+    targetNamespace="http://kirkdietz.me/CSharpLanguage.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://kirkdietz.me/CSharpLanguage.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <!-- A. 1 Lexical Grammar -->
+
+  <xs:element name="input"/>
+  <xs:element name="input-section"/>
+  <xs:element name="input-section-part"/>
+  
+  <xs:element name="input-elements">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="input-element" />
+      </xs:all>       
+    </xs:complexType>  
+  </xs:element>
+  
+  <xs:element name="input-element"/>
+  
+  <!-- A. 1.1 Line terminator -->
+
+  <xs:element name="new-line">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="\r\n|\r|\n|\u2085|\u2028|\u2029"/>        
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  
+  <!-- A 1.2 White space -->
+
+  <xs:element name="whitespace">
+    
+  </xs:element>
+
+  <xs:element name="whitespace-characters"></xs:element>
+
+  <xs:element name="whitespace-character">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="\u0009|\u000B|\u000c"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <!-- A. 1.3 Comments -->
+
+  <xs:element name="comment">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="single-line-comment"/>
+        <xs:element ref="delimited-comment"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="single-line-comment"></xs:element>
+  <xs:element name="input-characters"></xs:element>
+  <xs:element name="input-character"></xs:element>
+  <xs:element name="new-line-character"></xs:element>
+  <xs:element name="delimited-comment"></xs:element>
+  <xs:element name="delimited-comment-text"></xs:element>
+  <xs:element name="delimited-comment-section"></xs:element>
+  <xs:element name="asterisks"></xs:element>
+  <xs:element name="not-asterisks"></xs:element>
+  <xs:element name="not-slash"></xs:element>
+  
+  <!-- A. 1.4 Tokens -->
+
+  <xs:element name="token">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="identifier"/>
+        <xs:element ref="keyword"/>
+        <xs:element ref="integer-literal"/>
+        <xs:element ref="real-literal"/>
+        <xs:element ref="character-literal"/>
+        <xs:element ref="string-literal"/>
+        <xs:element ref="operator-or-punctuator"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- A. 1.5 -->
+  
+  <!-- A. 1.6 Identifiers -->
+
+  <xs:element name="identifier">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="availiable-identifier"/>
+        <xs:element ref="identifier-or-keyword"/>
+      </xs:choice>
+    </xs:complexType>  
+  </xs:element>
+  
+  <xs:element name="availiable-identifier">
+    
+  </xs:element>
+  
+  <xs:element name="identifier-or-keyword"></xs:element>
+  
+  <xs:element name="identifier-start-character"></xs:element>
+  
+  <xs:element name="identifier-part-characters"></xs:element>
+  
+  <xs:element name="letter-character"></xs:element> 
+  <xs:element name="combining-character"></xs:element>  
+  <xs:element name="decimal-digit-character"></xs:element>  
+  <xs:element name="connecting-character"></xs:element>  
+  <xs:element name="formatting-character"></xs:element>
+
+  <!-- A. 1.7 Keywords [COMPLETE] -->
+  
+  <xs:element name="keyword">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="abstract"/>
+        <xs:enumeration value="as"/>
+        <xs:enumeration value="base"/>
+        <xs:enumeration value="bool"/>
+        <xs:enumeration value="break"/>
+        <xs:enumeration value="byte"/>
+        <xs:enumeration value="case"/>
+        <xs:enumeration value="catch"/>
+        <xs:enumeration value="char"/>
+        <xs:enumeration value="checked"/>
+        <xs:enumeration value="class"/>
+        <xs:enumeration value="const"/>
+        <xs:enumeration value="continue"/>
+        <xs:enumeration value="decimal"/>
+        <xs:enumeration value="default"/>
+        <xs:enumeration value="delegate"/>
+        <xs:enumeration value="do"/>
+        <xs:enumeration value="double"/>
+        <xs:enumeration value="else"/>
+        <xs:enumeration value="enum"/>
+        <xs:enumeration value="event"/>
+        <xs:enumeration value="explicit"/>
+        <xs:enumeration value="extern"/>
+        <xs:enumeration value="false"/>
+        <xs:enumeration value="finally"/>
+        <xs:enumeration value="fixed"/>
+        <xs:enumeration value="float"/>        
+        <xs:enumeration value="for"/>
+        <xs:enumeration value="foreach"/>
+        <xs:enumeration value="goto"/>
+        <xs:enumeration value="if"/>
+        <xs:enumeration value="implicit"/>
+        <xs:enumeration value="in"/>
+        <xs:enumeration value="int"/>
+        <xs:enumeration value="interface"/>
+        <xs:enumeration value="new"/>
+        <xs:enumeration value="null"/>
+        <xs:enumeration value="object"/>
+        <xs:enumeration value="operator"/>
+        <xs:enumeration value="out"/>
+        <xs:enumeration value="override"/>
+        <xs:enumeration value="params"/>
+        <xs:enumeration value="private"/>
+        <xs:enumeration value="protected"/>
+        <xs:enumeration value="public"/>
+        <xs:enumeration value="readonly"/>
+        <xs:enumeration value="ref"/>
+        <xs:enumeration value="return"/> 
+        <xs:enumeration value="sbyte"/>
+        <xs:enumeration value="sealed"/>
+        <xs:enumeration value="short"/>
+        <xs:enumeration value="sizeof"/>
+        <xs:enumeration value="stackalloc"/>
+        <xs:enumeration value="static"/>
+        <xs:enumeration value="string"/>
+        <xs:enumeration value="struct"/>
+        <xs:enumeration value="switch"/>
+        <xs:enumeration value="this"/>
+        <xs:enumeration value="throw"/>
+        <xs:enumeration value="true"/>
+        <xs:enumeration value="try"/>
+        <xs:enumeration value="typeof"/>
+        <xs:enumeration value="uint"/>
+        <xs:enumeration value="ulong"/>
+        <xs:enumeration value="unchecked"/>
+        <xs:enumeration value="unsafe"/>
+        <xs:enumeration value="ushort"/>
+        <xs:enumeration value="using"/>
+        <xs:enumeration value="virtual"/>
+        <xs:enumeration value="void"/>
+        <xs:enumeration value="volatile"/>
+        <xs:enumeration value="while"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <!-- A. 1.8 Literals -->
+  
+  <xs:element name="literal">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="boolean-literal"/>
+        <xs:element ref="integer-literal"/>
+        <xs:element ref="real-literal"/>
+        <xs:element ref="character-literal"/>
+        <xs:element ref="string-literal"/>
+        <xs:element ref="null-literal"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- xs:boolean : are lower-case only (e.g. "true" and "false") -->
+  <xs:element name="boolean-literal">
+    <xs:simpleType>
+      <xs:restriction base="xs:boolean"/>
+    </xs:simpleType>
+  </xs:element>
+  
+  <xs:element name="integer-literal"></xs:element>
+
+  <xs:element name="decimal-integer-literal">
+    <xs:complexType>
+      
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="decimal-digits" type="xs:int"/>
+  
+  <!-- not used -->
+  <xs:element name="decimal-digit">
+    <xs:simpleType>
+      <xs:restriction base="xs:int">
+        <xs:totalDigits value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element> 
+
+  <xs:element name="integer-type-suffix">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="([Ll][Uu]|[Uu][Ll]|[Uu|Ll])"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name="hexadecimal-integer-literal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="hex-digits" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="integer-type-suffix" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="hex-digits" type="xs:hexBinary"/>
+
+  <xs:element name="hex-digit">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="[A-Fa-f0-9]{1}"/>
+      </xs:restriction>
+    </xs:simpleType>  
+  </xs:element>
+
+  <xs:element name="real-literal"/>
+
+  <xs:element name="exponent-part"/>
+  
+  <xs:element name="sign">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="+"/>
+        <xs:enumeration value="-"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name="real-type-suffix"></xs:element>  
+  
+  <xs:element name="character-literal"></xs:element>
+
+  <xs:element name="character"></xs:element>
+
+  <xs:element name="single-character"></xs:element>
+
+  <xs:element name="simple-escape-sequence">
+    
+  </xs:element>
+
+  <xs:element name="hexadecimal-escape-sequence">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="\\x[A-Fa-f0-9]+"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  
+  <xs:element name="string-literal" type="xs:string"/>
+
+  <xs:element name="regular-string-literal"/>
+  <xs:element name="regular-string-literal-characters"/>
+
+  <xs:element name="regular-string-literal-character">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="single-regular-string-literal-character"/>
+        <xs:element ref="simple-escape-sequence"/>
+        <xs:element ref="hexadecimal-escape-sequence"/>
+        <!-- unicode escape sequence -->
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="single-regular-string-literal-character"/>
+  <xs:element name="verbatim-string-literal"/>
+  <xs:element name="verbatim-string-literal-characters"/>
+  <xs:element name="verbatim-string-literal-character"/>
+  <xs:element name="single-verbatim-string-literal-character"/>
+  <xs:element name="quote-escape-sequence"/>
+  
+  <xs:element name="null-literal">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="null"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  
+  <!-- A. 1.9 Operators and Punctuators -->
+
+  <xs:element name="operator-or-punctuator">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="{"/>
+        <xs:enumeration value="}"/>
+        <xs:enumeration value="["/>
+        <xs:enumeration value="]"/>
+        <xs:enumeration value="("/>
+        <xs:enumeration value=")"/>
+        <xs:enumeration value="."/>
+        <xs:enumeration value=","/>
+        <xs:enumeration value=":"/>
+        <xs:enumeration value=";"/>
+        <xs:enumeration value="+"/>
+        <xs:enumeration value="-"/>
+        <xs:enumeration value="*"/>
+        <xs:enumeration value="/"/>
+        <xs:enumeration value="%"/>
+        <xs:enumeration value="&quot;"/>
+        <xs:enumeration value="|"/>
+        <xs:enumeration value="^"/>
+        <xs:enumeration value="!"/>
+        <xs:enumeration value="~"/>
+        <xs:enumeration value="="/>
+        <xs:enumeration value="&lt;"/>
+        <xs:enumeration value="&gt;"/>
+        <xs:enumeration value="?"/>
+        <xs:enumeration value="??"/>
+        <xs:enumeration value="::"/>
+        <xs:enumeration value="++"/>
+        <xs:enumeration value="--"/>
+        <xs:enumeration value="&quot;&quot;"/>
+        <xs:enumeration value="||"/>
+        <xs:enumeration value="->"/>
+        <xs:enumeration value="=="/>
+        <xs:enumeration value="&lt;="/>
+        <xs:enumeration value="&gt;="/>
+        <xs:enumeration value="+="/>
+        <xs:enumeration value="-="/>
+        <xs:enumeration value="*="/>
+        <xs:enumeration value="/="/>
+        <xs:enumeration value="%="/>
+        <xs:enumeration value="&quot;="/>
+        <xs:enumeration value="|="/>
+        <xs:enumeration value="&lt;&lt;"/>
+        <xs:enumeration value="&lt;&lt;="/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  
+  <!-- A 2.1 Basic Concepts -->
+
+  <xs:element name="compilation-unit">
+
+    <!--
+    extern-alias-directives
+    using-directives
+    global-attributes
+    namespace-member-declarations
+    -->  
+    
+  </xs:element>
+  
+  <xs:element name="namespace-name">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="namespace-or-type-name" minOccurs="1" maxOccurs="1"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-name">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="namespace-or-type-name" minOccurs="1" maxOccurs="1"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="namespace-or-type-name">
+    <!-- identifier with optional type-argument-list-->
+  </xs:element>
+  
+  <!-- A 2.2 Types -->
+
+  <xs:element name="type">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="value-type"/>
+        <xs:element ref="reference-type"/>
+        <xs:element ref="type-parameter"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="value-type">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="struct-type"/>
+        <xs:element ref="enum-type"/>
+      </xs:choice>
+    </xs:complexType>    
+  </xs:element>
+
+  <xs:element name="struct-type">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="type-name"/>
+        <xs:element ref="simple-type"/>
+        <xs:element ref="nullable-type"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="simple-type">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="numeric-type"/>
+        <xs:element ref="boolean-type"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="boolean-type" type="xs:boolean"/>
+
+  <xs:element name="numeric-type">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="integral-type"/>
+        <xs:element ref="floating-point-type"/>
+        <xs:element ref="decimal-type"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="integral-type">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="sbyte"/>
+        <xs:enumeration value="byte"/>
+        <xs:enumeration value="short"/>
+        <xs:enumeration value="int"/>
+        <xs:enumeration value="uint"/>
+        <xs:enumeration value="long"/>
+        <xs:enumeration value="ulong"/>
+        <xs:enumeration value="char"/>
+      </xs:restriction>      
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name="decimal-type" type="xs:decimal"/>    
+
+  <xs:element name="floating-point-type">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="float"/>
+        <xs:enumeration value="double"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name="enum-type">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="type-name"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="nullable-type">
+    
+  </xs:element>
+  
+  <xs:element name="non-nullable-value-type"></xs:element>
+  
+  <xs:element name="reference-type"/>
+  <xs:element name="class-type"/>
+  <xs:element name="interface-type"/>
+  <xs:element name="array-type"/>
+  <xs:element name="non-array-type"/>
+  <xs:element name="rank-specifiers"/>
+  <xs:element name="rank-specifier"/>
+  <xs:element name="dim-separators"/>
+  <xs:element name="delegate-type">
+    
+  </xs:element>
+      
+
+  <!-- A 2.3 Variables -->
+
+    <xs:element name="variable-reference">
+    <!-- 
+    expression
+    ref variable-reference
+    out variable-reference
+    -->    
+  </xs:element>
+  
+  <!-- A 2.4 Expressions -->
+  
+  <xs:element name="argument-list"></xs:element>
+  <xs:element name="argument"></xs:element>
+  <xs:element name="primary-expression"></xs:element>
+  <xs:element name="primary-no-array-creation-expression"></xs:element>
+  <xs:element name="simple-name"></xs:element>
+  <xs:element name="parenthesized-expression"></xs:element>
+  <xs:element name="member-access"></xs:element>
+  
+  <xs:element name="predefined-type">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="bool"/>
+        <xs:enumeration value="byte"/>
+        <xs:enumeration value="char"/>
+        <xs:enumeration value="decimal"/>
+        <xs:enumeration value="double"/>
+        <xs:enumeration value="float"/>
+        <xs:enumeration value="int"/>
+        <xs:enumeration value="long"/>
+        <xs:enumeration value="object"/>
+        <xs:enumeration value="sbyte"/>
+        <xs:enumeration value="short"/>      
+        <xs:enumeration value="string"/>
+        <xs:enumeration value="uint"/>       
+        <xs:enumeration value="ulong"/>     
+        <xs:enumeration value="ushort"/>  
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  
+  <xs:element name="invocation-expression"></xs:element>
+  <xs:element name="element-access"></xs:element>
+  <xs:element name="expression-list"></xs:element>
+  <xs:element name="this-access"></xs:element>
+  <xs:element name="base-access"></xs:element>
+  <xs:element name="post-increment-expression"></xs:element>
+  <xs:element name="post-decrement-expression"></xs:element>
+  <xs:element name="object-creation-expression"></xs:element>
+  <xs:element name="array-creation-expression"></xs:element>
+  <xs:element name="delegate-creation-expression"></xs:element>
+  <xs:element name="typeof-expression"></xs:element>
+  <xs:element name="unbound-type-name"></xs:element>
+  <xs:element name="generic-dimension-specifier"></xs:element>
+  <xs:element name="commas"></xs:element>
+  <xs:element name="checked-expression"></xs:element>
+  <xs:element name="unchecked-expression"></xs:element>
+  <xs:element name="default-value-expression"></xs:element>
+  <xs:element name="anonymous-method-expression"></xs:element>
+  <xs:element name="anonymous-method-signature"></xs:element>
+  <xs:element name="anonymous-method-parameter-list"></xs:element>
+  <xs:element name="anonymous-method-parameter"></xs:element>
+  <xs:element name="unary-expression"></xs:element>
+  <xs:element name="pre-increment-expression"></xs:element>
+  <xs:element name="pre-decrement-expression"></xs:element>
+  <xs:element name="cast-expression"></xs:element>
+  <xs:element name="multiplicative-expression"></xs:element>
+  <xs:element name="additive-expression"></xs:element>
+  <xs:element name="shift-expression"></xs:element>
+  <xs:element name="relational-expression"></xs:element>
+  <xs:element name="equality-expression"></xs:element>
+  <xs:element name="and-expression"></xs:element>
+  <xs:element name="exclusive-or-expression"></xs:element>
+  <xs:element name="inclusive-or-expression"></xs:element>
+  <xs:element name="conditional-and-expression"></xs:element>
+  <xs:element name="conditional-or-expression"></xs:element>
+  <xs:element name="null-coalescing-expression"></xs:element>
+  <xs:element name="conditional-expression"></xs:element>
+  <xs:element name="assignment"></xs:element>
+  <xs:element name="assignment-operator"></xs:element>
+  <xs:element name="expression"></xs:element>
+  
+  <xs:element name="constant-expression"></xs:element>
+  
+  <xs:element name="boolean-expression">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="expression"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- A 2.5 Statements -->
+  
+  <!-- A 2.6 Classes -->
+  
+  <!-- A 2.7 Structs -->
+  
+  <!-- A 2.8 Arrays -->
+  
+  <!-- A 2.9 Interfaces -->
+  
+  <!-- A 2.10 Enums -->
+
+  <!-- A 2.11 Delegates -->
+
+  <!-- A 2.12 Attributes -->
+
+  <xs:element name="global-attributes"/>
+  <xs:element name="global-attribute-sections"/>
+  <xs:element name="global-attribute-section"/>
+  <xs:element name="global-attribute-target-specifier"/>
+  <xs:element name="global-attribute-target"/>
+  
+  <xs:element name="attributes"></xs:element>
+  <xs:element name="attribute-sections"></xs:element>
+  <xs:element name="attribute-section"></xs:element>
+  <xs:element name="attribute-target-specifier"></xs:element>
+  <xs:element name="attribute-target"></xs:element>
+  <xs:element name="attribute-list"></xs:element>
+  <xs:element name="attribute"></xs:element>
+  <xs:element name="attribute-name"></xs:element>
+  <xs:element name="attribute-arguments"></xs:element>
+  
+  <xs:element name="positional-argument-list"></xs:element>
+  <xs:element name="positional-argument"></xs:element>
+  <xs:element name="named-argument-list"></xs:element>
+  <xs:element name="named-argument"></xs:element>
+  <xs:element name="attribute-argument-expression"></xs:element>
+  
+  <!-- A 2.13 Generics -->
+
+  <xs:element name="type-parameter-list">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="type-parameters" />
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-parameters">
+    <xs:complexType>
+      <xs:sequence>
+        <!-- type parameters -->
+        <!-- attributes -->
+        <xs:element ref="type-parameter" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-parameter">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="identifier"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-argument-list">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="type-arguments"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-arguments">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="type-argument" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-argument">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="type" minOccurs="1" maxOccurs="1"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-parameter-constraints-clauses">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:sequence>
+          <xs:element ref="type-parameter-constraints-clause" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-parameter-constraints-clause">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="type-parameter"/>
+        <xs:element ref="type-parameter-constraints"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="type-parameter-constraints">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="primary-constraint" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="secondary-constraints" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="constructor-constraint" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>    
+  </xs:element>
+  
+  <xs:element name="primary-constraint">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="class-type"/>
+        <xs:element ref="primary-constraint-class"/>
+        <xs:element ref="primary-constraint-struct"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="primary-constraint-class"/>
+  
+  <xs:element name="primary-constraint-struct"/>
+  
+  <xs:element name="secondary-constraints">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="secondary-constraint" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="secondary-constraint">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="interface-type"/>
+        <xs:element ref="type-parameter"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="constructor-constraint"/>
+
+</xs:schema>

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneTest", "XPlaneTest\XP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "builder\Builder.csproj", "{E6546B09-9C50-452D-AAAE-28D15B555DA0}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{57463EC2-C0CB-4598-B543-A63CDC43A10E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,8 @@ Global
 		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57463EC2-C0CB-4598-B543-A63CDC43A10E}.Debug|Any CPU.ActiveCfg = Debug
+		{57463EC2-C0CB-4598-B543-A63CDC43A10E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

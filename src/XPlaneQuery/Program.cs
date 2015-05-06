@@ -59,7 +59,7 @@ namespace XPlaneQuery
 
 			var start = DateTime.Now;
             using (var reader = new CSVReader<FlightCsvDatapoint>(File.OpenRead(importFile))) {
-                Conversion.Convert<FlightDatapoint, FlightCsvDatapoint>(reader.ReadToEnd().ToArray()).ToArray();
+                //Conversion.Convert<FlightDatapoint, FlightCsvDatapoint>(reader.ReadToEnd().ToArray()).ToArray();
             }
 
 			//using (var writer = new DataWriter<FlightDatapoint> (dataFile)) {
