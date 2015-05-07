@@ -12,6 +12,7 @@ namespace XPlaneGenConsole
     public class QueryBuilder
     {
         private static readonly Dictionary<string, QueryOperations> ops;
+        private static Dictionary<string, Expression<Func<double, double>>> expressions = new Dictionary<string, Expression<Func<double, double>>>();
 
         static QueryBuilder()
         {
@@ -24,6 +25,11 @@ namespace XPlaneGenConsole
 
         private static IEnumerable<ParameterExpression> BuildParameters(params Type[] parameters)
         {
+            if (parameters.Length > 26)
+            {
+                throw new ArgumentException("too many variables");
+            }
+
             var names =
                 from l in Enumerable.Range(97, parameters.Count())
                 select new {
@@ -38,21 +44,44 @@ namespace XPlaneGenConsole
             yield break;
 
         }
-        public static Expression Build(string query, params Type[] parameters)
+
+        private static Expression Build(string query, params Type[] parameters)
         {
-            var lambda = Expression.Lambda(Build(query), BuildParameters(parameters).ToArray());
+            ParameterExpression[] ps;
+            var build = Build(query, out ps);
+            var lambda = Expression.Lambda(build, ps);
 
             return lambda;
         }
 
-        /*public static Expression<Func<T, double>> Build(string query, T input, params Type[] parameters)
-            where T : struct
+        public static Expression<Func<double,double>> Query(string query)
         {
-            throw new NotSupportedException();
-        }*/
+            if (expressions.ContainsKey(query))
+            {
+                return expressions[query];
+            }
 
-        public static Expression Build(string query)
+            query = query.ToLowerInvariant();
+            var ps = new ParameterExpression[] { };
+            var build = Build(query, out ps);
+
+            if(ps.Length != 1 && ps.First().Type != typeof(double))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var lambda = Expression.Lambda<Func<double, double>>(build, ps);
+            expressions.Add(query, lambda);
+
+            Console.WriteLine("Built: {0}", lambda.ToString());
+
+            return lambda;
+        }
+
+        public static Expression Build(string query, out ParameterExpression[] variables)
 		{
+            variables = new ParameterExpression[] { };
+            var variableList = new List<ParameterExpression>();
 			var builder = new QueryBuilder (query);
 			var stack = new Stack<QueryToken> ();
 			var queue = new Queue<QueryToken> ();
@@ -84,7 +113,7 @@ namespace XPlaneGenConsole
 					}
 				}
 
-
+                // Fields (aka variables) should not appear consecutively
                 if(last != TokenType.Field)
                 {
                     value = builder.ReadField();
@@ -96,6 +125,8 @@ namespace XPlaneGenConsole
                         continue;
                     }
                 }
+
+                // Grouping symbols are okay to have in groups
 				value = builder.ReadGroupingSymbol ();
 
 				if (value.Token == TokenType.Grouping) {
@@ -125,7 +156,7 @@ namespace XPlaneGenConsole
 					continue;
 				}
 
-				throw new Exception ("Unrecognized sequence");
+				throw new Exception ("Unrecognized character sequence");
 			}
 				
 
@@ -139,25 +170,39 @@ namespace XPlaneGenConsole
 				}
 			}
 
-			while (queue.Count > 0) {
-				var e = queue.Dequeue ();
+            while (queue.Count > 0)
+            {
+                var e = queue.Dequeue();
 
-				if (e.Token == TokenType.Operand || e.Token == TokenType.Field) {
-					eval.Push (e.GetExpression ());
-				} else if (e.Token == TokenType.Operator) {
-					var right = eval.Pop ();
+                if (e.Token == TokenType.Operand)
+                {
+                    eval.Push(e.GetExpression());
 
-					var left = eval.Pop ();
+                }
+                else if (e.Token == TokenType.Field)
+                {
+                    ParameterExpression exp = e.GetExpression() as ParameterExpression;
+                    eval.Push(exp);
+                    variableList.Add(exp);
+                }
+                else if (e.Token == TokenType.Operator)
+                {
+                    var right = eval.Pop();
 
-					var exp = e.GetExpression (left, right);
+                    var left = eval.Pop();
 
-					eval.Push (exp);
-				} else {
-					throw new Exception ("Parse Error");
-				}
-			}
+                    var exp = e.GetExpression(left, right);
+
+                    eval.Push(exp);
+                }
+                else
+                {
+                    throw new Exception("Parse Error");
+                }
+            }
 
 			if (eval.Count () == 1) {
+                variables = variableList.ToArray();
 				return eval.First ();
 			} else {
 				throw new ArgumentException ("Invalid Expression");

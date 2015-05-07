@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\GroupAttribute.cs" />
     <Compile Include="Attributes\RangeAttribute.cs" />
     <Compile Include="BinaryFile.cs" />
     <Compile Include="Console.cs" />

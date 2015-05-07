@@ -10,13 +10,16 @@ namespace XPlaneGenConsole
 {
     public abstract class Datapoint
     {
+        [Storage(1)]
         public int Flight { get; protected set; }
 
         [CsvField(0)]
+        [Storage(2)]
         public int Timestamp { get; internal set; }
 
-        [CsvField(1,typeof(DateTime))]
-        [CsvField(2,typeof(TimeSpan))]
+        [CsvField(1, typeof(DateTime))]
+        [CsvField(2, typeof(TimeSpan))]
+        [Storage(0, typeof(long))]
         public DateTime DateTime { get; internal set; }
 
         /// <summary>

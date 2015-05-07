@@ -126,34 +126,35 @@ namespace XPlaneGenConsole
 
 		public override Expression GetExpression (Expression left, Expression right)
 		{
-			switch (Operation) {
-			case QueryOperations.Add:
-				return Expression.Add (left, right);
-			case QueryOperations.Subtract:
-				return Expression.Subtract (left, right);
-			case QueryOperations.Multiply:
-				return Expression.Multiply (left, right);
-			case QueryOperations.Divide:
-				return Expression.Divide (left, right);
-			case QueryOperations.Modulus:
-				return Expression.Modulo(left,right);
-
-			case QueryOperations.LessThan:
-				return Expression.LessThan (left, right);
-			case QueryOperations.GreaterThan:
-				return Expression.GreaterThan (left, right);
-
-			case QueryOperations.BitwiseAnd:
-				return Expression.And (left, right);			
-			case QueryOperations.BitwiseXor:
-				return Expression.ExclusiveOr (left, right);
-
-
-			case QueryOperations.LogicalAnd:
-				return Expression.And (left, right);
-			default:
-				throw new NotSupportedException (Operation.ToString());
-			}
+            return Expression.MakeBinary(GetExpressionType(Operation), left, right);
 		}
-	}
+
+        private ExpressionType GetExpressionType(QueryOperations type)
+        {
+            switch (Operation)
+            {
+                case QueryOperations.Add:
+                    return ExpressionType.Add;
+                case QueryOperations.Subtract:
+                    return ExpressionType.Subtract;
+                case QueryOperations.Multiply:
+                    return ExpressionType.Multiply;
+                case QueryOperations.Divide:
+                    return ExpressionType.Divide;
+                case QueryOperations.Modulus:
+                    return ExpressionType.Modulo;
+                case QueryOperations.LessThan:
+                    return ExpressionType.LessThan;
+                case QueryOperations.GreaterThan:
+                    return ExpressionType.GreaterThan;
+                case QueryOperations.BitwiseAnd:
+                    return ExpressionType.And;
+                case QueryOperations.BitwiseXor:
+                    return ExpressionType.ExclusiveOr;
+                default:
+                    throw new NotSupportedException(Operation.ToString());
+            }
+
+        }
+    }
 }

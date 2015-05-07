@@ -35,18 +35,16 @@ namespace XPlaneGenConsole
             yield break;
         }
 
-		public void BuildQuery()
-		{
-			//var exp = QueryBuilder.Build (QueryString);
-		}
-
         public IQueryable<T> Evaluate()
         {
             var pe = Expression.Parameter(typeof(T), "flight");
 
             var left = Expression.Property(pe, typeof(T).GetProperty("VerticalSpeed"));
             var right = Expression.Constant((short)0);
-            var exp = Expression.GreaterThan(left, right);
+            //var exp = Expression.GreaterThan(left, right);
+
+
+            var exp = Expression.MakeBinary(ExpressionType.GreaterThan, left, right);
 
 			//Expression.
 

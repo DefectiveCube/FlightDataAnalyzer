@@ -10,10 +10,9 @@ namespace XPlaneGenConsole
     [AttributeUsage(AttributeTargets.Property)]
     internal class FormatAttribute : Attribute
     {
-        public readonly string format;
+        public readonly string Conversion;
         public readonly Type type;
         public readonly int value;
-        public Func<double, double> conversion;
 
 		/// <summary>
 		/// Defines the unit type to use
@@ -23,20 +22,21 @@ namespace XPlaneGenConsole
 		/// <param name="value">Value.</param>
         private FormatAttribute(Type type, string conversion, int value)
         {
+            Conversion = conversion;
             this.type = type;
             this.value = value;
 
-            // Create expression from string
-
-            if(value == 0 && conversion == string.Empty)
-            {
-                this.conversion = f => f;
-            }
+            //var q = QueryBuilder.Query(conversion);
         }        
 
         public bool Defined
         {
             get { return value != 0; }
+        }
+
+        public bool IsCustomized
+        {
+            get { return !string.IsNullOrEmpty(Conversion); }
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,7 +16,9 @@ namespace XPlaneQuery
         {
 
 
-            //var exp = QueryBuilder.Build("9.81 * a", new Type[] { typeof(float) });
+            //var exp = QueryBuilder.Query("9.81 * a").Compile();
+
+            //Console.WriteLine(exp(10));
             
             //Console.WriteLine(exp.ToString());
             //Console.WriteLine ("query v1.0");
@@ -32,13 +35,6 @@ namespace XPlaneQuery
 
             //Conversion.Convert<FlightDatapoint, FlightCsvDatapoint>(new FlightCsvDatapoint[] { });
 
-			var parser = CsvParser.GetParser<FlightDatapoint,FlightCsvDatapoint> ();
-			var dp = new FlightDatapoint ();
-
-
-
-			parser (dp, Enumerable.Range (1, 30).Select (x => (double)x).ToArray ());
-
 			var name = "P_FLIGHT.CSV";
 			var output = "Test.bin";
 
@@ -48,20 +44,26 @@ namespace XPlaneQuery
             var importFile = Path.Combine(import, name);
             var dataFile = Path.Combine(data, output);
 
-
-            //var dp = new EngineDatapoint();
-
-
-            
-
-
-            //Conversion<FlightCsvDatapoint, FlightDatapoint> con = new Conversion<FlightCsvDatapoint, FlightDatapoint>();
-
 			var start = DateTime.Now;
-            using (var reader = new CSVReader<FlightCsvDatapoint>(File.OpenRead(importFile))) {
-                //Conversion.Convert<FlightDatapoint, FlightCsvDatapoint>(reader.ReadToEnd().ToArray()).ToArray();
-            }
 
+            using (var reader = new CSVReader<FlightCsvDatapoint>(File.OpenRead(importFile)))
+            {
+                var parser = CsvParser.GetParser<FlightDatapoint, FlightCsvDatapoint>();
+                List<FlightDatapoint> points = new List<FlightDatapoint>();
+
+                foreach (var flightData in reader.ReadToEnd().ToArray())
+                {
+                    if (flightData.IsValid)
+                    {
+                        var _data = flightData.Value.ToArray();
+                        var pt = new FlightDatapoint();
+                        pt.IsValid = true;
+                        parser(pt, _data);
+                        points.Add(pt);
+                    }
+                }
+            }
+            Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
 			//using (var writer = new DataWriter<FlightDatapoint> (dataFile)) {
                 //reader.ReadToEnd().ToArray();
 				//writer.Write (reader.ReadToEnd ().ToArray ());

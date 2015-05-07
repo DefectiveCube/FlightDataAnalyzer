@@ -21,7 +21,6 @@ namespace XPlaneGenConsole
             Index = index;
         }
 
-		[Obsolete()]
         public CsvFieldAttribute(int index, Type type) : this(index)
         {
             Type = type;

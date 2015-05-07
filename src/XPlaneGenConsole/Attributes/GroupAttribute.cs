@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    public class StorageAttribute : Attribute
+    public class GroupAttribute : Attribute
     {
-        public StorageAttribute(int offset)
-        {
-
-        }
-
-        public StorageAttribute(int offset, Type type) : this(offset)
+        public GroupAttribute(string name)
         {
 
         }

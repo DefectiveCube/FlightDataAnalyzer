@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -296,6 +297,8 @@ namespace XPlaneGenConsole
 
             switch (t)
             {
+                case "Boolean":
+                    return value.AsBoolean(false);
                 case "Byte":
                     return value.AsByte();
                 case "Int16":
@@ -304,8 +307,8 @@ namespace XPlaneGenConsole
                     return value.AsInt();
                 case "Single":
                     return value.AsFloat();
-			case "Double":
-				return value.AsDouble ();
+                case "Double":
+                    return value.AsDouble();
                 case "DateTime":
                     return value.AsDateTime();
                 case "TimeSpan":
@@ -344,6 +347,25 @@ namespace XPlaneGenConsole
 
 			return ts;
 		}
+
+        public static bool AsBoolean(this string value, bool? defaultValue = null)
+        {
+            int num = 0;
+
+            if (TryParse(value, out num) && num == 0 || num == 1)
+            {
+                return num == 1;
+            }
+
+            if (defaultValue.HasValue)
+            {
+                return defaultValue.Value;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
 
 		public static byte AsByte(this string value, byte defaultValue = byte.MinValue){
 			byte result = defaultValue;

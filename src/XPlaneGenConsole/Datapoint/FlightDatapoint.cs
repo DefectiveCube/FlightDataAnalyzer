@@ -22,142 +22,180 @@ namespace XPlaneGenConsole
            
 		}
 
-        [CsvField(3, typeof(float))]
-        [Format(AccelerationUnit.Undefined, "x => 9.81 * x", "#.###")]
-        [Storage(typeof(float), 1)]
+        [CsvField(3)]
+        [Format(AccelerationUnit.Undefined, "9.81 * x", "#.###")]
+        [Storage(3,typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Acceleration")]
         public Acceleration NormalAcceleration { get; set; }
 
-        [CsvField(4, typeof(float))]
-        [Format(AccelerationUnit.Undefined, "x => 9.81 * x", "#.###")]
-        [Storage(typeof(float), 2)]
+        [CsvField(4)]
+        [Format(AccelerationUnit.Undefined, "9.81 * x", "#.###")]
+        [Storage(4, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Acceleration")]
         public Acceleration LongitudinalAcceleration { get; set; }
 
-        [CsvField(5, typeof(float))]
-        [Format(AccelerationUnit.Undefined, "x => 9.81 * x")]
-        [Storage(typeof(float), 3)]
+        [CsvField(5)]
+        [Format(AccelerationUnit.Undefined, "9.81 * x", "#.###")]
+        [Storage(5, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Acceleration")]
         public Acceleration LateralAcceleration { get; set; }
 
         [CsvField(6)]
-        [Storage(4)]
+        [Storage(-1)]
 		[Graph(GraphData.Discrete)]
+        [Group("Flags")]
 		public bool ADAHRUsed { get; set; }
 
         [CsvField(7)]
-		[Graph(GraphData.Discrete)]
+        [Storage(19)]
+        [Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte AHRSSStatus { get; set; }
 
-        [CsvField(8, typeof(float))]
+        [CsvField(8)]
         [Format(AngleUnit.Degree)]
-        [Storage(typeof(float), 4)]
-		[Graph(GraphData.Continuous)]
+        [Storage(6, typeof(float))]
+        [Graph(GraphData.Continuous)]
+        [Group("Vectors")]
         public Angle Heading { get; set; }
 
-        [CsvField(9, typeof(float))]
+        [CsvField(9)]
         [Format(AngleUnit.Degree)]
-		[Graph(GraphData.Continuous)]
+        [Storage(7, typeof(float))]
+        [Graph(GraphData.Continuous)]
+        [Group("Vectors")]
         public Angle Pitch { get; set; }
 
-        [CsvField(10, typeof(float))]
+        [CsvField(10)]
         [Format(AngleUnit.Degree)]
-		[Graph(GraphData.Continuous)]
+        [Storage(8, typeof(float))]
+        [Graph(GraphData.Continuous)]
+        [Group("Vectors")]
         public Angle Roll { get; set; }
 
         [CsvField(11)]
         [Format(AngleUnit.Degree)]
-		[Graph(GraphData.Continuous)]
+        [Storage(9, typeof(float))]
+        [Graph(GraphData.Continuous)]
         public Angle FlightDirectorPitch { get; set; }
 
         [CsvField(12)]
         [Format(AngleUnit.Degree)]
+        [Storage(10, typeof(float))]
 		[Graph(GraphData.Continuous)]
         public Angle FlightDirectorRoll { get; set; }
 
         [CsvField(13)]
         [Format(AngleUnit.Degree)]
+        [Storage(11, typeof(float))]
 		[Graph(GraphData.Continuous)]
         public Angle HeadingRate { get; set; }
 
         [CsvField(14)]
         [Format(LengthUnit.Foot)]
-		[Graph(GraphData.Continuous)]
+        [Storage(17, typeof(short))]
+        [Graph(GraphData.Continuous)]
         public Length PressureAltitude { get; set; }
 
         [CsvField(15)]
         [Format(SpeedUnit.Knot)]
+        [Storage(20, typeof(byte))]
 		[Graph(GraphData.Continuous)]
+        [Group("Speed")]
 		public Speed IndicatedAirspeed { get; set; }
 
         [CsvField(16)]
         [Format(SpeedUnit.Knot)]
+        [Storage(21, typeof(byte))]
 		[Graph(GraphData.Continuous)]
-		public Speed TrueAirspeed { get; set; }
+        [Group("Speed")]
+        public Speed TrueAirspeed { get; set; }
 
         [CsvField(17)]
         [Format(SpeedUnit.FootPerSecond)]
+        [Storage(18, typeof(short))]
 		[Graph(GraphData.Continuous)]
-		public Speed VerticalSpeed { get; set; }
+        [Group("Speed")]
+        public Speed VerticalSpeed { get; set; }
 
         [CsvField(18)]
         [Format(AngleUnit.Degree)]
-		[Graph(GraphData.Continuous)]
-		public Angle GPSLatitude { get; set; }
+        [Storage(12, typeof(float))]
+        [Graph(GraphData.Continuous)]
+        [Group("GPS")]
+        public Angle GPSLatitude { get; set; }
 
         [CsvField(19)]
         [Format(AngleUnit.Degree)]
-		[Graph(GraphData.Continuous)]
+        [Storage(13, typeof(float))]
+        [Graph(GraphData.Continuous)]
+        [Group("GPS")]
         public Angle GPSLongitude { get; set; }
 
         [CsvField(20)]
         [Format(AngleUnit.Degree)]
+        [Storage(14, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Body Rates")]
         public Angle BodyYawRate { get; set; }
 
         [CsvField(21)]
         [Format(AngleUnit.Degree)]
+        [Storage(15, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Body Rates")]
         public Angle BodyPitchRate { get; set; }
 
         [CsvField(22)]
         [Format(AngleUnit.Degree)]
+        [Storage(16, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Body Rates")]
         public Angle BodyRollRate { get; set; }
 
         [CsvField(23)]
-        [Storage(0)]
-		[Graph(GraphData.Discrete)]
+        [Storage(22)]
+        [Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte MagStatus { get; set; }
 
         [CsvField(24)]
-        [Storage(0)]
-		[Graph(GraphData.Discrete)]
+        [Storage(23)]
+        [Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte IRUStatus { get; set; }
 
         [CsvField(25)]
-        [Storage(0)]
+        [Storage(24)]
 		[Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte MPUStatus { get; set; }
 
         [CsvField(26)]
-        [Storage(0)]
+        [Storage(25)]
 		[Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte ADCStatus { get; set; }
 
         [CsvField(27)]
-        [Storage(0)]
+        [Storage(26)]
 		[Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte AHRSSeq { get; set; }
 
         [CsvField(28)]
-        [Storage(0)]
+        [Storage(27)]
 		[Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte ADCSeq { get; set; }
 
         [CsvField(29)]
-        [Storage(0)]
+        [Storage(28)]
 		[Graph(GraphData.Discrete)]
+        [Group("Flags")]
         public byte AHRSStartupMode { get; set; }
 
 		internal override byte[] GetBytes()
@@ -166,7 +204,8 @@ namespace XPlaneGenConsole
             {
                 // Irrelevant Note: I hereby claim my proficiency in being a lazy programmer with the following use of an extension method + params + generics
 
-                Data.BlockCopy(0, sizeof(long), DateTime.Ticks);
+
+/*                Data.BlockCopy(0, sizeof(long), DateTime.Ticks);
                 Data.BlockCopy(8, sizeof(int), Flight, Timestamp);
 
                 //NormalAcceleration.
@@ -175,8 +214,8 @@ namespace XPlaneGenConsole
 				Data.BlockCopy (72, sizeof(short), PressureAltitude, VerticalSpeed);
 				
 				Data.BlockCopy (77, sizeof(byte), AHRSSStatus, IndicatedAirspeed, TrueAirspeed, MagStatus, IRUStatus, MPUStatus, ADCStatus, AHRSSeq, ADCSeq, AHRSStartupMode);
-			*/
-                Data.BlockCopy(76, sizeof(bool), ADAHRUsed);
+			
+                Data.BlockCopy(76, sizeof(bool), ADAHRUsed);*/
             }
 
 			return Data;
