@@ -14,12 +14,12 @@ namespace XPlaneGenConsole
     /// For reading binary types
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DataReader<T> : IDisposable
+    [Obsolete()]public class DataReader<T> : IDisposable
         where T : BinaryDatapoint, new()
     {
         private BinaryReader reader;
         private MemoryStream stream;
-        private readonly int bytesToRead;
+        //private readonly int bytesToRead;
 
         public bool EndOfStream
         {
@@ -44,14 +44,14 @@ namespace XPlaneGenConsole
 
             reader = new BinaryReader(this.stream);
             
-            bytesToRead = BinaryDatapoint.GetByteCount<T>();
+            //bytesToRead = BinaryDatapoint.GetByteCount<T>();
         }
 
         public T Read()
         {
             T datapoint = Activator.CreateInstance<T>();
 
-            datapoint.Load(reader.ReadBytes(bytesToRead));
+            //datapoint.Load(reader.ReadBytes(bytesToRead));
 
             return datapoint;
         }

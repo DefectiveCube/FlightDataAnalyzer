@@ -6,13 +6,43 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using UnitsNet;
+using UnitsNet.Units;
 
 namespace XPlaneGenConsole
 {
+    public static class Constants
+    {
+        public static AccelerationUnit Acceleration() { return AccelerationUnit.MeterPerSecondSquared; }
+
+        public static AngleUnit Angle() { return AngleUnit.Degree; }
+
+        public static LengthUnit Length { get { return LengthUnit.Meter; } }
+    }
+
 	public static class Extensions
 	{
+        public static string DefaultUnit()
+        {
+            return "";
+        }
+
+        public static bool HasIndex(this Array source, int index)
+        {
+            return source.Length > index;
+        }
+
         public static double GForces(this Acceleration source) {
             return source.MeterPerSecondSquared * 9.81;
+        }
+
+        public static double Value(this Acceleration source)
+        {
+            return source.MeterPerSecondSquared;
+        }
+
+        public static double Value(this Angle source)
+        {
+            return source.Degrees;
         }
 
 		public static void BlockCopy<T>(this byte[] source, int offset, int size, params T[] value)
@@ -163,37 +193,44 @@ namespace XPlaneGenConsole
 			return false;
 		}
 
-		public static bool TryParse(this string value, out int num){
-			num = 0;
+        public static bool TryParse(this string value, out int num)
+        {
+            num = 0;
 
-			bool negate = value.ToCharArray () [0].Equals ('-');
+            bool negate = value.ToCharArray()[0].Equals('-');
 
-			if (negate) {
-				value = value.Substring (1);
-			}
+            if (negate)
+            {
+                value = value.Substring(1);
+            }
 
-			if (value.Length == 0) {
-				return false;
-			}
+            if (value.Length == 0)
+            {
+                return false;
+            }
 
-			var b = Encoding.ASCII.GetBytes (value);
+            var b = Encoding.ASCII.GetBytes(value);
 
-			foreach (var n in b) {
-				
-				if (n < '0' || n > '9') {
-					return false;
-				}
 
-				num *= 10;
-				num += (n - 48);
-			}
+            foreach (var n in b)
+            {
 
-			if (negate) {
-				num *= -1;
-			}
+                if (n < '0' || n > '9')
+                {
+                    return false;
+                }
 
-			return true;
-		}
+                num *= 10;
+                num += (n - 48);
+            }
+
+            if (negate)
+            {
+                num *= -1;
+            }
+
+            return true;
+        }
 
 		public static bool TryParse(this string value, out ushort num)
 		{
@@ -385,10 +422,6 @@ namespace XPlaneGenConsole
 			short result;
 
 			return value.TryParse(out result) ? result : falseValue;
-		}
-
-		public static short AsShort(this string[] values, int index, short falseValue = short.MinValue){
-			return AsShort (values [index], falseValue);
 		}
 
 		public static int AsInt(this string value, int falseValue = int.MinValue)

@@ -316,15 +316,5 @@ namespace XPlaneGenConsole
 		/// </summary>
 		[Format(TemperatureUnit.DegreeCelsius)]
         public Temperature CylinderHeadTemp { get; set; }
-
-		internal override byte[] GetBytes ()
-		{
-			throw new NotImplementedException ();
-		}
-
-		internal override void SetBytes ()
-		{
-			throw new NotImplementedException ();
-		}
 	}
 }

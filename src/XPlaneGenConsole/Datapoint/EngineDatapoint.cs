@@ -22,91 +22,154 @@ namespace XPlaneGenConsole
 
 		}
 
+        // All CHT and EGT fields are in formatted of "###.#" but the tenths digit is always ZERO. Therefore, it would be advisable to store as a ushort instead of a float and reduce space consumption
+        // Note:  Would save 24 bytes per datapoint (19% decrease)
+
+        [CsvField(3)]
         [Format(TemperatureUnit.DegreeFahrenheit, "###")]
+        [Storage(24, typeof(short))]
         public Temperature OilTemperature { get; set; }
 
+        [CsvField(4)]
         [Format(PressureUnit.Undefined)]
+        [Storage(25, typeof(short))]
 		public Pressure OilPressure { get; set; }
 
+        [CsvField(5)]
         [Format(RotationalSpeedUnit.RevolutionPerMinute)]
+        [Storage(26, typeof(short))]
 		public RotationalSpeed EngineRPM { get; set; }
 
+        [CsvField(6)]
         [Format(PressureUnit.Undefined)]
+        [Storage(3, typeof(float))]
 		public Pressure EngineManifold { get; set; }
 
+        [CsvField(7)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
-		public Temperature EngineTIT { get; set; }
+        [Storage(4, typeof(float))]
+        public Temperature EngineTIT { get; set; }
 
+        [CsvField(8)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(5, typeof(ushort))]
         public Temperature CHT_1 { get; set; }
 
+        [CsvField(9)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(6, typeof(ushort))]
         public Temperature CHT_2 { get; set; }
 
+        [CsvField(10)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(7, typeof(ushort))]
         public Temperature CHT_3 { get; set; }
 
+        [CsvField(11)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(8, typeof(ushort))]
         public Temperature CHT_4 { get; set; }
 
+        [CsvField(12)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(9, typeof(ushort))]
         public Temperature CHT_5 { get; set; }
 
+        [CsvField(13)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(10, typeof(ushort))]
         public Temperature CHT_6 { get; set; }
 
+        [CsvField(14)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(11, typeof(ushort))]
         public Temperature EGT_1 { get; set; }
 
+        [CsvField(15)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(12, typeof(ushort))]
         public Temperature EGT_2 { get; set; }
 
+        [CsvField(16)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(13, typeof(ushort))]
         public Temperature EGT_3 { get; set; }
 
+        [CsvField(17)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(14, typeof(ushort))]
         public Temperature EGT_4 { get; set; }
 
+        [CsvField(18)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(15, typeof(ushort))]
         public Temperature EGT_5 { get; set; }
 
+        [CsvField(19)]
         [Format(TemperatureUnit.DegreeFahrenheit)]
+        [Storage(16, typeof(ushort))]
         public Temperature EGT_6 { get; set; }
 
+        [CsvField(20)]
         [Format(RatioUnit.Percent)]
-		public Ratio EnginePercentPower { get; set; }
+        [Storage(17, typeof(float))]
+        public Ratio EnginePercentPower { get; set; }
 
+        [CsvField(21)]
         [Format(VolumeUnit.UsGallon)]
-		public Volume FuelFlow { get; set; }
+        [Storage(18, typeof(float))]
+        public Volume FuelFlow { get; set; }
 
+        [CsvField(22)]
         [Format(VolumeUnit.UsGallon)]
-		public Volume FuelUsed { get; set; }
+        [Storage(19, typeof(float))]
+        public Volume FuelUsed { get; set; }
 
+        [CsvField(23)]
         [Format(VolumeUnit.UsGallon)]
-		public Volume FuelRemaining { get; set; }
+        [Storage(20, typeof(float))]
+        public Volume FuelRemaining { get; set; }
 
-		public Ratio FuelEconomy { get; set; }
+        [CsvField(25)]
+        [Storage(21, typeof(float))]
+        public Ratio FuelEconomy { get; set; }
 
+        [CsvField(26)]
         [Format(ElectricCurrentUnit.Ampere)]
-		public ElectricCurrent AlternatorCurrent_1 { get; set; }
+        [Storage(28, typeof(byte))]
+        public ElectricCurrent AlternatorCurrent_1 { get; set; }
 
+        [CsvField(27)]
         [Format(ElectricCurrentUnit.Ampere)]
+        [Storage(29, typeof(byte))]
         public ElectricCurrent AlternatorCurrent_2 { get; set; }
 
+        [CsvField(28)]
         [Format(ElectricCurrentUnit.Ampere)]
+        [Storage(27, typeof(ushort))]
         public ElectricCurrent BatteryCurrent { get; set; }
 
+        [CsvField(29)]
         [Format(ElectricPotentialUnit.Volt)]
+        [Storage(22, typeof(float))]
         public ElectricPotential BusVoltage_1 { get; set; }
 
+        [CsvField(30)]
         [Format(ElectricPotentialUnit.Volt)]
+        [Storage(23, typeof(float))]
         public ElectricPotential BusVoltage_2 { get; set; }
 
-		public byte DiscreteInputs { get; set; }
+        [CsvField(31)]
+        [Format(NumberStyles.HexNumber)]
+        [Storage(30, typeof(byte))]
+        public byte DiscreteInputs { get; set; }
 
-		public byte DiscreteOutputs { get; set; }
+        [CsvField(32)]
+        [Format(NumberStyles.HexNumber)]
+        [Storage(31, typeof(byte))]
+        public byte DiscreteOutputs { get; set; }
 
-		internal override void SetBytes()
+		/*internal override void SetBytes()
 		{
 			if (Data.Length == BYTES_COUNT)
 			{
@@ -131,7 +194,7 @@ namespace XPlaneGenConsole
                 FuelFlow = Volume.FromUsGallons(Data.GetSingle(76));
                 FuelUsed = Volume.FromUsGallons(Data.GetSingle(80));
                 FuelRemaining = Volume.FromUsGallons(Data.GetSingle(84));
-                /*this.FuelEconomy = Data.GetSingle(88);*/
+                /*this.FuelEconomy = Data.GetSingle(88);
                 BusVoltage_1 = ElectricPotential.FromVolts(Data.GetSingle(92));
                 BusVoltage_2 = ElectricPotential.FromVolts(Data.GetSingle(96));
                 OilTemperature = Temperature.FromDegreesFahrenheit(Data.GetInt16(100));
@@ -143,9 +206,9 @@ namespace XPlaneGenConsole
 				DiscreteInputs = Data[110];
 				DiscreteOutputs = Data[111];
 			}
-		}
+		}*/
 
-		internal override byte[] GetBytes()
+		/*internal override byte[] GetBytes()
 		{
 			if (IsValid) {
 				/*Data.BlockCopy (0, sizeof(long), DateTime.Ticks);
@@ -154,14 +217,14 @@ namespace XPlaneGenConsole
 					EnginePercentPower, FuelFlow, FuelUsed, FuelRemaining, FuelEconomy, BusVoltage_1, BusVoltage_2);
 				Data.BlockCopy (100, sizeof(short), OilTemperature, OilPressure, EngineRPM);
 				Data.BlockCopy (106, sizeof(ushort), BatteryCurrent);
-				Data.BlockCopy (108, sizeof(byte), AlternatorCurrent_1, AlternatorCurrent_2, DiscreteInputs, DiscreteOutputs);*/
+				Data.BlockCopy (108, sizeof(byte), AlternatorCurrent_1, AlternatorCurrent_2, DiscreteInputs, DiscreteOutputs);
 			}
 
 			return Data;
-		}
+		}*/
 			
-		public void Parse (string[] values)
-		{
+		//public void Parse (string[] values)
+		//{
 			//Timestamp = values [0].AsInt ();
 			//DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());
 			/*OilTemperature = values [3].AsShort ();
@@ -194,6 +257,6 @@ namespace XPlaneGenConsole
 			BusVoltage_2 = values [30].AsFloat ();
 			DiscreteInputs = values [31].GetHexBytes<byte> ().FirstOrDefault ();
 			DiscreteOutputs = values [32].GetHexBytes<byte> ().FirstOrDefault ();*/
-		}
+		//}
 	}
 }

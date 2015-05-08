@@ -46,27 +46,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DatapointAttribute.cs" />
     <Compile Include="Attributes\GroupAttribute.cs" />
-    <Compile Include="Attributes\RangeAttribute.cs" />
-    <Compile Include="BinaryFile.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="Datapoint\Base\CSVDatapoint.cs" />
     <Compile Include="Datapoint\Base\DatapointFactory.cs" />
-    <Compile Include="Datapoint\Conversion\Conversion.cs" />
     <Compile Include="Datapoint\Csv\EngineCsvDatapoint.cs" />
     <Compile Include="Datapoint\Csv\FlightCsvDatapoint.cs" />
     <Compile Include="Datapoint\Csv\SystemCsvDatapoint.cs" />
-    <Compile Include="Factory.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="FlightHeader.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Hexadecimal.cs" />
+    <Compile Include="Marshalling\Marshal.cs" />
+    <Compile Include="Marshalling\UntrustedCodeExecution.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ICsvMapping.cs" />
-    <Compile Include="Mapping\Map.cs" />
-    <Compile Include="Mapping\Mapping.cs" />
     <Compile Include="Query\QueryExpression.cs" />
     <Compile Include="Query\QueryBuilder.cs" />
     <Compile Include="Query\QueryToken.cs" />
@@ -75,13 +71,12 @@
     <Compile Include="Datapoint\EngineDatapoint.cs" />
     <Compile Include="Datapoint\FlightDatapoint.cs" />
     <Compile Include="Datapoint\SystemDatapoint.cs" />
-    <Compile Include="TextFile.cs" />
+    <Compile Include="FixedPoint.cs" />
     <Compile Include="XPlane\XPlaneCommentDatapoint.cs" />
     <Compile Include="XPlane\XPlaneBaseDatapoint.cs" />
     <Compile Include="XPlane\XPlaneDatapoint.cs" />
     <Compile Include="XPlane\XPlaneFile.cs" />
     <Compile Include="IO\DataWriter.cs" />
-    <Compile Include="IO\CSVWriter.cs" />
     <Compile Include="IO\CSVAttribute.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="IO\CSVReader.cs" />
@@ -103,7 +98,6 @@
     <Compile Include="Attributes\GraphAttribute.cs" />
     <Compile Include="Attributes\FormatAttribute.cs" />
     <Compile Include="Attributes\StorageAttribute.cs" />
-    <Compile Include="Datapoint\Conversion\Invocation.cs" />
     <Compile Include="Datapoint\Csv\CsvParser.cs" />
     <Compile Include="Attributes\CsvRecordAttribute.cs" />
   </ItemGroup>

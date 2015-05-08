@@ -84,7 +84,7 @@ namespace XPlaneGenConsole
 
 		public float MagVariance { get; set; }
 
-		internal override byte[] GetBytes()
+		/*internal override byte[] GetBytes()
 		{
 			if (IsValid)
 			{
@@ -105,9 +105,9 @@ namespace XPlaneGenConsole
 			}
 
 			return Data;
-		}
+		}*/
 
-		internal override void SetBytes()
+		/*internal override void SetBytes()
 		{
 			DateTime = new DateTime(BitConverter.ToInt64(Data, 0));
 			this.Flight = BitConverter.ToInt32(Data, 4);
@@ -144,9 +144,9 @@ namespace XPlaneGenConsole
 			this.CrsSelect = Data[93];
 			this.NavType = Data[94];
 			this.GPSState = Data[95];
-		}
+		}*/
 
-		public void Parse (string[] values)
+		/*public void Parse (string[] values)
 		{
 			Timestamp = values [0].AsInt ();
 			DateTime = values [1].AsDateTime ().Add (values [2].AsTimeSpan ());
@@ -184,6 +184,6 @@ namespace XPlaneGenConsole
 			VFQM = values [35].AsFloat ();
 			FmsCourse = values [36].AsShort ();
 			MagVariance = values [37].AsFloat ();
-		}
+		}*/
 	}
 }

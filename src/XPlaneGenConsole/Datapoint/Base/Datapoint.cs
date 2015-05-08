@@ -11,16 +11,16 @@ namespace XPlaneGenConsole
     public abstract class Datapoint
     {
         [Storage(1)]
-        public int Flight { get; protected set; }
+        public int Flight { get; set; }
 
         [CsvField(0)]
         [Storage(2)]
-        public int Timestamp { get; internal set; }
+        public int Timestamp { get; set; }
 
         [CsvField(1, typeof(DateTime))]
         [CsvField(2, typeof(TimeSpan))]
         [Storage(0, typeof(long))]
-        public DateTime DateTime { get; internal set; }
+        public DateTime DateTime { get; set; }
 
         /// <summary>
         /// True, if datapoint has usable data

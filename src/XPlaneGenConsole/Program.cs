@@ -146,10 +146,10 @@ Expression.Call(typeof(Temperature),typeof
             var s = Evaluate(list);*/
 
             //Console.WriteLine(Infix.Print(s));
-            Console.ReadLine();
-            return;
+            //Console.ReadLine();
+            //return;
 
-            try
+            /*try
             {
                 new ConsoleApp().Run(args);
             }
@@ -158,7 +158,7 @@ Expression.Call(typeof(Temperature),typeof
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(ex.StackTrace);
                 Console.ReadLine();
-            }
+            }*/
         }
     }
 }

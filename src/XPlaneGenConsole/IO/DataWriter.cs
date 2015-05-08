@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace XPlaneGenConsole
 {
+   [Obsolete()]
     public class DataWriter<T> : IDisposable
         where T : BinaryDatapoint, new()
     {
@@ -51,7 +52,7 @@ namespace XPlaneGenConsole
         {
             if (datapoint != null && datapoint.IsValid)
             {
-                writer.Write(datapoint.Data);
+                //writer.Write(datapoint.Data);
             }
         }
 

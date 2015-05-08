@@ -37,7 +37,11 @@ namespace XPlaneGenConsole
 
         public void Dispose()
         {
+            reader.Close();
+            stream.Close();
 
+            reader = null;
+            stream = null;
         }
 
 		public int ReadInt32(int min = 0, int max = 1)
@@ -111,17 +115,6 @@ namespace XPlaneGenConsole
 			return sb.ToString();
 		}
 
-		/*public async new Task<T> ReadLineAsync()
-		{
-			var line = await reader.ReadLineAsync();
-
-			T datapoint = Activator.CreateInstance<T>();
-
-			datapoint.Load (line);
-
-			return datapoint.IsValid ? datapoint : null;
-		}*/
-
 		public T ReadLine()
 		{
 			T datapoint = Activator.CreateInstance<T>();
@@ -130,57 +123,6 @@ namespace XPlaneGenConsole
 
 			return datapoint.IsValid ? datapoint : null;
 		}
-
-		/*public async new Task<T[]> ReadToEndAsync()
-		{
-			var start = DateTime.Now;
-
-			List<Task<T>> tasks = new List<Task<T>> ();
-
-			List<T> points = new List<T>();
-
-			using (reader)
-			{
-				while (!reader.EndOfStream)
-				{
-					var data = reader.ReadLine ();
-
-					var t = Task<T>.Factory.StartNew (() => {
-						T datapoint = Activator.CreateInstance<T>();
-
-						datapoint.Load(data);
-
-						return datapoint;
-					});
-
-					tasks.Add (t);
-				}
-			}
-
-			await Task.WhenAll (tasks.ToArray ());
-
-			Console.WriteLine ("Read: {0}", DateTime.Now.Subtract (start).TotalSeconds);
-
-			foreach (var t in tasks) {
-				if (t.Status == TaskStatus.RanToCompletion && t.Result.IsValid) {
-					points.Add (t.Result);
-				}
-			}
-
-			return points.ToArray();
-		}*/
-
-		/*public IEnumerable<T> ReadAll(){
-			var result = ReadToEndAsync ().Result;
-
-			foreach (var t in result) {
-				if(t.IsValid){
-					yield return t;
-				}
-			}
-
-			yield break;
-		}*/
 
 		public IEnumerable<T> ReadToEnd()
 		{

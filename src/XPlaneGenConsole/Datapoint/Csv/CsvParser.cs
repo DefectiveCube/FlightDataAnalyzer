@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -75,7 +76,6 @@ namespace XPlaneGenConsole
 
                 if (attrs != null && attrs.Count() > 0)
                 {
-
                     var format = prop.GetCustomAttribute<FormatAttribute>(); // should be null when the property type is a primitive
 
                     yield return new Tuple<string, CsvFieldAttribute[], FormatAttribute, Type>(prop.Name, attrs.ToArray(), format, prop.PropertyType);
@@ -95,8 +95,6 @@ namespace XPlaneGenConsole
             {
                 throw new Exception("Type does not support CSV records");
             }
-
-            var total = DateTime.Now + new TimeSpan(10000);
 
             // Both types must have the same amount of fields
             // TODO: check const values and compare. Throw if different
@@ -118,7 +116,7 @@ namespace XPlaneGenConsole
 
                 if (field.Item3 != null)
                 {
-                    if (field.Item3.Defined)
+                    if (field.Item3.IsDefinedUnit)
                     {
                         // Is supported unit
                         methodCall = Call(CallConvert(index), field.Item4, field.Item3.value);
@@ -139,6 +137,13 @@ namespace XPlaneGenConsole
 
                         // Call "From" on type, using default unit
                         methodCall = Call(invoke, field.Item4);
+                    }
+                    else if(field.Item3.Style != NumberStyles.None)
+                    {
+                        Debug.WriteLine(field.Item3.Style);
+
+                        methodCall = CallConvert(index, field.Item4);
+                        continue;
                     }
                     else
                     {
