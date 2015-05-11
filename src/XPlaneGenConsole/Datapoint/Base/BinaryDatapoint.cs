@@ -73,7 +73,7 @@ namespace XPlaneGenConsole
                     }
                     else
                     {
-                        var _m = typeof(Constants).GetMethod(unitType.Name.Replace("Unit", ""));
+                        var _m = typeof(Units).GetMethod(unitType.Name.Replace("Unit", ""));
 
                         if (_m == null)
                         {

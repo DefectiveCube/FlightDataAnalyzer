@@ -10,15 +10,6 @@ using UnitsNet.Units;
 
 namespace XPlaneGenConsole
 {
-    public static class Constants
-    {
-        public static AccelerationUnit Acceleration() { return AccelerationUnit.MeterPerSecondSquared; }
-
-        public static AngleUnit Angle() { return AngleUnit.Degree; }
-
-        public static LengthUnit Length { get { return LengthUnit.Meter; } }
-    }
-
 	public static class Extensions
 	{
         public static string DefaultUnit()

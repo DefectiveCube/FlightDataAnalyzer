@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security;
 using System.Security.Policy;
 using System.Security.Permissions;
+using System.Text;
 using System.Threading;
 using XPlaneGenConsole;
 using System.Runtime.Remoting;
@@ -17,9 +18,14 @@ namespace XPlaneQuery
     {
         public static void Main(string[] args)
         {
+			//PipedCsvReader.Read ("/Users/Kirk/FlightDataAnalyzer/Import/P_FLIGHT.CSV");
+
+			//return;
+				
+
             /* Load Assemblies into Partially Trusted Sandbox */
 
-            AppDomainSetup setup = new AppDomainSetup();
+            /*AppDomainSetup setup = new AppDomainSetup();
             setup.ApplicationBase = @"H:\repos\XPlaneGen\src\default\bin\Debug";
 
             var permissions = new PermissionSet(PermissionState.None);
@@ -34,7 +40,7 @@ namespace XPlaneQuery
             UntrustedCodeExecution instance = (UntrustedCodeExecution)handle.Unwrap();
 
             instance.DoNothing();
-            instance.DisplayAssemblies();
+            instance.DisplayAssemblies();*/
 
             //var readSomething = DatapointReader<FlightDatapoint>.GetReadAction();
             //var writeSomething = BinaryDatapoint.GetReadAction<FlightDatapoint>();
@@ -67,7 +73,62 @@ namespace XPlaneQuery
             // 5. Change Output
             // 6. Exit
 
+			/*
+			Console.WriteLine ("What type of file?");
+
+			var sb = new StringBuilder ();
+			sb.AppendLine ("1. Engine");
+			sb.AppendLine ("2. Flight");
+			sb.AppendLine ("3. System");
+
+			int option = 0;
+
+			Console.Write (sb.ToString ());
+
+			while (!int.TryParse (Console.ReadLine (), out option) && option < 1 || option > 3) {
+				Console.Clear ();
+				Console.Write (sb.ToString ());
+			}
+
+			Console.WriteLine ("Enter path of file:");
+			var path = Console.ReadLine ();
+
+			while (path != string.Empty && !File.Exists (path)) {
+				Console.Clear ();
+				Console.WriteLine ("Enter path of file:");
+				path = Console.ReadLine();
+			}
+
+			Console.Clear ();
+
+			var info = new FileInfo (path);
+
+			Console.WriteLine ("Reading from {0}", info.FullName);
+			*/
+			/*List<BinaryDatapoint> points = new List<BinaryDatapoint> ();
+			dynamic parser;
+			dynamic reader;
+
+			switch (option) {
+			case 1:
+				parser = CsvParser.GetParser<EngineDatapoint,EngineCsvDatapoint> ();
+				reader = new CSVReader<EngineCsvDatapoint> (File.OpenRead (path));
+				break;
+			case 2:
+				parser = CsvParser.GetParser<FlightDatapoint,FlightCsvDatapoint> ();
+				reader = new CSVReader<FlightCsvDatapoint> (File.OpenRead (path));
+				break;
+			case 3:
+				parser = CsvParser.GetParser<SystemDatapoint, SystemCsvDatapoint> ();
+				reader = new CSVReader<SystemCsvDatapoint> (File.OpenRead (path));
+				break;
+			default:
+				throw new ArgumentOutOfRangeException ();
+			}*/
+
+
 			var name = "P_FLIGHT.CSV";
+			//var name = path;
 			var output = "Test.bin";
 
             var import = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FlightDataAnalyzer", "Import");
@@ -77,25 +138,36 @@ namespace XPlaneQuery
             var dataFile = Path.Combine(data, output);
 
             var parser = CsvParser.GetParser<FlightDatapoint, FlightCsvDatapoint>();
-            List<FlightDatapoint> points = new List<FlightDatapoint>();
 
             var start = DateTime.Now;
 
             // Read CSV data into Binary Datapoints
-            // TODO: use
             using (var reader = new CSVReader<FlightCsvDatapoint>(File.OpenRead(importFile)))
             {
-                foreach (var flightData in reader.ReadToEnd().ToArray())
+				var ignore = reader.ReadToEnd ()
+					.ToArray ()
+					.AsParallel ()
+					.Where (r => r.IsValid)
+					.Select (a => {
+						var pt = new FlightDatapoint ();
+						parser (pt, a.Value.ToArray ());
+						return pt;
+					})	
+					.OrderBy (f => f.Flight)
+					.ToArray ();
+
+
+/*				foreach (var flightData in reader.ReadToEnd().ToArray())
                 {
                     if (flightData.IsValid)
                     {
                         var _data = flightData.Value.ToArray();
                         var pt = new FlightDatapoint();
-                        pt.IsValid = true;
+                        //pt.IsValid = true;
                         parser(pt, _data);
-                        points.Add(pt);
+                        //points.Add(pt);
                     }
-                }
+                }*/
             }
 
             Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
@@ -115,6 +187,7 @@ namespace XPlaneQuery
 				
 			}*/
 
+			Console.WriteLine ("Press enter to exit");
             Console.ReadLine();
         }
     }

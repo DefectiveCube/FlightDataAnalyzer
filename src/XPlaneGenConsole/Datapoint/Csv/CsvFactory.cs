@@ -7,7 +7,7 @@ namespace XPlaneGenConsole
 	{
 		public override T CreateFromString(string value)
 		{
-			return CreateFromString(value.Split(','));
+			return CreateFromString (value.Split (new char[]{ ',' }, StringSplitOptions.RemoveEmptyEntries));
 		}
 
 		public override T CreateFromString(string[] values)

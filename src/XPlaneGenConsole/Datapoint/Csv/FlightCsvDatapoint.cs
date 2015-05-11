@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,10 +39,14 @@ namespace XPlaneGenConsole
             // If the row is 4 fields long, then that is a new flight
             if (!IsValid)
             {
-                if (values.Length == 4)
-                {
-                    Key = r.Next();
-                }
+				if (values.Length == 4) {
+					Key = r.Next ();
+				} else if (values.Length < FIELDS_COUNT) {
+					Debug.WriteLine ("Fields contains insufficient amount of columns");
+				} else if (values.Length > FIELDS_COUNT) {
+					Debug.WriteLine ("File contains extra amount of columns");
+				}
+			
 
                 return;
             }

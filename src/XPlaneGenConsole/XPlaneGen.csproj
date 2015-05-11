@@ -78,7 +78,6 @@
     <Compile Include="XPlane\XPlaneFile.cs" />
     <Compile Include="IO\DataWriter.cs" />
     <Compile Include="IO\CSVAttribute.cs" />
-    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="IO\CSVReader.cs" />
     <Compile Include="IO\DataReader.cs" />
     <Compile Include="Query\Query.cs" />
@@ -100,6 +99,13 @@
     <Compile Include="Attributes\StorageAttribute.cs" />
     <Compile Include="Datapoint\Csv\CsvParser.cs" />
     <Compile Include="Attributes\CsvRecordAttribute.cs" />
+    <Compile Include="Linq\FlightDataProvider.cs" />
+    <Compile Include="Linq\FlightDataContext.cs" />
+    <Compile Include="Linq\Evaluator.cs" />
+    <Compile Include="Units.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\Units.cs" />
+    <Compile Include="IO\PipedCsvReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -117,5 +123,6 @@
   <ItemGroup>
     <Folder Include="XPlane\FDR\" />
     <Folder Include="XPlane\Net\" />
+    <Folder Include="Linq\" />
   </ItemGroup>
 </Project>

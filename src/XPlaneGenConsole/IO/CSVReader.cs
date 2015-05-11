@@ -17,34 +17,36 @@ namespace XPlaneGenConsole
 	public class CSVReader<T> : IDisposable
 		where T : CsvDatapoint<T>, new()
 	{
-		private MemoryStream stream;
+		private BufferedStream bs;
+		//private FileStream stream;
 		private StreamReader reader;
 
 		public bool EndOfStream {
 			get { return reader.BaseStream.Position >= reader.BaseStream.Length; }
 		}
 
-		public CSVReader(Stream stream)
+		public CSVReader(FileStream stream)
 		{
-			this.stream = new MemoryStream ();
+//			this.stream = stream;
 
-			stream.CopyTo(this.stream);
-
-			reader = new StreamReader(this.stream);
+			bs = new BufferedStream (stream);
+			reader = new StreamReader (bs);
 			reader.BaseStream.Seek(0, SeekOrigin.Begin);
 			reader.ReadLine(); // skip first line
 		}
 
         public void Dispose()
         {
+			bs.Close ();
             reader.Close();
-            stream.Close();
+            //stream.Close();
 
+			bs = null;
             reader = null;
-            stream = null;
+            //stream = null;
         }
 
-		public int ReadInt32(int min = 0, int max = 1)
+		/*public int ReadInt32(int min = 0, int max = 1)
 		{
 			int value;
 
@@ -54,16 +56,16 @@ namespace XPlaneGenConsole
 			}
 
 			return value;
-		}
+		}*/
 
-        public Tuple<int,string> ReadFieldWithIndex(int min = 0, int max = 1)
+        /*public Tuple<int,string> ReadFieldWithIndex(int min = 0, int max = 1)
         {
             throw new NotSupportedException();
 
             //return new Tuple<int, string>(0, string.Empty);
-        }
+        }*/
 
-		public string ReadField(int min = 0, int max = 1)
+		/*public string ReadField(int min = 0, int max = 1)
 		{
 			if (min < 0)
 				throw new ArgumentOutOfRangeException("min");
@@ -113,7 +115,7 @@ namespace XPlaneGenConsole
 			}
 
 			return sb.ToString();
-		}
+		}*/
 
 		public T ReadLine()
 		{

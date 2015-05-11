@@ -22,7 +22,9 @@ namespace XPlaneGenConsole
         public abstract void Load(string[] values);
 
         public virtual Action<BinaryDatapoint, string[]> GetParser()
-        { throw new NotSupportedException(); }
+        { 
+			throw new NotSupportedException(); 
+		}
     }
 
     public sealed class XmlDatapoint : TextDatapoint
