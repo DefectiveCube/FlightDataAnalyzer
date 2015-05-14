@@ -18,6 +18,11 @@ namespace XPlaneGenConsole
 
 		}
 
+        public override BinaryDatapoint Create()
+        {
+            return new SystemDatapoint();
+        }
+
 		public byte AirTemperature { get; set; }
 
 		public float LocalizerDeviation { get; set; }

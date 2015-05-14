@@ -4,7 +4,7 @@ using UnitsNet;
 using UnitsNet.Units;
 using XPlaneGenConsole;
 
-[assembly:Datapoint(typeof(EngineDatapoint))]
+[assembly:Datapoint(typeof(Prototype.EngineDatapoint))]
 
 namespace Prototype
 {
@@ -14,6 +14,12 @@ namespace Prototype
     {
         public const int BYTES_COUNT = 122;
         public const int FIELDS_COUNT = 33;
+
+        public override BinaryDatapoint Create()
+        {
+            throw new NotImplementedException();
+        }
+
 
         [CsvField(3)]
         [Format(TemperatureUnit.DegreeFahrenheit, "###")]

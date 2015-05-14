@@ -1,6 +1,7 @@
 ﻿using XPlaneGenConsole;
 
-[assembly: Datapoint(typeof(SystemDatapoint))]
+[assembly: Datapoint(typeof(Prototype.SystemDatapoint))]
+[assembly: Model()]
 
 namespace Prototype
 {
@@ -12,6 +13,11 @@ namespace Prototype
         public SystemDatapoint()
         {
 
+        }
+
+        public override BinaryDatapoint Create()
+        {
+            throw new System.NotImplementedException();
         }
 
         public byte AirTemperature { get; set; }

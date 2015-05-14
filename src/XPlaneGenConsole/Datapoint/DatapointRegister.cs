@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-/*    public class XPlaneComment : XPlaneBaseDatapoint
+    public class DatapointRegister
     {
-        public XPlaneComment() : base()
+        public void Add(Type type)
         {
-            //Label = "COMM";
+
         }
-    }*/
+    }
 }

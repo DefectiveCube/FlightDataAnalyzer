@@ -22,6 +22,11 @@ namespace XPlaneGenConsole
 
 		}
 
+        public override BinaryDatapoint Create()
+        {
+            return new FlightDatapoint();
+        }
+
         [CsvField(3)]
         [Format(AccelerationUnit.Undefined, "9.81 * x", "#.###")]
         [Storage(3, typeof(float))]

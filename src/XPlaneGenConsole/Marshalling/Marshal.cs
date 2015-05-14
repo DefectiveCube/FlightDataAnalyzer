@@ -17,7 +17,7 @@ namespace XPlaneGenConsole.Marshalling
             Caller = Thread.GetDomain();
             DomainName = Caller.FriendlyName;
 
-            Caller.CreateInstanceAndUnwrap("", "");
+            //Caller.CreateInstanceAndUnwrap("", "");
         }
     }
 }

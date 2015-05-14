@@ -20,7 +20,8 @@ namespace XPlaneGenConsole
 
         public new Action<EngineDatapoint, string[]> GetParser()
         {
-            return CsvParser.GetParser<EngineDatapoint, EngineCsvDatapoint>();
+            //return CsvParser.GetParser<EngineDatapoint, EngineCsvDatapoint>();
+            throw new NotSupportedException();
         }
     }
 }

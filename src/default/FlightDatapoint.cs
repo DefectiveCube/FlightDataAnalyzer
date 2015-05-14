@@ -4,7 +4,7 @@ using UnitsNet;
 using UnitsNet.Units;
 using XPlaneGenConsole;
 
-[assembly: Datapoint(typeof(FlightDatapoint))]
+[assembly: Datapoint(typeof(Prototype.FlightDatapoint))]
 
 namespace Prototype
 {
@@ -13,6 +13,11 @@ namespace Prototype
 	{
 		public const int FIELDS_COUNT = 30;
 		public const int BYTES_COUNT = 87;
+
+        public override BinaryDatapoint Create()
+        {
+            throw new NotImplementedException();
+        }
 
         [CsvField(3)]
         [Format(AccelerationUnit.Undefined, "9.81 * x", "#.###")]

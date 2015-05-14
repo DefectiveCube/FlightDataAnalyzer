@@ -22,6 +22,12 @@ namespace XPlaneGenConsole
 
 		}
 
+        public override BinaryDatapoint Create()
+        {
+            return new EngineDatapoint();
+            //throw new NotImplementedException();
+        }
+
         // All CHT and EGT fields are in formatted of "###.#" but the tenths digit is always ZERO. Therefore, it would be advisable to store as a ushort instead of a float and reduce space consumption
         // Note:  Would save 24 bytes per datapoint (19% decrease)
 

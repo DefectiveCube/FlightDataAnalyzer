@@ -20,6 +20,11 @@ namespace XPlaneGenConsole
             get { return AppDomain.CurrentDomain.GetAssemblies().Select(a => a.FullName).First(); }
         }
 
+        public void LoadAssemblies()
+        {
+            //string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            LoadAssembly("Prototype");
+        }
 
         public void DisplayAssemblies()
         {
@@ -29,11 +34,23 @@ namespace XPlaneGenConsole
             }
         }
 
+        public string[] GetAssemblyNames()
+        {
+
+            var asm = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => a.GetName().Name == "Prototype")
+                .Select(a => a.GetName().Name);
+
+
+            return asm.ToArray();
+        }
+
         public bool LoadAssembly(string name)
         {
-            var asm = Assembly.ReflectionOnlyLoad("WMU");
+            AppDomain.CurrentDomain.Load(name);
+            //var asm = Assembly.ReflectionOnlyLoad("WMU");
 
-            var list = asm.GetCustomAttributesData();
+            //var list = asm.GetCustomAttributesData();
 
             return true;
             //return (asm.GetCustomAttributesData()//GetCustomAttribute<DatapointAttribute>() == null);
@@ -47,14 +64,15 @@ namespace XPlaneGenConsole
             // What type of datapoint ???
         }
 
-        public void Read(string file)
+        /*public void Read(string file, Type type)
         {
             BinaryDatapoint.GetReadAction<FlightDatapoint>();
         }
+
         public void Write()
         {
             BinaryDatapoint.GetWriteAction<FlightDatapoint>();
-        }
+        }*/
 
         public void DoNothing()
         {

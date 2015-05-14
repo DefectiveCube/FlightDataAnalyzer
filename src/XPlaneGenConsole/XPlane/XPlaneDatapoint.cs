@@ -11,6 +11,12 @@ namespace XPlaneGenConsole
 {
     public sealed class XPlaneDatapoint : XPlaneBaseDatapoint
     {
+
+        public override BinaryDatapoint Create()
+        {
+            return new XPlaneDatapoint();
+        }
+
 		[CsvField(0)]
 		[Format(DurationUnit.Second)]
 		[Graph(GraphData.Continuous)]

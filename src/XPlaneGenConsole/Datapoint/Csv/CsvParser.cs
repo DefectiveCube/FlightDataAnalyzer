@@ -64,9 +64,8 @@ namespace XPlaneGenConsole
             return Expression.Call(typeof(T).GetMethod("From"), exp, Expression.Constant(unit, typeof(U)));
         }
 
-		public static Action<T, string[]> GetParser<T, U>()
+		public static Action<T, string[]> GetParser<T>()
             where T : BinaryDatapoint, new()
-            where U : CsvDatapoint<U>, new()
         {
 			var start = DateTime.Now;
             var record = typeof(T).GetCustomAttribute<CsvRecordAttribute>();

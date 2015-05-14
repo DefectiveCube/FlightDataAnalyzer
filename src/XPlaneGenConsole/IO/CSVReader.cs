@@ -14,6 +14,7 @@ namespace XPlaneGenConsole
 	/// For reading CSV files
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
+    [Obsolete()]
 	public class CSVReader<T> : IDisposable
 		where T : CsvDatapoint<T>, new()
 	{
@@ -98,11 +99,11 @@ namespace XPlaneGenConsole
 			{
 				if(reader.Peek() == ',')
 				{
-					reader.Read();
+					reader.Load();
 					break;
 				}
 
-				sb.Append((char)reader.Read());
+				sb.Append((char)reader.Load());
 			}
 
 			int p = reader.Peek();
@@ -110,7 +111,7 @@ namespace XPlaneGenConsole
             // read through any commas and control characters
 			while(p == 44 || p < 32)
 			{
-				reader.Read();
+				reader.Load();
 				p = reader.Peek();
 			}
 

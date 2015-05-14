@@ -363,7 +363,7 @@ namespace XPlaneGenConsole
 
 			// Some operators are multiple-characters (e.g. logical-* (and,or))
 
-			// Read until next character is not an operator
+			// Load until next character is not an operator
 			var sb = new StringBuilder ();
 
 			while (Evaluate () == TokenType.Operator) {
@@ -429,7 +429,7 @@ namespace XPlaneGenConsole
 				sb.Append (Read ());
 			}
 
-			// Read functions arguments
+			// Load functions arguments
 
 			return QueryToken.Empty;
 		}

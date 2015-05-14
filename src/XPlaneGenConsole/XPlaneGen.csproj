@@ -48,12 +48,11 @@
   <ItemGroup>
     <Compile Include="Attributes\DatapointAttribute.cs" />
     <Compile Include="Attributes\GroupAttribute.cs" />
+    <Compile Include="Attributes\ModelAttribute.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="Datapoint\Base\CSVDatapoint.cs" />
     <Compile Include="Datapoint\Base\DatapointFactory.cs" />
-    <Compile Include="Datapoint\Csv\EngineCsvDatapoint.cs" />
-    <Compile Include="Datapoint\Csv\FlightCsvDatapoint.cs" />
-    <Compile Include="Datapoint\Csv\SystemCsvDatapoint.cs" />
+    <Compile Include="Datapoint\DatapointRegister.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="FlightHeader.cs" />
@@ -68,9 +67,6 @@
     <Compile Include="Query\QueryToken.cs" />
     <Compile Include="Query\QueryOperator.cs" />
     <Compile Include="Query\QueryFunction.cs" />
-    <Compile Include="Datapoint\EngineDatapoint.cs" />
-    <Compile Include="Datapoint\FlightDatapoint.cs" />
-    <Compile Include="Datapoint\SystemDatapoint.cs" />
     <Compile Include="FixedPoint.cs" />
     <Compile Include="XPlane\XPlaneCommentDatapoint.cs" />
     <Compile Include="XPlane\XPlaneBaseDatapoint.cs" />
@@ -87,7 +83,6 @@
     <Compile Include="Datapoint\Base\BinaryDatapoint.cs" />
     <Compile Include="Datapoint\Base\Datapoint.cs" />
     <Compile Include="IO\CSVDirection.cs" />
-    <Compile Include="IO\CSVFile.cs" />
     <Compile Include="Datapoint\Base\TextDatapoint.cs" />
     <Compile Include="Datapoint\Csv\CsvFactory.cs" />
     <Compile Include="XPlane\NavType.cs" />
@@ -105,7 +100,7 @@
     <Compile Include="Units.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\Units.cs" />
-    <Compile Include="IO\PipedCsvReader.cs" />
+    <Compile Include="IO\CsvConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -123,6 +118,5 @@
   <ItemGroup>
     <Folder Include="XPlane\FDR\" />
     <Folder Include="XPlane\Net\" />
-    <Folder Include="Linq\" />
   </ItemGroup>
 </Project>

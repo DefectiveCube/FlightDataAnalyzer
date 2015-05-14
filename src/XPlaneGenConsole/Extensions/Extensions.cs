@@ -115,37 +115,6 @@ namespace XPlaneGenConsole
 			yield break;
 		}
 
-		public static byte[] GetBytes(this double value){
-			return BitConverter.GetBytes (value);
-		}
-
-		public static byte[] GetBytes(this float value){
-			return BitConverter.GetBytes (value);
-		}
-
-		public static byte[] GetBytes(this long value){
-			return BitConverter.GetBytes (value);
-		}
-
-		public static byte[] GetBytes(this int value){
-			return BitConverter.GetBytes (value);
-		}
-
-        public static Single GetSingle(this IEnumerable<byte> data, int index = 0)
-        {
-            return BitConverter.ToSingle(data.ToArray(), index);
-        }
-
-        public static double GetDouble(this IEnumerable<byte> data, int index = 0)
-        {
-            return BitConverter.ToSingle(data.ToArray(), index);
-        }
-
-        public static short GetInt16(this IEnumerable<byte> data, int index = 0)
-        {
-            return BitConverter.ToInt16(data.ToArray(), index);
-        }
-
         public static int GetInt32(this IEnumerable<byte> data, int index = 0)
         {
             return BitConverter.ToInt32(data.ToArray(), index);
@@ -434,5 +403,93 @@ namespace XPlaneGenConsole
 
 			return value.TryParse (out result) ? result : defaultValue;
 		}
+
+        public static bool IsNaN(this double d)
+        {
+            return double.IsNaN(d);
+        }
+
+        public static double AsDouble(this char a)
+        {
+            // Only valid chars are digits
+            switch (a)
+            {
+                case '0':
+                    return 0.0;
+                case '1':
+                    return 1.0;
+                case '2':
+                    return 2.0;
+                case '3':
+                    return 3.0;
+                case '4':
+                    return 4.0;
+                case '5':
+                    return 5.0;
+                case '6':
+                    return 6.0;
+                case '7':
+                    return 7.0;
+                case '8':
+                    return 8.0;
+                case '9':
+                    return 9.0;
+                default:
+                    return double.NaN;
+            }
+        }
+
+        public static double AsDouble(char a, char b, bool allowNegative = true)
+        {
+            // First char could be '-' or digit
+            // Second char must be digit
+            double c = a.AsDouble();
+            double d = b.AsDouble();
+
+            if (!double.IsNaN(c) && !double.IsNaN(d))
+            {
+                return 10.0 * c + d;
+            }
+            else if (allowNegative && c == '-' && !double.IsNaN(d))
+            {
+                return -1.0 * d;
+            }
+            else
+            {
+                return double.NaN;
+            }
+        }
+
+        public static double AsDouble(char a, char b, char c, bool allowNegative = true)
+        {
+            // First char could be - or digit
+            // Second char could be '.' if first is digit
+            // Third char must be digit
+            double d = a.AsDouble();
+            double e = b.AsDouble();
+            double f = c.AsDouble();
+
+            if (!d.IsNaN() && !e.IsNaN() && !f.IsNaN())
+            {
+                return 100.0 * d + 10.0 * e + f;
+            }
+            else if (!d.IsNaN() && e == '.' && !f.IsNaN())
+            {
+                return d + f / 10.0;
+            }
+            else if (d == '-' && !e.IsNaN() && !f.IsNaN())
+            {
+                return -1 * (e * 10.0 + f);
+            }
+            else
+            {
+                return double.NaN;
+            }
+        }
+
+        public static double AsDouble(char a, char b, char c, char d, bool allowNegative = true)
+        {
+            throw new NotImplementedException();
+        }
 	}
 }
