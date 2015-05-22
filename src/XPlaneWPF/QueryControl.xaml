@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="XPlaneWPF.QueryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:XPlaneWPF"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <app:StringList x:Key="RelationList"/>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label>Data Model:</Label>
+            <ComboBox x:Name="datapointTypeCB" ItemsSource="{Binding Source={StaticResource ModelListData}}" DisplayMemberPath="Name" SelectionChanged="ComboBox_SelectionChanged" MinWidth="500" MaxWidth="800" HorizontalAlignment="Left"/>
+                    
+            <Label IsEnabled="False">Version:</Label>
+            <ComboBox IsEnabled="False">
+                <ComboBoxItem>1.0.0.0</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        
+        <Label>Constraints:</Label>
+        <DataGrid x:Name="constraintsDG" ItemsSource="{Binding View}" SelectionMode="Single" AutoGenerateColumns="False" 
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CanUserResizeRows="False"
+                  CanUserSortColumns="False"
+                  CanUserAddRows="False" 
+                  CanUserDeleteRows="False">
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox IsThreeState="True" IsChecked="True" Content="{Binding Name}" Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" Indeterminate="CheckBox_Indeterminate" Tag="{Binding Name}"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ContentPresenter/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <ItemsPresenter/>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Use">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsThreeState="False" IsChecked="{Binding Use}" Checked="CheckBox_ItemChecked" Unchecked="CheckBox_ItemUnchecked" Tag="{Binding Group}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="Property" IsReadOnly="True" Binding="{Binding Name, Mode=OneTime}"/>
+                <DataGridTextColumn Header="Category" IsReadOnly="True" Binding="{Binding Category, Mode=OneTime}" />
+                <DataGridTextColumn Header="Unit" IsReadOnly="True" Binding="{Binding Unit, Mode=OneTime}"/>
+                <DataGridComboBoxColumn Header="Relationship" ItemsSource="{Binding Source={StaticResource RelationList}}" SelectedItemBinding="{Binding Relation}"/>
+                <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=OneTime}"/>
+                <DataGridTextColumn Header="Conversion" Binding="{Binding Conversion, Mode=OneTime}"/>
+                <DataGridTextColumn Header="Data Type" IsReadOnly="True" Binding="{Binding DataType, Mode=OneTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <Button Click="Button_Click">Build</Button>
+    </StackPanel>
+</UserControl>

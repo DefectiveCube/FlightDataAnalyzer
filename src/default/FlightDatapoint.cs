@@ -41,6 +41,7 @@ namespace Prototype
         public Acceleration LateralAcceleration { get; set; }
 
         [CsvField(6)]
+        [Format(NumberStyles.Integer ^ NumberStyles.AllowLeadingSign)]
         [Storage(29)]
         [Graph(GraphData.Discrete)]
         [Group("Flags")]
@@ -78,24 +79,28 @@ namespace Prototype
         [Format(AngleUnit.Degree)]
         [Storage(9, typeof(float))]
         [Graph(GraphData.Continuous)]
+        [Group("FlightDirector")]
         public Angle FlightDirectorPitch { get; set; }
 
         [CsvField(12)]
         [Format(AngleUnit.Degree)]
         [Storage(10, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("FlightDirector")]
         public Angle FlightDirectorRoll { get; set; }
 
         [CsvField(13)]
         [Format(AngleUnit.Degree)]
         [Storage(11, typeof(float))]
 		[Graph(GraphData.Continuous)]
+        [Group("Rates")]
         public Angle HeadingRate { get; set; }
 
         [CsvField(14)]
         [Format(LengthUnit.Foot)]
         [Storage(17, typeof(short))]
         [Graph(GraphData.Continuous)]
+        [Group("Altitude")]
         public Length PressureAltitude { get; set; }
 
         [CsvField(15)]

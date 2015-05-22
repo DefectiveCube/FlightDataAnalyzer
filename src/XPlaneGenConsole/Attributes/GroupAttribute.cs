@@ -8,9 +8,11 @@ namespace XPlaneGenConsole
 {
     public class GroupAttribute : Attribute
     {
+        public readonly string Group;
+
         public GroupAttribute(string name)
         {
-
+            Group = name;
         }
     }
 }

@@ -71,15 +71,12 @@ namespace XPlaneGenConsole
         {
             var write = BinaryDatapoint.GetWriteAction<T>();
             string filePath = path as string;
-            int count = 0;
 
             Console.WriteLine("Writing to {0}", filePath);
 
             var ordered = from dp in OutputQueue
                           orderby dp.DateTime, dp.Timestamp
                           select dp;
-
-            count = ordered.Count();
 
             using (var writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
             {
@@ -89,7 +86,7 @@ namespace XPlaneGenConsole
                 }
             }
 
-            Console.WriteLine("Consumer thread finished | {0} datapoints", count);
+            Console.WriteLine("Consumer thread finished | {0} datapoints", ordered.Count());
         }
 
         static void ProducerThread(object path)
@@ -139,6 +136,7 @@ namespace XPlaneGenConsole
                 startBarrier.RemoveParticipant();
                 Thread.CurrentThread.Abort();
                 Console.WriteLine(ex.Message);
+                return;
             }
 
             while (!InputQueue.IsEmpty)

@@ -13,5 +13,13 @@ namespace XPlaneWPF
     /// </summary>
     public partial class App : Application
     {
+        void App_Startup(object sender, StartupEventArgs e)
+        {
+            ModelList list = FindResource("ModelListData") as ModelList;
+
+            var window = new AppWindow();
+
+            window.Show();
+        }
     }
 }

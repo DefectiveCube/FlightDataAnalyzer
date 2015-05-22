@@ -23,35 +23,41 @@ namespace XPlaneWPF
     /// </summary>
     public partial class DataModelBuilder : Window
     {
-        private ObservableCollection<DataModelProperties> properties { get; set; }
+        public PropertyList Properties { get; set; }
 
         public DataModelBuilder()
         {
             InitializeComponent();
-            DataContext = this;
-            properties = new ObservableCollection<DataModelProperties>();
-            DataGrid.ItemsSource = properties;
+
+            Properties = new PropertyList();
+
+            DataGrid.DataContext = this;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            properties.Add(new DataModelProperties()
-            {
-                Name = "Test",
-                Column = 0,
-                Type = "Angle",
-                Unit = "Undefined",
-                IsUnsigned = false,
-                Conversion = string.Empty,
-                Format = "#.##"
-            });
+            Properties.Add(new DataModelProperties()
+             {
+                 Name = "Test",
+                 Column = 0,
+                 Type = typeof(UnitsNet.Angle).Name,
+                 Unit = "Undefined",
+                 IsUnsigned = false,
+                 Conversion = string.Empty,
+                 Format = "#.##"
+             });
 
-            Debug.WriteLine(properties.Count);
+            Debug.WriteLine(Properties.Count);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            properties.Remove(properties.Last());
+            //properties.Remove(properties.Last());
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Creating");
         }
     }
 }

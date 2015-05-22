@@ -1,8 +1,9 @@
 ﻿<Application x:Class="XPlaneWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="DataModelBuilder.xaml">
+             xmlns:app="clr-namespace:XPlaneWPF"
+             Startup="App_Startup">
     <Application.Resources>
-         
+        <app:ModelList x:Key="ModelListData" />
     </Application.Resources>
 </Application>

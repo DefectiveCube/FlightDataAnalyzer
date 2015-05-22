@@ -8,9 +8,11 @@ namespace XPlaneGenConsole
 {
     public class GraphAttribute : Attribute
     {
+        public readonly GraphData DataType;
+
         public GraphAttribute(GraphData data)
         {
-
+            DataType = data;
         }
     }
 

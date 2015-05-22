@@ -166,12 +166,6 @@ namespace XPlaneGenConsole
 
             foreach (var item in propertyInfo)
             {
-                /*
-                Debug.Write(item.Name);
-                Debug.Write(" ");
-                Debug.WriteLine(item.Type.Name);
-                */
-
                 paramType = item.Storage.Type ?? item.Type;
 
                 writeMethod = typeof(BinaryWriter).GetMethods()

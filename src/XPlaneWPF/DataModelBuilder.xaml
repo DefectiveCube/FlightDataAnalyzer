@@ -1,75 +1,53 @@
 ﻿<Window x:Class="XPlaneWPF.DataModelBuilder"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:col="clr-namespace:XPlaneWPF"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:XPlaneWPF"
         Title="Create a Data Model" Height="480" Width="720">
+    
+    <Window.Resources>
+        <col:PropertyList x:Key="PropertyListData"/>
+        <col:TypeList x:Key="TypeListData"/>
+    </Window.Resources>
+    
     <Grid>
         <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label>Name:</Label>
-                <TextBox Width="100"></TextBox>
-
-                <Label>Namespace:</Label>
-                <TextBox Width="100"></TextBox>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <Label>Unit Type:</Label>
-                <ComboBox>
-                    <ComboBoxItem>Angle</ComboBoxItem>
-                    <ComboBoxItem>Acceleration</ComboBoxItem>
-                    <ComboBoxItem>Electric Current</ComboBoxItem>
-                    <ComboBoxItem>Electric Potential</ComboBoxItem>
-                    <ComboBoxItem>Electric Resistance</ComboBoxItem>
-                    <ComboBoxItem>Length</ComboBoxItem>
-                    <ComboBoxItem>Pressure</ComboBoxItem>
-                    <ComboBoxItem>Ratio</ComboBoxItem>
-                    <ComboBoxItem>Rotational Speed</ComboBoxItem>
-                    <ComboBoxItem>Speed</ComboBoxItem>
-                    <ComboBoxItem>Temperature</ComboBoxItem>
-                    <ComboBoxItem>Torque</ComboBoxItem>
-                    <ComboBoxItem>Volume</ComboBoxItem>
-                    <ComboBoxItem>Boolean</ComboBoxItem>
-                    <ComboBoxItem>Byte</ComboBoxItem>
-                    <ComboBoxItem>Int16</ComboBoxItem>
-                    <ComboBoxItem>Int32</ComboBoxItem>
-                    <ComboBoxItem>Int64</ComboBoxItem>
-                    <ComboBoxItem>Float</ComboBoxItem>
-                    <ComboBoxItem>Double</ComboBoxItem>
-                    <ComboBoxItem>String</ComboBoxItem>
-                    <ComboBoxItem>DateTime</ComboBoxItem>
-                    <ComboBoxItem>TimeSpan</ComboBoxItem>
-                </ComboBox>
-
-                <Label>Unit:</Label>
-                <ComboBox>
-                    <ComboBoxItem>Undefined</ComboBoxItem>
-                </ComboBox>
-
-                <Label>Unsigned:</Label>
-                <CheckBox></CheckBox>
-
-                <Label>Conversion:</Label>
-                <TextBox Width="100"></TextBox>
-
-                <Label>Format:</Label>
-                <TextBox Width="100"></TextBox>
-            </StackPanel>
-
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Width="50" Click="Button_Click_2">Create</Button>
                 <Button Width="30" Click="Button_Click">+</Button>
                 <Button Width="30" Click="Button_Click_1">-</Button>
             </StackPanel>
-
-            <DataGrid x:Name="DataGrid" ItemsSource="{Binding Source=properties}" CanUserAddRows="True" AutoGenerateColumns="False">
+            
+            <DataGrid x:Name="DataGrid" ItemsSource="{Binding Source={StaticResource PropertyListData}}" CanUserAddRows="True" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, ValidatesOnExceptions=True}"/>
-                    <DataGridTextColumn Header="Column" Binding="{Binding Path=Column, ValidatesOnExceptions=True}"/>                                       
-                    <DataGridComboBoxColumn Header="Type" ItemsSource="{Binding Source={my:UnitType {x:Type my:SupportedUnitTypes}}}" DisplayMemberPath="Name" SelectedValuePath="Value" />
-                    <DataGridComboBoxColumn Header="Unit" />
+                    <DataGridTextColumn Header="Column" Binding="{Binding Path=Column, ValidatesOnExceptions=True}"/>
+                                        
+                    <DataGridComboBoxColumn 
+                        Header="Type" 
+                        ItemsSource="{Binding Source={StaticResource TypeListData}}"
+                        DisplayMemberPath="Name"
+                        />                                            
+                    
+                    <DataGridComboBoxColumn Header="Unit"
+                                            SelectedValueBinding="{Binding Path=UnitNames}">
+                                            
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding Path=UnitNames}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding Path=UnitNames}"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                        
+                    </DataGridComboBoxColumn>
                     <DataGridCheckBoxColumn Header="Unsigned?" Binding="{Binding Path=IsUnsigned}" />
                     <DataGridTextColumn Header="Conversion" Binding="{Binding Path=Conversion}"/>
                     <DataGridTextColumn Header="Format" Binding="{Binding Path=Format}"/>
+                    <DataGridHyperlinkColumn Header="Delete"/>
                 </DataGrid.Columns>
             </DataGrid>
 

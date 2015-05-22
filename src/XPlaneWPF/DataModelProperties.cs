@@ -95,7 +95,6 @@ namespace XPlaneWPF
             {
                 unitType = value;
 
-
                 if (unitType != null && unitType.IsEnum)
                 {
                     UnitNames = Enum.GetNames(TypeOfUnit);
