@@ -13,7 +13,7 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label>Data Model:</Label>
-            <ComboBox x:Name="datapointTypeCB" ItemsSource="{Binding Source={StaticResource ModelListData}}" DisplayMemberPath="Name" SelectionChanged="ComboBox_SelectionChanged" MinWidth="500" MaxWidth="800" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="datapointTypeCB" DisplayMemberPath="Name" SelectionChanged="ComboBox_SelectionChanged" MinWidth="500" MaxWidth="800" HorizontalAlignment="Left"/>
                     
             <Label IsEnabled="False">Version:</Label>
             <ComboBox IsEnabled="False">

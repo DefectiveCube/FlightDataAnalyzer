@@ -17,28 +17,6 @@ namespace XPlaneGenConsole
 
         public abstract BinaryDatapoint Create();
 
-        public static BinaryDatapoint Create<T>()
-            where T : BinaryDatapoint, new()
-        {
-            var name = typeof(T).Name;
-
-            // This isn't going to work because these types aren't going to be reference'able come GA release
-
-            /*switch(name)
-            {
-                case "EngineDatapoint":
-                    return new EngineDatapoint();
-                case "FlightDatapoint":
-                    return new FlightDatapoint();
-                case "SystemDatapoint":
-                    return new SystemDatapoint();
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }*/
-
-            throw new NotImplementedException();
-        }
-
         public static Func<BinaryReader, T> GetReadAction<T>()
             where T : BinaryDatapoint, new()
         {
@@ -205,6 +183,10 @@ namespace XPlaneGenConsole
 
                     var extCall = Expression.Call(method.First(), property);
                     writeExpression = Expression.Convert(extCall, paramType);
+                }
+                else if(item.Format != null && !item.Format.IsDefinedUnit){
+                    Console.WriteLine("Warning: Unable to process property {0}", item.Name);
+                    continue;
                 }
                 else if (item.Type != typeof(DateTime) && item.Type != typeof(TimeSpan))
                 {

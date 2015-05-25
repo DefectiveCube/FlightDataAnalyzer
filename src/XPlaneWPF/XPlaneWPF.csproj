@@ -59,11 +59,40 @@
     <Compile Include="AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DatapointDataProvider.cs" />
+    <Compile Include="Controls\DatapointTypeProvider.cs" />
+    <Compile Include="Controls\DataTemplateFactory.cs" />
+    <Compile Include="Controls\FileDialog.xaml.cs">
+      <DependentUpon>FileDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InlineMenu.xaml.cs">
+      <DependentUpon>InlineMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InlineMenuItem.cs" />
+    <Compile Include="Controls\UnitTypeProvider.cs" />
     <Compile Include="DataModelBuilderViewModel.cs" />
     <Compile Include="DataModelInfoWindow.xaml.cs">
       <DependentUpon>DataModelInfoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelList.cs" />
+    <Compile Include="Pages\DataModelBuilderPage.xaml.cs">
+      <DependentUpon>DataModelBuilderPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DataModelPage.xaml.cs">
+      <DependentUpon>DataModelPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ImportDataPage.xaml.cs">
+      <DependentUpon>ImportDataPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\GraphPage.xaml.cs">
+      <DependentUpon>GraphPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\QueryPage.xaml.cs">
+      <DependentUpon>QueryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\StartupPage.xaml.cs">
+      <DependentUpon>StartupPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PropertyList.cs" />
     <Compile Include="QueryControl.xaml.cs">
       <DependentUpon>QueryControl.xaml</DependentUpon>
@@ -78,6 +107,14 @@
     <Compile Include="UnitTypeExtension.cs" />
     <Compile Include="UnitTypes.cs" />
     <Page Include="AppWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FileDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\InlineMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,11 +138,64 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="Documents\Units.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Page Include="Pages\DataModelBuilderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DataModelPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ImportDataPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\GraphPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\QueryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\StartupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="QueryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="QueryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\EngineDatapointTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\InlineMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Template.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\VerticalListBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -132,6 +222,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="Fonts\Lato-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -153,6 +246,9 @@
       <Project>{7ef97ce7-dc97-4839-88a6-d4475f451b15}</Project>
       <Name>XPlaneGen</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

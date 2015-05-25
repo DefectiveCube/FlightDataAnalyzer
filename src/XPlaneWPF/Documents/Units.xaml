@@ -1,0 +1,58 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              ColumnWidth="400" FontSize="14" FontFamily="Segoe UI Semilight">
+    
+    <Paragraph>
+        <Bold>Acceleration</Bold>
+    </Paragraph>
+    
+    <List>
+        <ListItem>
+            <Paragraph>Meters per second<Span Typography.Variants="Superscript">2</Span></Paragraph>
+        </ListItem>
+    </List>
+    
+    <Paragraph>
+        <Bold>Angle</Bold>
+    </Paragraph>
+    
+    <List>
+        <ListItem>
+            <Paragraph>Degree</Paragraph>
+        </ListItem>
+        <ListItem>
+            <Paragraph>Radian</Paragraph>
+        </ListItem>
+        <ListItem>
+            <Paragraph>Gradient</Paragraph>
+        </ListItem>
+    </List>
+
+    <Paragraph>
+        <Bold>Rotational Speed</Bold>
+    </Paragraph>
+
+    <Paragraph>
+        <Bold>Speed</Bold>
+    </Paragraph>
+
+    <Paragraph>
+        <Bold>Temperature</Bold>        
+    </Paragraph>
+
+    <List>
+        <ListItem>
+            <Paragraph>Celsius</Paragraph>
+        </ListItem>
+        <ListItem>
+            <Paragraph>Fahrenheit</Paragraph>
+        </ListItem>
+    </List>
+
+    <Paragraph>
+        <Bold>Torque</Bold>
+    </Paragraph>
+    
+    <Paragraph>
+        <Bold>Volume</Bold>
+    </Paragraph>
+</FlowDocument>

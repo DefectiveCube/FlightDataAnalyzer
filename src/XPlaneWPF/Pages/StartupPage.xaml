@@ -1,0 +1,91 @@
+﻿<Page x:Class="XPlaneWPF.Pages.StartupPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:app="clr-namespace:XPlaneWPF.Controls"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Title="Startup Page">
+    
+    <Grid VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Menu Style="{StaticResource InlineMenu}" Margin="20">
+            <Menu.Resources>
+                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
+            </Menu.Resources>
+            
+            <MenuItem Header="Home" Click="Button_Click" Tag="Home"/>
+        </Menu>
+        
+        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="1" Margin="20">
+            <Menu.Resources>
+                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineSubMenuItem}"/>
+            </Menu.Resources>
+            
+            <MenuItem Header="Data" Click="Button_Click" Tag="Data"/>
+            <MenuItem Header="Import" Click="Button_Click" Tag="Import"/>
+            <MenuItem Header="View" Tag="View"/>
+            <MenuItem Header="Graph" Tag="Graph"/>
+            <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
+            <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
+            <MenuItem Header="Export" Tag="Export"/>
+
+        </Menu>
+            
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+            
+            <!-- Data -->            
+            <ListBox Grid.Column="0"/>
+            
+            <!-- Queries -->
+            <ListBox Grid.Column="1"/>
+
+            <!-- Models -->
+        <ListBox Grid.Column="2"/>
+        </Grid>
+        <!--
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="Import Data" FontFamily="./#Lato" Foreground="White" FontSize="36" Width="400" Height="400">
+                <TextBlock.Background>
+                    <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Color="#00FF00"/>
+                            <GradientStop Color="#000000" Offset="1"/>
+                        </LinearGradientBrush.GradientStops>                        
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+            </TextBlock>
+        </Grid>
+        -->
+    </Grid>
+</Page>

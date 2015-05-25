@@ -4,7 +4,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using XPlaneGenConsole;
@@ -20,7 +22,14 @@ namespace XPlaneGenConsole
         static ConcurrentQueue<T> OutputQueue;
         static ConcurrentQueue<Tuple<DateTime,int>> FlightTimes;
         static int validLineCount = 0;
+        static int Fields = typeof(T).GetCustomAttribute<CsvRecordAttribute>().Count;
         static Action<T, string[]> parser = CsvParser.GetParser<T>();
+
+
+        public static async Task LoadAsync(string path, string outputPath)
+        {
+            await Task.Factory.StartNew(() => Load(path, outputPath));
+        }
 
         public static void Load(string path, string outputPath)
         {
@@ -73,19 +82,37 @@ namespace XPlaneGenConsole
             string filePath = path as string;
 
             Console.WriteLine("Writing to {0}", filePath);
+            Console.WriteLine("Consumer found {0} datapoints", validLineCount);
 
             var ordered = from dp in OutputQueue
                           orderby dp.DateTime, dp.Timestamp
                           select dp;
 
-            using (var writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
+            var ms = new MemoryStream();
+            byte[] data = new byte[] { };
+            long compressSize, normalSize;
+
+            using (var writer = new BinaryWriter(ms))
             {
                 foreach (var dp in ordered)
                 {
                     write(dp, writer);
                 }
+
+                data = ms.ToArray();
+                normalSize = ms.Length;
             }
 
+            using (var file = File.Open(filePath, FileMode.Create))            
+            using (var compress = new GZipStream(file, CompressionMode.Compress))
+            {
+                compress.Write(data, 0, data.Length);
+                compressSize = compress.BaseStream.Length;
+            }
+
+            Console.WriteLine("Uncompressed Size: {0} bytes", normalSize);
+            Console.WriteLine("Compressed Size: {0} bytes", compressSize);
+            Console.WriteLine("Compression Ratio: {0:P}", 1.0 - (double)compressSize / normalSize);
             Console.WriteLine("Consumer thread finished | {0} datapoints", ordered.Count());
         }
 
@@ -98,16 +125,19 @@ namespace XPlaneGenConsole
 
             StreamReader reader = new StreamReader(path as string);
             Console.WriteLine("Producer is reading from {0}", path);
+            int count = 0;
 
             bool AreThreadsSet = false;
 
             using (reader)
             {
+                Console.WriteLine("File size: {0}", reader.BaseStream.Length);
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
                 {
                     InputQueue.Enqueue(reader.ReadLine());
+                    count++;
 
                     if (!AreThreadsSet)
                     {
@@ -119,6 +149,7 @@ namespace XPlaneGenConsole
 
             barrier.SignalAndWait();
             InputQueue = null;
+            Console.WriteLine("Read In {0} lines", count);
         }
 
 		static void ThreadRead()
@@ -143,11 +174,13 @@ namespace XPlaneGenConsole
             {
                 if (InputQueue.TryDequeue(out result))
                 {
-                    var value = result.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    var value = result.Split(new char[] { ',' }, StringSplitOptions.None);
 
-                    if (value.Length == 30)
+
+
+                    if (value.Length == Fields)
                     {
-                        T dp = (T)BinaryDatapoint.Create<T>();
+                        T dp = Activator.CreateInstance<T>();
                         parser(dp, value);
 
                         OutputQueue.Enqueue(dp);
@@ -160,6 +193,10 @@ namespace XPlaneGenConsole
                                 value[1].AsDateTime(value[2].AsTimeSpan()),
                                 value[3].AsInt()
                                 ));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Skipping {0}", value.Length);
                     }
                 }
             }

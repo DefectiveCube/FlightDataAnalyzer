@@ -1,0 +1,69 @@
+﻿<Page x:Class="XPlaneWPF.Pages.DataModelBuilderPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="1200"
+	Title="DataModelBuilder">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Menu Style="{StaticResource InlineMenu}" Margin="20">
+            <Menu.Resources>
+                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
+            </Menu.Resources>
+
+            <MenuItem Header="Home" Click="Button_Click" Tag="Home"/>
+        </Menu>
+
+        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="1" Margin="20">
+            <Menu.Resources>
+                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineSubMenuItem}"/>
+            </Menu.Resources>
+
+            <MenuItem Header="Data" Click="Button_Click" Tag="Data"/>
+            <MenuItem Header="Import" Click="Button_Click" Tag="Import"/>
+            <MenuItem Header="View" Tag="View"/>
+            <MenuItem Header="Graph" Tag="Graph"/>
+            <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
+            <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
+            <MenuItem Header="Export" Tag="Export"/>
+
+        </Menu>
+        
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+            <Label>Name</Label>
+            <TextBox></TextBox>
+            
+            <Label>Namespace:</Label>
+            <TextBox></TextBox>
+            
+            <Label>Unit Type:</Label>
+            <ComboBox 
+                x:Name="unitTypeCB"
+                ItemsSource="{Binding Source={StaticResource UnitTypeInfoProvider},Mode=OneWay}" 
+                SelectedValue="{Binding Mode=OneWay}"
+                SelectedValuePath="Info"
+                />
+
+            <Label>Unit</Label>
+            <ComboBox
+                ItemsSource="{Binding Source={StaticResource UnitTypeInfoProvider},Mode=OneWay}"
+
+                />
+
+            <Button>Submit</Button>
+            
+        </StackPanel>
+    </Grid>
+</Page>

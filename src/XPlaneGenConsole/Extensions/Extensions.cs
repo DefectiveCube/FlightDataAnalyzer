@@ -310,6 +310,8 @@ namespace XPlaneGenConsole
                     return value.AsDateTime();
                 case "TimeSpan":
                     return value.AsTimeSpan();
+                case "String":
+                    return value;
                 default:
                     throw new Exception();
             }

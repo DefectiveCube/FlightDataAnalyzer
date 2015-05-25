@@ -51,6 +51,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
+            <FlowDocumentPageViewer Height="600" Width="800" x:Name="PageViewer"/>               
         </StackPanel>
     </Grid>
 </Window>

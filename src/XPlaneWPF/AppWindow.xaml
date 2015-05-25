@@ -1,10 +1,24 @@
-﻿<Window x:Class="XPlaneWPF.AppWindow"
+﻿<NavigationWindow x:Class="XPlaneWPF.AppWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Flight Data Analyzer" Height="300" Width="300">
-    <StackPanel>
-        <Button Click="Button_Click">Build Query</Button>
-        <Button Click="Button_Click_2">Run Query</Button>        
-        <Button Click="Button_Click_1">Data Models</Button>
-    </StackPanel>
-</Window>
+        xmlns:app="clr-namespace:XPlaneWPF.Controls"
+        Title="Flight Data Analyzer" WindowStartupLocation="CenterScreen" Background="{StaticResource WindowBackground}"                  
+        Source="Pages/StartupPage.xaml">
+
+    <NavigationWindow.Style>
+        <Style TargetType="NavigationWindow">      
+            <Style.Triggers>
+                <!--
+                <DataTrigger Binding="{Binding WindowState}" Value="Maximized">
+                    <Setter Property="ShowsNavigationUI" Value="True"/>
+                </DataTrigger>
+                
+                <DataTrigger Binding="{Binding WindowState}" Value="Normal">
+                    <Setter Property="ShowsNavigationUI" Value="False"/>
+                </DataTrigger>
+                -->
+            </Style.Triggers>
+        </Style>
+    </NavigationWindow.Style>
+
+</NavigationWindow>

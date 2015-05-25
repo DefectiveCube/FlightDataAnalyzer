@@ -15,7 +15,8 @@ namespace XPlaneWPF
     {
         void App_Startup(object sender, StartupEventArgs e)
         {
-            ModelList list = FindResource("ModelListData") as ModelList;
+            this.Resources.Add("ModelListData", new ModelList());
+            //ModelList list = FindResource("ModelListData") as ModelList;
 
             var window = new AppWindow();
 

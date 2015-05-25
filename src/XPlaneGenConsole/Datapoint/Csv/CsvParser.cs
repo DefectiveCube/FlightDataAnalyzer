@@ -42,10 +42,14 @@ namespace XPlaneGenConsole
                     return CallFrom<ElectricCurrent, ElectricCurrentUnit>(index, unit > -1 ? (ElectricCurrentUnit)unit : ElectricCurrentUnit.Ampere);
                 case "ElectricPotential":
                     return CallFrom<ElectricPotential, ElectricPotentialUnit>(index, unit > -1 ? (ElectricPotentialUnit)unit : ElectricPotentialUnit.Volt);
+                case "Frequency":
+                    return CallFrom<Frequency, FrequencyUnit>(index, unit > -1 ? (FrequencyUnit)unit : FrequencyUnit.Hertz);
                 case "Length":
                     return CallFrom<Length, LengthUnit>(index, unit > -1 ? (LengthUnit)unit : LengthUnit.Meter);
                 case "Ratio":
                     return CallFrom<Ratio, RatioUnit>(index, unit > -1 ? (RatioUnit)unit : RatioUnit.DecimalFraction);
+                case "RotationalSpeed":
+                    return CallFrom<RotationalSpeed, RotationalSpeedUnit>(index, unit > -1 ? (RotationalSpeedUnit)unit : RotationalSpeedUnit.RevolutionPerMinute);
                 case "Speed":
                     return CallFrom<Speed, SpeedUnit>(index, unit > -1 ? (SpeedUnit)unit : SpeedUnit.MeterPerSecond);
                 case "Temperature":
@@ -163,7 +167,7 @@ namespace XPlaneGenConsole
 
             var block = Expression.Block(exps.ToArray());
 
-			Console.WriteLine (DateTime.Now.Subtract (start).TotalSeconds);
+            Console.WriteLine("Created Expression Tree for Parser of Type: {0} in {1} seconds", typeof(T).Name, DateTime.Now.Subtract(start).TotalSeconds);
             return Expression.Lambda<Action<T, string[]>>(block, instance, nums).Compile();
         }
     }

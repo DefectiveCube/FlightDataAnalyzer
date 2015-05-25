@@ -5,18 +5,40 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using XPlaneGenConsole;
 
 namespace XPlaneWPF
 {
-    public class DataModelProperties : INotifyPropertyChanged
+    public class DataModelPropertyInfo : INotifyPropertyChanged
     {
-        private string name, type, unit, conversion, format;
-        private ushort column;
+        private string name, type, unit, conversion, format, storage;
+        private int column;
         private bool isUnsigned;
-        private Type unitType;
+        private Type unitType, storageType;
         private string[] names;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public DataModelPropertyInfo()
+        {
+
+        }
+
+        public DataModelPropertyInfo(FormatAttribute format, StorageAttribute storage, GroupAttribute group, GraphAttribute graph, CsvFieldAttribute csv = null, Type propertyType = null)
+        {
+            Unit = format.UnitName;
+            Conversion = format.Conversion;
+            IsHexadecimal = format.Style == System.Globalization.NumberStyles.HexNumber;
+
+            StorageType = storage.Type ?? propertyType;
+
+            if (storageType == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            Column = csv.Index;
+        }
 
         public string Name
         {
@@ -28,7 +50,7 @@ namespace XPlaneWPF
             }
         }
 
-        public ushort Column
+        public int Column
         {
             get { return column; }
             set
@@ -60,11 +82,16 @@ namespace XPlaneWPF
 
         public bool IsUnsigned
         {
-            get { return isUnsigned; }
-            set
-            {
-                isUnsigned = value;
-                OnPropertyChanged("IsUnsigned");
+            get {
+                if (storageType != typeof(bool))
+                {
+                    ValueType val = (ValueType)storageType.GetField("MinValue").GetValue(null);
+                    bool IsSigned = storageType.IsPrimitive && Convert.ToBoolean(val);
+
+                    return storageType.IsPrimitive && !IsSigned;
+                }
+
+                return true;
             }
         }
 
@@ -112,6 +139,27 @@ namespace XPlaneWPF
                 names = value;
                 //OnPropertyChanged("UnitNames");
             }
+        }
+
+        public Type StorageType
+        {
+            get { return storageType; }
+            set
+            {
+                storageType = value;
+                OnPropertyChanged("Storage");
+            }
+        }
+
+        public string Storage
+        {
+            get { return storageType.Name; }
+        }
+
+        public bool IsHexadecimal
+        {
+            get;
+            set;
         }
 
         protected void OnPropertyChanged(string name)

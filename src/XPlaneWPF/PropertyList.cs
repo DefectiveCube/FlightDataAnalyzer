@@ -10,7 +10,7 @@ using UnitsNet;
 
 namespace XPlaneWPF
 {
-    public class PropertyList : ObservableCollection<DataModelProperties>
+    public class PropertyList : ObservableCollection<DataModelPropertyInfo>
     {
         public event PropertyChangedEventHandler ItemPropertyChanged;
 

@@ -20,7 +20,7 @@ namespace Prototype
         }
 
         [CsvField(3)]
-        [Format(TemperatureUnit.DegreeFahrenheit, "###")]
+        [Format(TemperatureUnit.DegreeFahrenheit, "", "###")]
         [Storage(24, typeof(short))]
         [Graph(GraphData.Continuous)]
         [Group("Oil")]
