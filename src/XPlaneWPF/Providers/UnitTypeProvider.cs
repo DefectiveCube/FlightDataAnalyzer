@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using UnitsNet;
 using UnitsNet.Units;
+using XPlaneWPF.Models;
 
 namespace XPlaneWPF.Controls
 {
@@ -21,28 +22,12 @@ namespace XPlaneWPF.Controls
         {
             infoList.Add(new UnitTypeInfo(typeof(Acceleration), typeof(AccelerationUnit)));
             infoList.Add(new UnitTypeInfo(typeof(Angle), typeof(AngleUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(ElectricCurrent), typeof(ElectricCurrentUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(ElectricPotential), typeof(ElectricPotentialUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(ElectricResistance), typeof(ElectricResistanceUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(Temperature), typeof(TemperatureUnit)));
 
             base.OnQueryFinished(Info);
-        }
-    }
-
-
-    public class UnitTypeInfo
-    {
-        private readonly Type unitType;
-        private readonly Type unit;
-
-        public UnitTypeInfo(Type unitType, Type unit)
-        {
-            this.unitType = unitType;
-            this.unit = unit;
-        }
-
-        public string Name { get { return unitType.Name; } }
-        
-        public IEnumerable<string> Units
-        {
-            get { return Enum.GetNames(unit).Where(n => n != "Undefined"); }
         }
     }
 }

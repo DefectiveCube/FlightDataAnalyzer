@@ -1,13 +1,22 @@
 ﻿<Page x:Class="XPlaneWPF.Pages.StartupPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:app="clr-namespace:XPlaneWPF.Controls"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ext="clr-namespace:XPlaneWPF.Extensions"
+      xmlns:exp="clr-namespace:XPlaneWPF.Extensions.Expressions"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="Startup Page">
     
+    <Page.Resources>
+        <!--
+        <exp:AddExtension x:Key="add" Left="{ext:Constant Value=2,Type=sys:Int32}" Right="{ext:Constant Value=3,Type=sys:Int32}"/>
+        <ext:EvaluateExtension x:Key="eval" Expression="{exp:Add Type=sys:Int32,Left={ext:Constant Value=2,Type=sys:Int32},Right={ext:Constant Value=3,Type=sys:Int32}}"/>
+    -->
+    </Page.Resources>
     <Grid VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
@@ -18,7 +27,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        
+                        
         <Menu Style="{StaticResource InlineMenu}" Margin="20">
             <Menu.Resources>
                 <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
@@ -39,17 +48,15 @@
             <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
             <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
             <MenuItem Header="Export" Tag="Export"/>
-
         </Menu>
             
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
 
-            
             <!-- Data -->            
             <ListBox Grid.Column="0"/>
             

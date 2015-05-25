@@ -59,6 +59,13 @@
     <Compile Include="AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToWindowStateConverter.cs" />
+    <Compile Include="Extensions\BrushExtension.cs" />
+    <Compile Include="Extensions\ExpressionExtension.cs" />
+    <Compile Include="Extensions\Expressions\BinaryExtension.cs" />
+    <Compile Include="Models\ModelBuildParameters.cs" />
+    <Compile Include="Models\ModelBuildProperty.cs" />
+    <Compile Include="Models\UnitTypeInfo.cs" />
     <Compile Include="Pages\DataModelInfoPage.xaml.cs">
       <DependentUpon>DataModelInfoPage.xaml</DependentUpon>
     </Compile>
