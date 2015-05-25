@@ -25,15 +25,10 @@ namespace XPlaneWPF
     /// </summary>
     public partial class DataModelBuilder : Window
     {
-        public PropertyList Properties { get; set; }
 
         public DataModelBuilder()
         {
             InitializeComponent();
-
-            Properties = new PropertyList();
-
-            DataGrid.DataContext = this;
 
             using (var xamlFile = new FileStream(@"Documents/Units.xaml", FileMode.Open, FileAccess.Read))
             {
@@ -45,7 +40,7 @@ namespace XPlaneWPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Add(new DataModelPropertyInfo()
+            /*Properties.Add(new PropertiesModel()
              {
                  Name = "Test",
                  Column = 0,
@@ -56,7 +51,7 @@ namespace XPlaneWPF
                  Format = "#.##"
              });
 
-            Debug.WriteLine(Properties.Count);
+            Debug.WriteLine(Properties.Count);*/
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

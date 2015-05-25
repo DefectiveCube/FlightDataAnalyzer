@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace XPlaneWPF
+namespace XPlaneWPF.Pages
 {
     /// <summary>
-    /// Interaction logic for DataModelDialog.xaml
+    /// Interaction logic for DataModelInfoPage.xaml
     /// </summary>
-    public partial class DataModelDialog : Window
+    public partial class DataModelInfoPage : Page
     {
-        public DataModelDialog()
+        public DataModelInfoPage()
         {
             InitializeComponent();
         }

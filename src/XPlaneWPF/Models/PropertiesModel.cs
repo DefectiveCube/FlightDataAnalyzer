@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using XPlaneGenConsole;
 
-namespace XPlaneWPF
+namespace XPlaneWPF.Models
 {
-    public class DataModelPropertyInfo : INotifyPropertyChanged
+    public class PropertiesModel : INotifyPropertyChanged
     {
         private string name, type, unit, conversion, format, storage;
         private int column;
@@ -19,12 +19,12 @@ namespace XPlaneWPF
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DataModelPropertyInfo()
+        public PropertiesModel()
         {
 
         }
 
-        public DataModelPropertyInfo(FormatAttribute format, StorageAttribute storage, GroupAttribute group, GraphAttribute graph, CsvFieldAttribute csv = null, Type propertyType = null)
+        public PropertiesModel(FormatAttribute format, StorageAttribute storage, GroupAttribute group, GraphAttribute graph, CsvFieldAttribute csv = null, Type propertyType = null)
         {
             Unit = format.UnitName;
             Conversion = format.Conversion;

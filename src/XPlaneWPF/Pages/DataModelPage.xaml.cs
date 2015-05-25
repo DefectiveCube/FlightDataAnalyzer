@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using XPlaneGenConsole;
+using XPlaneWPF.Models;
 
 namespace XPlaneWPF.Pages
 {
@@ -23,13 +24,13 @@ namespace XPlaneWPF.Pages
     /// </summary>
     public partial class DataModelPage : Page
     {
-        public ObservableCollection<DataModelPropertyInfo> Info { get; set; }
+        public ObservableCollection<PropertiesModel> Info { get; set; }
 
         public DataModelPage()
         {
             InitializeComponent();
 
-            Info = new ObservableCollection<DataModelPropertyInfo>();
+            Info = new ObservableCollection<PropertiesModel>();
 
             this.Loaded += DataModelPage_Loaded;
             this.ModelListBox.SelectionChanged += ModelListBox_SelectionChanged;
@@ -45,12 +46,12 @@ namespace XPlaneWPF.Pages
             {
                 Info.Clear();
 
-                var info = new DataModelPropertyInfo();
+                var info = new PropertiesModel();
 
                 var props = type.GetProperties()
                     .Where(s => s.GetCustomAttribute<FormatAttribute>() != null)
                     .Select(
-                                    s => new DataModelPropertyInfo(
+                                    s => new PropertiesModel(
                                         s.GetCustomAttribute<FormatAttribute>(),
                                         s.GetCustomAttribute<StorageAttribute>(),
                                         s.GetCustomAttribute<GroupAttribute>(),

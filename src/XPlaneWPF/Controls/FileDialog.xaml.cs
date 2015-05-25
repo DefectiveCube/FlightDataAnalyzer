@@ -16,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using XPlaneWPF.Models;
+using XPlaneWPF.ViewModels;
+
 namespace XPlaneWPF.Controls
 {
     /// <summary>
@@ -23,70 +26,18 @@ namespace XPlaneWPF.Controls
     /// </summary>
     public partial class FileDialog : UserControl
     {
-        public ObservableCollection<DriveInfo> Drives { get; private set; }
-
-        public ObservableCollection<DirectoryInfo> Directories { get; private set; }
-
-        public ObservableCollection<FileInfo> Files { get; private set; }
-
-        public Info Path { get; set; }
-
         public FileDialog()
         {
             InitializeComponent();
 
-            Drives = new ObservableCollection<DriveInfo>();
-            Directories = new ObservableCollection<DirectoryInfo>();
-            Files = new ObservableCollection<FileInfo>();
-
-            DataContext = this;
-            Loaded += FileDialog_Loaded;
-        }
-
-        void FileDialog_Loaded(object sender, RoutedEventArgs e)
-        {
-            Drives.Clear();
-
-            var drives = DriveInfo.GetDrives();
-
-            foreach (var drive in drives)
-            {
-                Drives.Add(drive);
-            }
+            Loaded += ViewModel.OnLoaded;
         }
 
         private void drivesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var info = drivesListBox.SelectedItem as DriveInfo;
 
-            Path.Directory = info.RootDirectory;            
-
-            /*
-            if (info.RootDirectory.Exists)
-            {
-                Directories.Clear();
-                foreach (var dir in info.RootDirectory.EnumerateDirectories())
-                {
-                    Directories.Add(dir);
-                }
-
-                Files.Clear();
-                foreach (var file in info.RootDirectory.EnumerateFiles())
-                {
-                    Files.Add(file);
-                }
-
-            }
-            else
-            {
-
-            }*/
+            ViewModel.Path.Directory = info.RootDirectory;
         }
-    }
-
-
-    public class Info : INotifyPropertyChanged
-    {
-        public DirectoryInfo Directory { get; set; }
     }
 }

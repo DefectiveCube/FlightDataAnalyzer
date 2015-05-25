@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
     <UserControl.Resources>
-        <app:StringList x:Key="RelationList"/>
+       <!-- <app:StringList x:Key="RelationList"/> -->
     </UserControl.Resources>
 
     <StackPanel>

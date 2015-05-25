@@ -1,17 +1,24 @@
 ﻿<UserControl x:Class="XPlaneWPF.Controls.FileDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:viewmodel="clr-namespace:XPlaneWPF.ViewModels"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <viewmodel:FileDialogViewModel x:Name="ViewModel" />
+    </UserControl.DataContext>
+    
     <Grid>        
-        <StackPanel  Orientation="Horizontal">
-            <ListBox x:Name="drivesListBox" ItemsSource="{Binding Drives}" SelectionChanged="drivesListBox_SelectionChanged"/>
-        
-            <ListBox x:Name="dirListBox" ItemsSource="{Binding Directories}"/>
+        <StackPanel  Orientation="Horizontal">            
+            <!-- add user folders here -->
             
-            <ListBox x:Name="fileListBox" ItemsSource="{Binding Files}"/>
+            <ListBox x:Name="drivesListBox" ItemsSource="{Binding Drives}" SelectionMode="Single" SelectedItem="{Binding Drive,Mode=TwoWay}"/>                     
+                     
+            <ListBox x:Name="dirListBox" ItemsSource="{Binding Directories}" SelectionMode="Single" SelectedItem="{Binding Directory,Mode=TwoWay}"/>
+            
+            <ListBox x:Name="fileListBox" ItemsSource="{Binding Files}" SelectionMode="Single" SelectedItem="{Binding File,Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </UserControl>
