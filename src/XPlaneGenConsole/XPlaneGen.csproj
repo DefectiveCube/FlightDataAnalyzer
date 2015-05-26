@@ -49,15 +49,14 @@
     <Compile Include="Attributes\DatapointAttribute.cs" />
     <Compile Include="Attributes\GroupAttribute.cs" />
     <Compile Include="Attributes\ModelAttribute.cs" />
-    <Compile Include="Console.cs" />
     <Compile Include="Datapoint\Base\CSVDatapoint.cs" />
     <Compile Include="Datapoint\Base\DatapointFactory.cs" />
-    <Compile Include="Datapoint\DatapointRegister.cs" />
+    <Compile Include="Extensions\Units.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="FlightHeader.cs" />
-    <Compile Include="Hash.cs" />
-    <Compile Include="Hexadecimal.cs" />
     <Compile Include="Marshalling\Marshal.cs" />
     <Compile Include="Marshalling\UntrustedCodeExecution.cs" />
     <Compile Include="Program.cs" />
@@ -79,10 +78,8 @@
     <Compile Include="Query\Query.cs" />
     <Compile Include="XPlane\XPlaneHeader.cs" />
     <Compile Include="XPlane\XPlaneFileEnding.cs" />
-    <Compile Include="Singleton.cs" />
     <Compile Include="Datapoint\Base\BinaryDatapoint.cs" />
     <Compile Include="Datapoint\Base\Datapoint.cs" />
-    <Compile Include="IO\CSVDirection.cs" />
     <Compile Include="Datapoint\Base\TextDatapoint.cs" />
     <Compile Include="Datapoint\Csv\CsvFactory.cs" />
     <Compile Include="XPlane\NavType.cs" />
@@ -94,17 +91,11 @@
     <Compile Include="Attributes\StorageAttribute.cs" />
     <Compile Include="Datapoint\Csv\CsvParser.cs" />
     <Compile Include="Attributes\CsvRecordAttribute.cs" />
-    <Compile Include="Linq\FlightDataProvider.cs" />
-    <Compile Include="Linq\FlightDataContext.cs" />
-    <Compile Include="Linq\Evaluator.cs" />
-    <Compile Include="Units.cs" />
     <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Extensions\Units.cs" />
     <Compile Include="IO\CsvConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DatapointDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

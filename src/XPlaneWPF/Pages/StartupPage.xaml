@@ -5,8 +5,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:ext="clr-namespace:XPlaneWPF.Extensions"
-      xmlns:exp="clr-namespace:XPlaneWPF.Extensions.Expressions"
+      xmlns:Expression="clr-namespace:XPlaneWPF.Extensions.Expressions"
+      xmlns:Provider="clr-namespace:XPlaneWPF.Providers"
+      xmlns:Prototype="clr-namespace:Prototype;assembly=Prototype"
+      xmlns:Unit="clr-namespace:XPlaneWPF.Extensions.Units"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="Startup Page">
@@ -47,7 +49,7 @@
             <MenuItem Header="Graph" Tag="Graph"/>
             <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
             <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
-            <MenuItem Header="Export" Tag="Export"/>
+            <MenuItem Header="Export" Click="Button_Click" Tag="Export"/>
         </Menu>
             
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
@@ -56,9 +58,38 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Button Width="200" Height="70" Grid.Column="1" Grid.Row="2" Content="{Unit:Temperature Value=10.0,Unit=DegreeFahrenheit}"/>
+<!--
+            <Button Content="{Expression:Equal Left={Expression:Property Name=OilTemperature,Instance={Expression:Parameter Name=Datapoint,Type=Prototype:EngineDatapoint}}, Right={Expression:Convert Type=Units:Temperature,Value={Expression:Constant Value=0.0,Type=sys:Double}}}"
+                />            
+            -->
             <!-- Data -->            
-            <ListBox Grid.Column="0"/>
+            <ListBox Grid.Column="0">
+                
+                <!--
+                <Expression:EqualExtension>
+                    <Expression:EqualExtension.Left>
+                        <Expression:PropertyExtension Name="OilTemperature">
+                            <Expression:PropertyExtension.Instance>
+                                <Expression:ParameterExtension Name="Instance" Type="{x:Type Prototype:EngineDatapoint}"/>
+                            </Expression:PropertyExtension.Instance>
+                        </Expression:PropertyExtension>
+                    </Expression:EqualExtension.Left>
+                    <Expression:EqualExtension.Right>
+                        <Expression:ConstantExtension Type="sys:Double" Value="0.0"/>
+                    </Expression:EqualExtension.Right>
+                </Expression:EqualExtension>
+                -->
+                <!--
+                ItemsSource="{Expression:Parameter Name=Instance,Type=Prototype:EngineDatapoint}">
+                -->
+            </ListBox>
             
             <!-- Queries -->
             <ListBox Grid.Column="1"/>
@@ -66,33 +97,5 @@
             <!-- Models -->
         <ListBox Grid.Column="2"/>
         </Grid>
-        <!--
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            <TextBlock Text="Import Data" FontFamily="./#Lato" Foreground="White" FontSize="36" Width="400" Height="400">
-                <TextBlock.Background>
-                    <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
-                        <LinearGradientBrush.GradientStops>
-                            <GradientStop Color="#00FF00"/>
-                            <GradientStop Color="#000000" Offset="1"/>
-                        </LinearGradientBrush.GradientStops>                        
-                    </LinearGradientBrush>
-                </TextBlock.Background>
-            </TextBlock>
-        </Grid>
-        -->
     </Grid>
 </Page>

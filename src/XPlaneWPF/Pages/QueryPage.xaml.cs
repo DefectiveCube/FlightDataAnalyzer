@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using XPlaneGenConsole;
+using XPlaneWPF.Models;
 
 namespace XPlaneWPF.Pages
 {
@@ -23,61 +24,14 @@ namespace XPlaneWPF.Pages
     /// </summary>
     public partial class QueryPage : Page
     {
-        public ObservableCollection<QuerySelection> QueryItems { get; set; }
-
-        public ListCollectionView View { get; set; }
-
         public QueryPage()
         {
             InitializeComponent();
 
-            QueryItems = new ObservableCollection<QuerySelection>();
-            View = new ListCollectionView(QueryItems);
-            View.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
+            _buildCommand.CanExecute += viewModel.BuildCommand_CanExecute;
+            _buildCommand.Executed += viewModel.BuildCommand_Executed;
 
-            DataContext = this;
-
-            this.Loaded += QueryPage_Loaded;
-            ModelListBox.SelectionChanged += ModelListBox_SelectionChanged;
-        }
-
-        void QueryPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            ModelListBox.Items.Clear();
-
-            ModelListBox.Items.Add(typeof(Prototype.EngineDatapoint));
-            ModelListBox.Items.Add(typeof(Prototype.FlightDatapoint));
-            ModelListBox.Items.Add(typeof(Prototype.SystemDatapoint));
-        }
-
-        void ModelListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var type = ModelListBox.SelectedItem as Type;
-
-            if (type != null)
-            {
-                QueryItems.Clear();
-
-                var props = type.GetProperties()
-                    .Where(p => p.GetCustomAttribute<GraphAttribute>() != null)
-                    .Select(p => new QuerySelection()
-                    {
-                        Name = p.Name,
-                        Use = true,
-                        CategoryType = p.PropertyType,
-                        Unit = p.GetCustomAttribute<FormatAttribute>().UnitName,
-                        UnitType = p.GetCustomAttribute<FormatAttribute>().type,
-                        Value = string.Empty,
-                        DataType = p.GetCustomAttribute<GraphAttribute>().DataType.ToString(),
-                        Group = p.GetCustomAttribute<GroupAttribute>().Group,
-                        Conversion = p.GetCustomAttribute<FormatAttribute>().Conversion
-                    });
-
-                foreach (var prop in props)
-                {
-                    QueryItems.Add(prop);
-                }
-            }
+            typeListBox.SelectionChanged += viewModel.TypeSelectionChanged;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -105,6 +59,13 @@ namespace XPlaneWPF.Pages
             }
 
             NavigationService.Navigate(page);
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scv = sender as ScrollViewer;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

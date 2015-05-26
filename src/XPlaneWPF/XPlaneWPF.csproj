@@ -60,14 +60,26 @@
       <DependentUpon>AppWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToWindowStateConverter.cs" />
+    <Compile Include="Converters\TemperatureConverter.cs" />
     <Compile Include="Extensions\BrushExtension.cs" />
-    <Compile Include="Extensions\ExpressionExtension.cs" />
+    <Compile Include="Extensions\Expressions\ConvertExtension.cs" />
+    <Compile Include="Extensions\Expressions\ExpressionExtension.cs" />
     <Compile Include="Extensions\Expressions\BinaryExtension.cs" />
+    <Compile Include="Extensions\Expressions\ParameterExtension.cs" />
+    <Compile Include="Extensions\Expressions\PropertyExtension.cs" />
+    <Compile Include="Extensions\UnitInfoExtension.cs" />
+    <Compile Include="Extensions\Units\UnitExtension.cs" />
+    <Compile Include="Models\LogicalRelation.cs" />
     <Compile Include="Models\ModelBuildParameters.cs" />
     <Compile Include="Models\ModelBuildProperty.cs" />
+    <Compile Include="Models\Query.cs" />
+    <Compile Include="Models\QuerySelection.cs" />
     <Compile Include="Models\UnitTypeInfo.cs" />
     <Compile Include="Pages\DataModelInfoPage.xaml.cs">
       <DependentUpon>DataModelInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ExportDataPage.xaml.cs">
+      <DependentUpon>ExportDataPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Providers\DatapointDataProvider.cs" />
     <Compile Include="Providers\DatapointTypeProvider.cs" />
@@ -79,7 +91,10 @@
       <DependentUpon>InlineMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\InlineMenuItem.cs" />
-    <Compile Include="Providers\UnitTypeProvider.cs" />
+    <Compile Include="Providers\QueryProvider.cs" />
+    <Compile Include="Providers\LogicalRelationProvider.cs" />
+    <Compile Include="Providers\UnitInfoProvider.cs" />
+    <Compile Include="Providers\UnitTypeInfoProvider.cs" />
     <Compile Include="ViewModels\DataModelBuilderViewModel.cs" />
     <Compile Include="DataModelInfoWindow.xaml.cs">
       <DependentUpon>DataModelInfoWindow.xaml</DependentUpon>
@@ -110,6 +125,7 @@
       <DependentUpon>QueryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\FileDialogViewModel.cs" />
+    <Compile Include="ViewModels\QueryBuilderViewModel.cs" />
     <Page Include="AppWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +168,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\DataModelPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ExportDataPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

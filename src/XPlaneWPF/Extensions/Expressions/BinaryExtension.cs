@@ -63,6 +63,27 @@ namespace XPlaneWPF.Extensions.Expressions
         public AndAssignExtension() : base(ExpressionType.AndAssign) { }
     }
 
+    public class EqualExtension : BinaryExtension
+    {
+        public EqualExtension() : base(ExpressionType.Equal) { }
+    }
+
+
+    public class LessThanExtension : BinaryExtension
+    {
+        public LessThanExtension() : base(ExpressionType.LessThan) { }
+    }
+
+    public class LessThanOrEqualExtension : BinaryExtension
+    {
+        public LessThanOrEqualExtension() : base(ExpressionType.LessThanOrEqual) { }
+    }
+
+    public class NotEqualExtension : BinaryExtension
+    {
+        public NotEqualExtension() : base(ExpressionType.NotEqual) { }
+    }
+
     public class SubtractExtension : BinaryExtension
     {
         public SubtractExtension() : base(ExpressionType.Subtract) { }

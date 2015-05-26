@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using XPlaneGenConsole;
 
-namespace XPlaneWPF.Controls
+namespace XPlaneWPF.Providers
 {
     public class DatapointSourceProvider<T> : DataSourceProvider
         where T : BinaryDatapoint, new()
@@ -17,12 +17,7 @@ namespace XPlaneWPF.Controls
 
         protected override void BeginQuery()
         {
-            // Read all files of Type T
-
-            // Evaluate against BinaryExpression
-
             base.OnQueryFinished(null);
         }
-
     }
 }

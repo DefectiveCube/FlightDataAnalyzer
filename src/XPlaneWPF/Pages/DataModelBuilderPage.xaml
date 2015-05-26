@@ -8,6 +8,8 @@
       d:DesignHeight="800" d:DesignWidth="1200"
 	Title="DataModelBuilder">
     
+    <!-- This page is where the user can build a data model -->
+    
     <Page.DataContext>
         <viewmodel:DataModelBuilderViewModel x:Name="viewModel"/>
     </Page.DataContext>
@@ -48,12 +50,14 @@
         </Menu>
         
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
-            <Label>Name:</Label>
-            <TextBox Text="{Binding Parameters.Name}"/>
+            <StackPanel Orientation="Horizontal">
+                <Label>Name:</Label>
+                <TextBox Text="{Binding Parameters.Name}" MinWidth="100" MaxWidth="500" VerticalContentAlignment="Center"/>
 
-            <Label>Namespace:</Label>
-            <TextBox Text="{Binding Parameters.Namespace}"/>
-
+                <Label>Namespace:</Label>
+                <TextBox Text="{Binding Parameters.Namespace}" MinWidth="100" MaxWidth="500" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            
             <StackPanel Orientation="Horizontal">
 
                 <Label>Unit Type:</Label>
@@ -62,11 +66,14 @@
                 ItemsSource="{Binding Source={StaticResource UnitTypeInfoProvider},Mode=OneWay}" 
                 SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
                 DisplayMemberPath="Name"
+                MinWidth="200"
+                VerticalContentAlignment="Center"
                 />
 
             <Label>Unit</Label>
-            <ComboBox ItemsSource="{Binding SelectedItem.Units,Mode=OneWay}">
-                <ComboBox.Style>
+            <ComboBox ItemsSource="{Binding SelectedItem.Units,Mode=OneWay}" MinWidth="200" VerticalContentAlignment="Center">
+
+                    <ComboBox.Style>
                     <Style TargetType="ComboBox">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=unitTypeCB,Path=SelectedItem}" Value="{x:Null}">
@@ -87,14 +94,18 @@
                 
                 <StackPanel>
                     
-                <Label>Type</Label>
-                <ComboBox>
-                    <ComboBoxItem>Integer</ComboBoxItem>
-                    <ComboBoxItem>Decimal</ComboBoxItem>
-                    <ComboBoxItem>String</ComboBoxItem>
-                    <ComboBoxItem>Date</ComboBoxItem>
-                    <ComboBoxItem>Time</ComboBoxItem>
-                </ComboBox>
+                    <Label>Type</Label>
+                    <ComboBox>
+                        <ComboBoxItem>Integer</ComboBoxItem>
+                        <ComboBoxItem>Decimal</ComboBoxItem>
+                        <ComboBoxItem>String</ComboBoxItem>                    <ComboBoxItem>Date</ComboBoxItem>
+                        <ComboBoxItem>Time</ComboBoxItem>
+                    </ComboBox>
+                    
+                    <Label>Domain</Label>
+                    <TextBox/>
+                    
+                    <TextBox/>
                 </StackPanel>
 
                 <Label>Leading Precision</Label>

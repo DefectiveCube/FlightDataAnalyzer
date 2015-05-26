@@ -47,6 +47,9 @@ namespace XPlaneWPF.Pages
                     //page = new DataModelPage();
                     page = new DataModelBuilderPage();
                     break;
+                case "Export":
+                    page = new ExportDataPage();
+                    break;
                 default:
                     return;
             }

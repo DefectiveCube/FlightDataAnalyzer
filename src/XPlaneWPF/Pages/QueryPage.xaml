@@ -2,32 +2,44 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:my="clr-namespace:XPlaneWPF"
       xmlns:app="clr-namespace:XPlaneWPF.Controls"
+      xmlns:viewmodel="clr-namespace:XPlaneWPF.ViewModels"
+      xmlns:Provider="clr-namespace:XPlaneWPF.Providers"
+      xmlns:UnitInfo="clr-namespace:XPlaneWPF.Extensions"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
       Title="QueryPage">
-    <Page.Resources>
-<!--        
-        <my:StringList x:Key="RelationList"/>
-        
-        -->
-    </Page.Resources>
+
+    <Page.CommandBindings>
+        <CommandBinding x:Name="_buildCommand" Command="ApplicationCommands.Save" />        
+    </Page.CommandBindings>
+    
+    <Page.DataContext>
+        <viewmodel:QueryBuilderViewModel x:Name="viewModel"/>
+    </Page.DataContext>
     
     <Grid>        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*" MinHeight="100" MaxHeight="100" />
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*" MinHeight="600"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         
-        <Menu Style="{StaticResource InlineMenu}">
+        <Menu Style="{StaticResource InlineMenu}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
             <Menu.Resources>
                 <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
             </Menu.Resources>
@@ -35,7 +47,7 @@
             <MenuItem Header="Home" Click="Button_Click" Tag="Home"/>
         </Menu>
 
-        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="1">
+        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="3"  Grid.Row="1" VerticalAlignment="Center">
             <Menu.Resources>
                 <Style TargetType="MenuItem" BasedOn="{StaticResource InlineSubMenuItem}"/>
             </Menu.Resources>
@@ -45,24 +57,38 @@
             <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
         </Menu>
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Top">
-            <ListBox x:Name="ModelListBox"/>
+        <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="20">
+            <TextBlock Foreground="{StaticResource Text}" FontSize="24" Text="Loaded Data Models"/>
+            <ListBox x:Name="typeListBox" ItemsSource="{Binding Source={StaticResource TypeProvider},Mode=OneWay}" DisplayMemberPath="Name"/>
+            
+            <!--
+            <ComboBox 
+                x:Name="typeComboBox" 
+                ItemsSource="{Binding Source={StaticResource UnitTypeInfoProvider},Mode=OneWay}"
+                SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
+                DisplayMemberPath="Name"
+                />
+            <ComboBox ItemsSource="{Binding SelectedItem.Units,Mode=OneWay}"/>
+            -->
         </StackPanel>
-        
-        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
-            <ScrollViewer>
+
+        <ScrollViewer Grid.Column="3" Grid.Row="3" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+            <ScrollViewer.Effect>
+                <DropShadowEffect/>
+            </ScrollViewer.Effect>
+            
             <DataGrid x:Name="constraintsDG" ItemsSource="{Binding View}" SelectionMode="Single" AutoGenerateColumns="False" 
-                  CanUserReorderColumns="False"
-                  CanUserResizeColumns="True"
-                  CanUserResizeRows="False"
-                  CanUserSortColumns="False"
-                  CanUserAddRows="False" 
-                  CanUserDeleteRows="False">
+                          CanUserReorderColumns="False"
+                          CanUserResizeColumns="True"
+                          CanUserResizeRows="False"
+                          CanUserSortColumns="False"
+                          CanUserAddRows="False" 
+                          CanUserDeleteRows="False" VerticalScrollBarVisibility="Disabled">
                 <DataGrid.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-<!--                                Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" Indeterminate="CheckBox_Indeterminate"-->
+                                <!--                                Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" Indeterminate="CheckBox_Indeterminate"-->
                                 <CheckBox IsThreeState="True" IsChecked="True" Content="{Binding Name}"  Tag="{Binding Name}"/>
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
@@ -90,29 +116,85 @@
 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Use">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Use" ToolTip="Check to have property included in query"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsThreeState="False" IsChecked="{Binding Use}" 
-                                          Tag="{Binding Group}"/>
+                                <CheckBox IsThreeState="False" IsChecked="{Binding Use}" Tag="{Binding Group}"/>
                                 <!--Checked="CheckBox_ItemChecked" Unchecked="CheckBox_ItemUnchecked" -->
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Property" IsReadOnly="True" Binding="{Binding Name, Mode=OneTime}"/>
+                    <DataGridTextColumn IsReadOnly="True" Binding="{Binding Name, Mode=OneTime}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Property" ToolTip="The property name"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
                     <DataGridTextColumn Header="Category" IsReadOnly="True" Binding="{Binding Category, Mode=OneTime}" />
                     <DataGridTextColumn Header="Unit" IsReadOnly="True" Binding="{Binding Unit, Mode=OneTime}"/>
-                    <DataGridComboBoxColumn Header="Relationship" ItemsSource="{Binding Source={StaticResource RelationList}}" SelectedItemBinding="{Binding Relation}"/>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Relationship"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox IsEnabled="{Binding Use}" DisplayMemberPath="Operator" SelectedIndex="0">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ItemsSource" Value="{Binding Source={StaticResource LogicalRelationProvider}}"/>
+                                                </Trigger>
+                                                <DataTrigger Binding="{Binding Unit,Mode=OneWay}" Value="">
+                                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                                    <Setter Property="IsEditable" Value="False"/>
+                                                    <Setter Property="Focusable" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=OneTime}"/>
+                    <DataGridTemplateColumn Header="Unit">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Units,Mode=OneWay}" IsEnabled="{Binding Use}" SelectedIndex="0">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Unit,Mode=OneWay}" Value="">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Conversion" Binding="{Binding Conversion, Mode=OneTime}"/>
-                    <DataGridTextColumn Header="Data Type" IsReadOnly="True" Binding="{Binding DataType, Mode=OneTime}"/>
                 </DataGrid.Columns>
             </DataGrid>
-            </ScrollViewer>
-        </StackPanel>
-        
-        <StackPanel Grid.Row="2" Grid.Column="1">
-            <Button>Save</Button>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="5" Grid.Column="3">
+            <Button 
+                Content="Save"
+                Command="ApplicationCommands.Save"/>
         </StackPanel>
         
     </Grid>

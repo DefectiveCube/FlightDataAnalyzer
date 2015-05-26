@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using XPlaneGenConsole;
+using XPlaneWPF.Models;
 
 namespace XPlaneWPF
 {
@@ -46,7 +47,7 @@ namespace XPlaneWPF
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var type = datapointTypeCB.SelectedItem as Type;
+            /*var type = datapointTypeCB.SelectedItem as Type;
 
             if (type != null)
             {
@@ -73,12 +74,12 @@ namespace XPlaneWPF
                 {
                     Items.Add(prop);
                 }
-            }
+            }*/
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var where = Items.Where(i => !string.IsNullOrEmpty(i.Relation));
+            /*var where = Items.Where(i => !string.IsNullOrEmpty(i.Relation));
             var select = Items.Where(i => i.Use);
 
             var instance = Expression.Parameter(DatapointType, "datapoint");
@@ -146,31 +147,12 @@ namespace XPlaneWPF
             //     var whereCall = Expression.Call(typeof(Queryable), "Where", new Type[] { }, null, lambda);
 
             var data = new Prototype.FlightDatapoint[] { };
-
-        }
-
-        private Expression Where(Type type, Expression body)
-        {
-            var methods = typeof(QueryControl).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(m => m.Name == "Where" && m.ReturnType != typeof(Expression));
-
-            var method = methods.First();
-            var generic = method.MakeGenericMethod(DatapointType);
-
-            return (Expression)generic.Invoke(this, new object[] { body });
-        }
-
-        private MethodCallExpression Where<T>(Expression expression, Type elementType, Expression QueryExpression, params ParameterExpression[] pe)
-            where T : BinaryDatapoint, new()
-        {
-            var lambda = Expression.Lambda<Func<T, bool>>(expression, pe);
-
-            return Expression.Call(typeof(Queryable), "Where", new Type[] { DatapointType }, QueryExpression, lambda);
+            */
         }
 
         private void CheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
-            var cb = sender as CheckBox;
+            /*var cb = sender as CheckBox;
             var group = cb.Tag as string;
 
             if (group != null)
@@ -179,11 +161,12 @@ namespace XPlaneWPF
                 {
                     item.Use = true;
                 }
-            }
+            }*/
         }
 
         private void CheckBox_ItemChecked(object sender, System.Windows.RoutedEventArgs e)
         {
+            /*
             var cb = sender as CheckBox;
             var group = cb.Tag as string;
 
@@ -199,10 +182,12 @@ namespace XPlaneWPF
             {
                 //cb.IsChecked = null;
             }
+             */
         }
 
         private void CheckBox_ItemUnchecked(object sender, System.Windows.RoutedEventArgs e)
         {
+            /*
             var cb = sender as CheckBox;
             var group = cb.Tag as string;
 
@@ -214,72 +199,33 @@ namespace XPlaneWPF
             {
                 //cb.IsChecked = null;
             }
+             */
         }
 
         private void CheckBox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
         {
+            /*
             var cb = sender as CheckBox;
             var group = cb.Tag as string;
 
             foreach (var item in Items.Where(i => i.Group == group))
             {
                 item.Use = false;
-            }
+            }*/
         }
 
         private void CheckBox_Indeterminate(object sender, System.Windows.RoutedEventArgs e)
         {
+            /*
             var cb = sender as CheckBox;        
 
             CheckBox_Unchecked(sender, e);
 
             cb.IsChecked = false;
             return;
+             */
         }
     }
 
-    public class QuerySelection : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private bool use;
-
-        public void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public bool Use
-        {
-            get { return use; }
-            set
-            {
-                use = value;
-                OnPropertyChanged("Use");
-            }
-        }
-
-        public string Name { get; set; }
-
-        public string Category { get { return CategoryType.Name; } }
-
-        public Type CategoryType { get; set; }
-
-        public string Unit { get; set; }
-
-        public Type UnitType { get; set; }
-
-        public string Value { get; set; }
-
-        public string Relation { get; set; }
-
-        public string Conversion { get; set; }
-
-        public string Group { get; set; }
-
-        public string DataType { get; set; }
-    }
+    
 }

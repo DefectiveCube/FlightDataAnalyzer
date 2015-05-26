@@ -81,16 +81,21 @@ namespace XPlaneGenConsole
             var write = BinaryDatapoint.GetWriteAction<T>();
             string filePath = path as string;
 
-            Console.WriteLine("Writing to {0}", filePath);
-            Console.WriteLine("Consumer found {0} datapoints", validLineCount);
-
             var ordered = from dp in OutputQueue
                           orderby dp.DateTime, dp.Timestamp
                           select dp;
 
+            /* build Flight index */
+            var indexPath = filePath.Replace(".output", ".index");
+
+            /* write file data */
+
             var ms = new MemoryStream();
             byte[] data = new byte[] { };
             long compressSize, normalSize;
+
+            Console.WriteLine("Writing to {0}", filePath);
+            Console.WriteLine("Consumer found {0} datapoints", validLineCount);
 
             using (var writer = new BinaryWriter(ms))
             {

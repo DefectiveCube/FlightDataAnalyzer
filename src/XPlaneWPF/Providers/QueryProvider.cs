@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
-namespace XPlaneGenConsole
+namespace XPlaneWPF.Providers
 {
-    public class DatapointRegister
+    public class QueryProvider : DataSourceProvider
     {
-        public void Add(Type type)
-        {
-
-        }
     }
 }

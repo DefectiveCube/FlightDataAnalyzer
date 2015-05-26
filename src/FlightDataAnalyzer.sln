@@ -1,17 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneGen", "XPlaneGenConsole\XPlaneGen.csproj", "{7EF97CE7-DC97-4839-88A6-D4475F451B15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneQuery", "XPlaneQuery\XPlaneQuery.csproj", "{81F0782D-80DC-4786-9300-5868369EE8BB}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{57463EC2-C0CB-4598-B543-A63CDC43A10E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prototype", "default\prototype.csproj", "{3AB5334C-7CDF-47A0-9729-A72568E25D1C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "builder\Builder.csproj", "{E6546B09-9C50-452D-AAAE-28D15B555DA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPlaneWPF", "XPlaneWPF\XPlaneWPF.csproj", "{887BE285-C7F3-4A5A-BC51-4A42727C98D4}"
 EndProject
@@ -29,15 +25,10 @@ Global
 		{81F0782D-80DC-4786-9300-5868369EE8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81F0782D-80DC-4786-9300-5868369EE8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81F0782D-80DC-4786-9300-5868369EE8BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57463EC2-C0CB-4598-B543-A63CDC43A10E}.Debug|Any CPU.ActiveCfg = Debug
-		{57463EC2-C0CB-4598-B543-A63CDC43A10E}.Release|Any CPU.ActiveCfg = Release
 		{3AB5334C-7CDF-47A0-9729-A72568E25D1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3AB5334C-7CDF-47A0-9729-A72568E25D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AB5334C-7CDF-47A0-9729-A72568E25D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AB5334C-7CDF-47A0-9729-A72568E25D1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6546B09-9C50-452D-AAAE-28D15B555DA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{887BE285-C7F3-4A5A-BC51-4A42727C98D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{887BE285-C7F3-4A5A-BC51-4A42727C98D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{887BE285-C7F3-4A5A-BC51-4A42727C98D4}.Release|Any CPU.ActiveCfg = Release|Any CPU

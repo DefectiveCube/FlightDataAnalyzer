@@ -6,19 +6,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
-    <UserControl.Resources>
-       <!-- <app:StringList x:Key="RelationList"/> -->
-    </UserControl.Resources>
 
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label>Data Model:</Label>
             <ComboBox x:Name="datapointTypeCB" DisplayMemberPath="Name" SelectionChanged="ComboBox_SelectionChanged" MinWidth="500" MaxWidth="800" HorizontalAlignment="Left"/>
-                    
+                
+            <!--
             <Label IsEnabled="False">Version:</Label>
             <ComboBox IsEnabled="False">
                 <ComboBoxItem>1.0.0.0</ComboBoxItem>
             </ComboBox>
+            -->
         </StackPanel>
         
         <Label>Constraints:</Label>

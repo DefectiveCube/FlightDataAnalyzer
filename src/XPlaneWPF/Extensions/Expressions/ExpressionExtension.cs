@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 
-namespace XPlaneWPF.Extensions
+namespace XPlaneWPF.Extensions.Expressions
 {
     public class PrimitiveExtension : MarkupExtension
     {
@@ -125,6 +125,7 @@ namespace XPlaneWPF.Extensions
         }
     }
 
+    /*
     public class ParameterExtension : MarkupExtension
     {
         [ConstructorArgument("Name")]
@@ -159,7 +160,7 @@ namespace XPlaneWPF.Extensions
             //return Expression.Property(Expression, Accessor);
             //return Expression.Property(Expression, PropertyInfo);
         }
-    }
+    }*/
 
     public class CallExtension : MarkupExtension
     {

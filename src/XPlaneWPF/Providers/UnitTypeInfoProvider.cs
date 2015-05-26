@@ -8,7 +8,7 @@ using UnitsNet;
 using UnitsNet.Units;
 using XPlaneWPF.Models;
 
-namespace XPlaneWPF.Controls
+namespace XPlaneWPF.Providers
 {
     public class UnitTypeInfoProvider : DataSourceProvider
     {
@@ -25,7 +25,13 @@ namespace XPlaneWPF.Controls
             infoList.Add(new UnitTypeInfo(typeof(ElectricCurrent), typeof(ElectricCurrentUnit)));
             infoList.Add(new UnitTypeInfo(typeof(ElectricPotential), typeof(ElectricPotentialUnit)));
             infoList.Add(new UnitTypeInfo(typeof(ElectricResistance), typeof(ElectricResistanceUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(Frequency), typeof(FrequencyUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(Ratio), typeof(RatioUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(RotationalSpeed), typeof(RotationalSpeedUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(Speed), typeof(SpeedUnit)));
             infoList.Add(new UnitTypeInfo(typeof(Temperature), typeof(TemperatureUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(Torque), typeof(TorqueUnit)));
+            infoList.Add(new UnitTypeInfo(typeof(Volume), typeof(VolumeUnit)));
 
             base.OnQueryFinished(Info);
         }

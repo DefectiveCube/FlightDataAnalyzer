@@ -13,8 +13,6 @@ namespace XPlaneWPF.Converters
     /// </summary>
     public class BoolToWindowStateConverter : IValueConverter
     {
-        #region IValueConverter Members
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             bool? visible = (bool?)value;
@@ -39,7 +37,5 @@ namespace XPlaneWPF.Converters
             }
             return null;
         }
-
-        #endregion
     }
 }
