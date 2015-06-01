@@ -57,6 +57,8 @@
     <Compile Include="FileProcessor.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="FlightHeader.cs" />
+    <Compile Include="IO\Hash.cs" />
+    <Compile Include="IO\TypeCreater.cs" />
     <Compile Include="Marshalling\Marshal.cs" />
     <Compile Include="Marshalling\UntrustedCodeExecution.cs" />
     <Compile Include="Program.cs" />

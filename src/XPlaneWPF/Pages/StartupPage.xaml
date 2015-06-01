@@ -4,7 +4,8 @@
       xmlns:app="clr-namespace:XPlaneWPF.Controls"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:Control="clr-namespace:XPlaneWPF.Controls"
       xmlns:Expression="clr-namespace:XPlaneWPF.Extensions.Expressions"
       xmlns:Provider="clr-namespace:XPlaneWPF.Providers"
       xmlns:Prototype="clr-namespace:Prototype;assembly=Prototype"
@@ -13,45 +14,17 @@
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="Startup Page">
     
-    <Page.Resources>
-        <!--
-        <exp:AddExtension x:Key="add" Left="{ext:Constant Value=2,Type=sys:Int32}" Right="{ext:Constant Value=3,Type=sys:Int32}"/>
-        <ext:EvaluateExtension x:Key="eval" Expression="{exp:Add Type=sys:Int32,Left={ext:Constant Value=2,Type=sys:Int32},Right={ext:Constant Value=3,Type=sys:Int32}}"/>
-    -->
-    </Page.Resources>
     <Grid VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-                        
-        <Menu Style="{StaticResource InlineMenu}" Margin="20">
-            <Menu.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
-            </Menu.Resources>
-            
-            <MenuItem Header="Home" Click="Button_Click" Tag="Home"/>
-        </Menu>
-        
-        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="1" Margin="20">
-            <Menu.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineSubMenuItem}"/>
-            </Menu.Resources>
-            
-            <MenuItem Header="Data" Click="Button_Click" Tag="Data"/>
-            <MenuItem Header="Import" Click="Button_Click" Tag="Import"/>
-            <MenuItem Header="View" Tag="View"/>
-            <MenuItem Header="Graph" Tag="Graph"/>
-            <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
-            <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
-            <MenuItem Header="Export" Click="Button_Click" Tag="Export"/>
-        </Menu>
-            
+
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -63,39 +36,42 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <Button Width="200" Height="70" Grid.Column="1" Grid.Row="2" Content="{Unit:Temperature Value=10.0,Unit=DegreeFahrenheit}"/>
-<!--
-            <Button Content="{Expression:Equal Left={Expression:Property Name=OilTemperature,Instance={Expression:Parameter Name=Datapoint,Type=Prototype:EngineDatapoint}}, Right={Expression:Convert Type=Units:Temperature,Value={Expression:Constant Value=0.0,Type=sys:Double}}}"
-                />            
-            -->
-            <!-- Data -->            
-            <ListBox Grid.Column="0">
-                
-                <!--
-                <Expression:EqualExtension>
-                    <Expression:EqualExtension.Left>
-                        <Expression:PropertyExtension Name="OilTemperature">
-                            <Expression:PropertyExtension.Instance>
-                                <Expression:ParameterExtension Name="Instance" Type="{x:Type Prototype:EngineDatapoint}"/>
-                            </Expression:PropertyExtension.Instance>
-                        </Expression:PropertyExtension>
-                    </Expression:EqualExtension.Left>
-                    <Expression:EqualExtension.Right>
-                        <Expression:ConstantExtension Type="sys:Double" Value="0.0"/>
-                    </Expression:EqualExtension.Right>
-                </Expression:EqualExtension>
-                -->
-                <!--
-                ItemsSource="{Expression:Parameter Name=Instance,Type=Prototype:EngineDatapoint}">
-                -->
-            </ListBox>
-            
-            <!-- Queries -->
-            <ListBox Grid.Column="1"/>
 
-            <!-- Models -->
-        <ListBox Grid.Column="2"/>
+            <StackPanel Grid.Row="2">
+                <Control:Card Title="Multiple Monitors Detected" Subtitle="Settings Change Required">
+                    <TextBlock Text="Update settings now?"/>
+                </Control:Card>
+                
+                <Control:Card Title="Queries">
+                    <Control:Card.Dismissive>
+                        <Control:FlatButton>Cancel</Control:FlatButton>
+                    </Control:Card.Dismissive>
+                    <Control:Card.Admissive>
+                        <Control:FlatButton>Ok</Control:FlatButton>
+                    </Control:Card.Admissive>
+                    <StackPanel Background="White">
+                        <TextBlock Margin="16 0 0 0" Text="You have 13 queries saved."/>
+                    </StackPanel>
+                </Control:Card>
+                
+                <Control:Card Title="Data">
+                    <Control:Card.Dismissive>
+                        <Control:FlatButton>CANCEL</Control:FlatButton>
+                    </Control:Card.Dismissive>
+                    <Control:Card.Admissive>
+                        <Control:FlatButton>OK</Control:FlatButton>
+                    </Control:Card.Admissive>
+                    <StackPanel Background="White">
+                        <TextBlock Margin="16 0 0 0" Text="You are using 10 megabytes."/>
+                    </StackPanel>
+                </Control:Card>
+                
+                <Control:Card Title="Models">
+                    <StackPanel Background="White">
+                        <TextBlock Text="You have 3 avaiable models"/>
+                    </StackPanel>
+                </Control:Card>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

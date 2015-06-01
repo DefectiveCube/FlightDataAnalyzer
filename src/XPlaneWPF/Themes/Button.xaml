@@ -28,12 +28,47 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.5"/>
+                                </VisualStateGroup.Transitions>
+                                
+                                <!-- normal -->
+                                <VisualState x:Name="Normal"/>
+
+                                <!-- hover -->
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.150" Storyboard.TargetName="borderColor" Storyboard.TargetProperty="Color" To="Cyan"/>
+                                    </Storyboard>
+                                </VisualState>
+
+                                <!-- pressed -->
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.150" Storyboard.TargetName="borderColor" Storyboard.TargetProperty="Color" To="Red"/>
+                                    </Storyboard>
+                                </VisualState>
+
+                                <!-- disabled -->
+                                <VisualState x:Name="Disabled"/>
+
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <!-- focused -->
+                                <VisualState x:Name="Focused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                         <Border
                             x:Name="border"
                             Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            />
+                           >
+                            <Border.BorderBrush>
+                                <SolidColorBrush x:Name="borderColor" Color="Blue"/>
+                            </Border.BorderBrush>
+                        </Border>
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             Margin="{TemplateBinding Padding}"
@@ -42,6 +77,7 @@
                             />
                     </Grid>
                     
+                    <!--
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="OpacityMask" Value="#EE888888"/>
@@ -57,11 +93,9 @@
                             <Setter Property="Foreground" Value="#ADADAD"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
+                    -->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-    
-    <Style x:Key="FlatTextBox" TargetType="TextBox">
     </Style>
 </ResourceDictionary>

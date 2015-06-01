@@ -1,0 +1,27 @@
+﻿<Button x:Class="XPlaneWPF.Controls.FloatingActionButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Convert="clr-namespace:XPlaneWPF.Converters"
+        xmlns:SVG="clr-namespace:XPlaneWPF.Extensions.SVG"
+        x:Name="Button"
+        Width="100"
+        Height="100">
+    <Button.Resources>
+        <Convert:StringToImageConverter x:Key="converter"/>
+    </Button.Resources>
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                <Ellipse Width="94" Height="94" Fill="{TemplateBinding Background}" Stroke="Silver">
+                    <Ellipse.Effect>
+                        <DropShadowEffect Color="Silver" Direction="270"/>
+                    </Ellipse.Effect>                    
+                </Ellipse>
+                                
+                <Image Width="56" Height="56" Source="{Binding ElementName=Button,Path=Image}"/>
+
+                <ContentPresenter/>
+            </Grid>            
+        </ControlTemplate>
+    </Button.Template>
+</Button>

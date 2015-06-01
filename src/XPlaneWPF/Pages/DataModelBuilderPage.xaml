@@ -2,10 +2,8 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:viewmodel="clr-namespace:XPlaneWPF.ViewModels"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="1200"
+      xmlns:Control="clr-namespace:XPlaneWPF.Controls"
+      xmlns:SVG="clr-namespace:XPlaneWPF.Extensions.SVG"
 	Title="DataModelBuilder">
     
     <!-- This page is where the user can build a data model -->
@@ -17,122 +15,141 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="100" MaxHeight="200"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        
-        <Menu Style="{StaticResource InlineMenu}" Margin="20">
-            <Menu.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
-            </Menu.Resources>
 
-            <MenuItem Header="Home" Click="Button_Click" Tag="Home"/>
-        </Menu>
-
-        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="1" Margin="20">
-            <Menu.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineSubMenuItem}"/>
-            </Menu.Resources>
-
-            <MenuItem Header="Data" Click="Button_Click" Tag="Data"/>
-            <MenuItem Header="Import" Click="Button_Click" Tag="Import"/>
-            <MenuItem Header="View" Tag="View"/>
-            <MenuItem Header="Graph" Tag="Graph"/>
-            <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
-            <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
-            <MenuItem Header="Export" Tag="Export"/>
-
-        </Menu>
-        
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>               
+            </Grid.ColumnDefinitions>
+            
             <StackPanel Orientation="Horizontal">
                 <Label>Name:</Label>
                 <TextBox Text="{Binding Parameters.Name}" MinWidth="100" MaxWidth="500" VerticalContentAlignment="Center"/>
+            </StackPanel>
 
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <Label>Namespace:</Label>
                 <TextBox Text="{Binding Parameters.Namespace}" MinWidth="100" MaxWidth="500" VerticalContentAlignment="Center"/>
             </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
 
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
                 <Label>Unit Type:</Label>
-            <ComboBox 
-                x:Name="unitTypeCB"
-                ItemsSource="{Binding Source={StaticResource UnitTypeInfoProvider},Mode=OneWay}" 
-                SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
-                DisplayMemberPath="Name"
-                MinWidth="200"
-                VerticalContentAlignment="Center"
-                />
-
-            <Label>Unit</Label>
-            <ComboBox ItemsSource="{Binding SelectedItem.Units,Mode=OneWay}" MinWidth="200" VerticalContentAlignment="Center">
-
-                    <ComboBox.Style>
-                    <Style TargetType="ComboBox">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=unitTypeCB,Path=SelectedItem}" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ComboBox.Style>
-            </ComboBox>
-            
-                <StackPanel>
-                    <Label>Minimum Length:</Label>
-                    <TextBox/>
-
-                    <Label>Maximum Length:</Label>
-                    <TextBox/>
-                </StackPanel>
-                
-                <StackPanel>
-                    
-                    <Label>Type</Label>
-                    <ComboBox>
-                        <ComboBoxItem>Integer</ComboBoxItem>
-                        <ComboBoxItem>Decimal</ComboBoxItem>
-                        <ComboBoxItem>String</ComboBoxItem>                    <ComboBoxItem>Date</ComboBoxItem>
-                        <ComboBoxItem>Time</ComboBoxItem>
-                    </ComboBox>
-                    
-                    <Label>Domain</Label>
-                    <TextBox/>
-                    
-                    <TextBox/>
-                </StackPanel>
-
-                <Label>Leading Precision</Label>
-                <TextBox/>
-                
-                <Label>Trailing Precision</Label>
-                <TextBox/>                
-                
-                <Label>Date Format:</Label>
-                <TextBox/>
-                
-                <Label>Time Format:</Label>
-                <TextBox/>
-                
-                <CheckBox Content="Leading Whitespace"/>
-                <CheckBox Content="Trailing Whitespace"/>
-                
-                <CheckBox Content="Has Hex Specifier?"/>
-                <CheckBox Content="Has Grouping Separators?"/>
-                <CheckBox Content="Has Decimal Point?"/>
+                <ComboBox 
+                    x:Name="unitTypeCB"
+                    ItemsSource="{Binding Source={StaticResource UnitTypeInfoProvider},Mode=OneWay}" 
+                    SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
+                    DisplayMemberPath="Name"
+                    MinWidth="200"
+                    VerticalContentAlignment="Center"
+                    />
             </StackPanel>
 
-            <Button>Submit</Button>
+            <StackPanel Orientation="Horizontal" Grid.Column="3">
+                <Label>Unit</Label>
+                <ComboBox ItemsSource="{Binding SelectedItem.Units,Mode=OneWay}" MinWidth="200" VerticalContentAlignment="Center">
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=unitTypeCB,Path=SelectedItem}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
             
-        </StackPanel>
-        
-        <DataGrid Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Parameters.Properties}" 
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+                <Label>Minimum Length:</Label>
+                <TextBox Text="{Binding Info.MinLength,Mode=OneWayToSource}"/>
+
+                <Label>Maximum Length:</Label>
+                <TextBox Text="{Binding Info.MaxLength,Mode=OneWayToSource}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <Label>Type</Label>
+                <RadioButton x:Name="numRadio">Number</RadioButton>
+                <RadioButton>String</RadioButton>
+                <RadioButton x:Name="dateRadio">Date</RadioButton>
+                <RadioButton x:Name="timeRadio">Time</RadioButton>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">                
+                <StackPanel>
+                    <Label>Leading Precision</Label>
+                    <TextBox x:Name="leadingPrecision" Text="{Binding Info.LeadingPrecision,Mode=OneWayToSource}" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Label>Trailing Precision</Label>
+                    <TextBox x:Name="trailingPrecision" Text="{Binding Info.TrailingPrecision,Mode=OneWayToSource}" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="3">
+                <StackPanel Orientation="Horizontal">
+                    <Label>Date Format:</Label>
+                    <TextBox Text="{Binding Info.DateFormat,Mode=OneWayToSource}" MinWidth="100" IsEnabled="{Binding Path=IsChecked,ElementName=dateRadio}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label>Time Format:</Label>                
+                    <TextBox Text="{Binding Info.TimeFormat,Mode=OneWayToSource}" MinWidth="100" IsEnabled="{Binding Path=IsChecked,ElementName=timeRadio}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="5">
+                <CheckBox Content="Leading Whitespace" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+                <CheckBox Content="Trailing Whitespace" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+                <CheckBox Content="Has Hex Specifier?" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+                <CheckBox Content="Has Grouping Separators?" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+                <CheckBox Content="Has Decimal Point?" IsEnabled="{Binding Path=IsChecked,ElementName=numRadio}"/>
+            </StackPanel>
+            
+            <Button Grid.Row="1">Submit</Button>
+            
+            <Control:FloatingActionButton>
+                <Image Source="{SVG:Svg Path=ic_build_48px.svg}"/>
+            </Control:FloatingActionButton>
+        </Grid>
+
+        <DataGrid Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Parameters.Properties}" 
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -150,8 +167,6 @@
                 <DataGridCheckBoxColumn Header="Hexdecimal?" Binding="{Binding IsHexadecimal}"/>
             </DataGrid.Columns>
         </DataGrid>
-
-
 
     </Grid>
 </Page>

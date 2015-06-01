@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace XPlaneWPF.Controls
+namespace XPlaneWPF.Providers
 {
     public class DatapointTypeProvider : DataSourceProvider
     {
@@ -76,6 +77,7 @@ namespace XPlaneWPF.Controls
             }
             else if (Directory.Exists(Path))
             {
+                // TODO: types need to be loaded from assemblies that are located in a specified directory
                 Load();
 
                 result = Types;
@@ -85,6 +87,8 @@ namespace XPlaneWPF.Controls
                 error = new DirectoryNotFoundException("directory does not exist");
             }
 
+
+            Debug.WriteLineIf(error != null, string.Format("[ERROR][DatapointTypeProvider] {0}", error != null ? error.Message : ""));
             base.OnQueryFinished(result, error, null, null);
         }
 

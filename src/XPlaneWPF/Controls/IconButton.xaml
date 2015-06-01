@@ -1,0 +1,35 @@
+﻿<Button x:Class="XPlaneWPF.Controls.IconButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="33"
+        Height="33"
+        Margin="12"
+        Background="{StaticResource Primary}"
+        >
+    
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Border>
+                <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                    <Ellipse x:Name="Circle" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
+                    <ContentPresenter Width="20" Height="20"/>
+                </Grid>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualStateGroup.Transitions>
+                            <VisualTransition GeneratedDuration="0:0:0.5"/>
+                            <VisualTransition GeneratedDuration="0" To="Pressed"/>
+                        </VisualStateGroup.Transitions>
+                        <VisualState x:Name="Normal"/>
+                        <VisualState x:Name="MouseOver">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="Circle" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)" To="{StaticResource PrimaryDarkColor}" Duration="0:0:.15"/>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Border>
+        </ControlTemplate>
+    </Button.Template>
+</Button>

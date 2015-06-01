@@ -18,24 +18,6 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         
-        <Menu Style="{StaticResource InlineMenu}">
-            <Menu.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineMenuItem}"/>
-            </Menu.Resources>
-
-            <MenuItem Header="Home"/>
-        </Menu>
-
-        <Menu Style="{StaticResource InlineSubMenu}" Grid.Column="1">
-            <Menu.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource InlineSubMenuItem}"/>
-            </Menu.Resources>
-
-            <MenuItem Header="Data" Click="Button_Click" Tag="Data"/>
-            <MenuItem Header="Query" Click="Button_Click" Tag="Query"/>
-            <MenuItem Header="Model" Click="Button_Click" Tag="Model"/>
-        </Menu>
-
         <ListBox x:Name="ModelListBox" Grid.Row="2" Style="{StaticResource VerticalListBox}" ItemsSource="{Binding Source={StaticResource TypeProvider},Mode=OneWay}" DisplayMemberPath="Name">
             
         </ListBox>

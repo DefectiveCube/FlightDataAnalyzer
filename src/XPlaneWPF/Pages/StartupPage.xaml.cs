@@ -9,52 +9,41 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using XPlaneWPF.ViewModels;
+
 namespace XPlaneWPF.Pages
 {
-    /// <summary>
-    /// Interaction logic for StartupPage.xaml
-    /// </summary>
     public partial class StartupPage : Page
     {
         public StartupPage()
         {
             InitializeComponent();
+            Loaded += StartupPage_Loaded;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            string tag = (sender as Control).Tag as string;
+        void StartupPage_Loaded(object sender, RoutedEventArgs e)
+        {            
+            // Verify Folder Structure
 
-            Page page;
+            /*var viewModel = App.Current.MainWindow.DataContext as AppWindowViewModel;
 
-            switch (tag)
+            if (viewModel != null)
             {
-                case "Home":
-                    page = new StartupPage();
-                    break;
-                case "Data":
-                case "Import":
-                    page = new ImportDataPage();
-                    break;
-                case "Query":
-                    page = new QueryPage();
-                    break;
-                case "Model":
-                    //page = new DataModelPage();
-                    page = new DataModelBuilderPage();
-                    break;
-                case "Export":
-                    page = new ExportDataPage();
-                    break;
-                default:
-                    return;
-            }
+                viewModel.PageName = "Flight Data Analyzer > Start";
+            }*/
 
-            NavigationService.Navigate(page);
+            /*var dialog = new XPlaneWPF.Dialogs.Dialog();
+            App.Current.MainWindow.Effect = new BlurEffect()
+            {
+                Radius = 25
+            };
+            //dialog.ShowDialog();
+            App.Current.MainWindow.Effect = null;*/
         }
     }
 }

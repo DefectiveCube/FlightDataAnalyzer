@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using XPlaneWPF.Pages;
+
 namespace XPlaneWPF
 {
     /// <summary>
@@ -20,32 +22,87 @@ namespace XPlaneWPF
     /// </summary>
     public partial class AppWindow :  NavigationWindow
     {
-        private QueryWindow queryWindow;
-
         public AppWindow()
         {
-            InitializeComponent();           
+            InitializeComponent();
+
+            Loaded += ViewModel.AppWindow_Loaded;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void TaskbarDrag_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            queryWindow = new QueryWindow();
-            queryWindow.Show();
+            this.DragMove();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+/*        private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-            DataModelInfoWindow window = new DataModelInfoWindow();
-            window.Show();
+            //this.WindowState = this.WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
 
-            /*DataModelBuilder builder = new DataModelBuilder();
-            builder.Show();*/
-        }
+            if (WindowState == System.Windows.WindowState.Normal)
+            {
+                NormalTop = Top;
+                NormalLeft = Left;
+                NormalWidth = ActualWidth;
+                NormalHeight = ActualHeight;
+                Width = SystemParameters.VirtualScreenWidth;
+                Height = SystemParameters.VirtualScreenHeight;
+                Top = 0;
+                Left = 0;
+                WindowState = System.Windows.WindowState.Maximized;
+            }
+            else
+            {
+                Width = NormalWidth;
+                Height = NormalHeight;
+                Top = NormalTop;
+                Left = NormalLeft;
+                WindowState = System.Windows.WindowState.Normal;
+            }
+        }*/
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        /*
+        private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            DataModelBuilder builder = new DataModelBuilder();
-            builder.Show();
+            base.WindowState = System.Windows.WindowState.Minimized;
         }
+
+        private void navWindow_StateChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine("StateChanged");
+        }
+
+        private void navWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Console.WriteLine("SizeChanged");
+        }  
+
+        private void Minimize_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            base.WindowState = System.Windows.WindowState.Minimized;
+        }
+
+        private void Maximize_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (WindowState == System.Windows.WindowState.Normal)
+            {
+                NormalTop = Top;
+                NormalLeft = Left;
+                NormalWidth = ActualWidth;
+                NormalHeight = ActualHeight;
+                Width = SystemParameters.VirtualScreenWidth;
+                Height = SystemParameters.VirtualScreenHeight;
+                Top = 0;
+                Left = 0;
+                WindowState = System.Windows.WindowState.Maximized;
+            }
+            else
+            {
+                Width = NormalWidth;
+                Height = NormalHeight;
+                Top = NormalTop;
+                Left = NormalLeft;
+                WindowState = System.Windows.WindowState.Normal;
+            }
+        }*/
     }
 }

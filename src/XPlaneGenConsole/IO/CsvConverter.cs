@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.IO.Pipes;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XPlaneGenConsole;
@@ -16,24 +18,30 @@ namespace XPlaneGenConsole
 	public class CsvConverter<T>
         where T: BinaryDatapoint, new()
 	{
-        static Barrier barrier;
-        static Barrier startBarrier;
-		static ConcurrentQueue<string> InputQueue;
-        static ConcurrentQueue<T> OutputQueue;
-        static ConcurrentQueue<Tuple<DateTime,int>> FlightTimes;
-        static int validLineCount = 0;
-        static int Fields = typeof(T).GetCustomAttribute<CsvRecordAttribute>().Count;
-        static Action<T, string[]> parser = CsvParser.GetParser<T>();
+        private static Barrier barrier;
+        private static Barrier startBarrier;
+        private static ConcurrentQueue<string> InputQueue;
+        private static ConcurrentQueue<T> OutputQueue;
+        private static ConcurrentQueue<Tuple<DateTime, int>> FlightTimes;
+        private static int validLineCount = 0;
+        private static int Fields = typeof(T).GetCustomAttribute<CsvRecordAttribute>().Count;
+        private static Action<T, string[]> parser = CsvParser.GetParser<T>();
+        private static StringBuilder messages = new StringBuilder();
 
+        public static event EventHandler<string> MessageWritten, ErrorWritten;
+        public static event EventHandler ReadStarted, ReadCompleted, ParsingStarted, ParsingCompleted, WriteStarted, WriteCompleted;
+
+        private static readonly object _locker = new object();
 
         public static async Task LoadAsync(string path, string outputPath)
         {
-            await Task.Factory.StartNew(() => Load(path, outputPath));
+            await Task.Factory.StartNew(() => Load(path, outputPath), CancellationToken.None, TaskCreationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        public static void Load(string path, string outputPath)
+        public static void Load(string path, string outputDirectory)
         {
-            outputPath = !string.IsNullOrWhiteSpace(outputPath) ? outputPath : path + ".output";
+            var hash = XPlaneGenConsole.IO.Hash.ComputeHash(path);
+            outputDirectory = System.IO.Path.Combine(outputDirectory, BitConverter.ToString(hash).Replace("-", ""));
 
             barrier = new Barrier(Environment.ProcessorCount + 1);
             startBarrier = new Barrier(Environment.ProcessorCount + 1);
@@ -41,6 +49,8 @@ namespace XPlaneGenConsole
             InputQueue = new ConcurrentQueue<string>();
             OutputQueue = new ConcurrentQueue<T>();
             FlightTimes = new ConcurrentQueue<Tuple<DateTime, int>>();
+
+            messages.Clear();
 
             // Reader thread
             Thread producer = new Thread(ProducerThread);
@@ -59,18 +69,44 @@ namespace XPlaneGenConsole
                 threads[i].Start();
             }
 
+            //ReadStarted(null, new EventArgs());
+            //ParsingStarted(null, new EventArgs());
+
             // Start reading
             producer.Start(path);
             producer.Join(); // Producer has a barrier with the worker threads, so this blocks until all workers are done
 
+            if (ReadCompleted != null)
+            {
+                ReadCompleted(null, new EventArgs());
+            }
+
+            if (ParsingCompleted != null)
+            {
+                ParsingCompleted(null, new EventArgs());
+            }
+
+            messages.AppendFormat("Valid Lines: {0}", validLineCount);
+            messages.AppendLine();
+            messages.AppendFormat("Unique Flights: {0}", FlightTimes.Count);
+            messages.AppendLine();
+            messages.AppendFormat("Process Completed in {0} seconds", DateTime.Now.Subtract(start).TotalSeconds);
+            messages.AppendLine();
+
             // Start writing
-            consumer.Start(outputPath);
+            consumer.Start(outputDirectory);
             consumer.Join();
 
-            Console.WriteLine("Valid lines: {0}", validLineCount);
-            Console.WriteLine("Unique Flights: {0}", FlightTimes.Count);
-            Console.WriteLine("Process completed");
-            Console.WriteLine(DateTime.Now.Subtract(start).TotalSeconds);
+            if (WriteCompleted != null)
+            {
+                WriteCompleted(null, EventArgs.Empty);
+            }
+
+            if (MessageWritten != null)
+            {
+                MessageWritten(null, messages.ToString());
+            }
+
 
             OutputQueue = null;
             FlightTimes = null;
@@ -94,8 +130,8 @@ namespace XPlaneGenConsole
             byte[] data = new byte[] { };
             long compressSize, normalSize;
 
-            Console.WriteLine("Writing to {0}", filePath);
-            Console.WriteLine("Consumer found {0} datapoints", validLineCount);
+            //Console.WriteLine("Writing to {0}", filePath);
+            //Console.WriteLine("Consumer found {0} datapoints", validLineCount);
 
             using (var writer = new BinaryWriter(ms))
             {
@@ -115,10 +151,15 @@ namespace XPlaneGenConsole
                 compressSize = compress.BaseStream.Length;
             }
 
-            Console.WriteLine("Uncompressed Size: {0} bytes", normalSize);
-            Console.WriteLine("Compressed Size: {0} bytes", compressSize);
-            Console.WriteLine("Compression Ratio: {0:P}", 1.0 - (double)compressSize / normalSize);
-            Console.WriteLine("Consumer thread finished | {0} datapoints", ordered.Count());
+            lock (_locker)
+            {
+                messages.AppendFormat("Uncompressed Size: {0} bytes", normalSize);
+                messages.AppendLine();
+                messages.AppendFormat("Compressed Size: {0} bytes", compressSize);
+                messages.AppendLine();
+                messages.AppendFormat("Compression Ratio: {0:P}", 1.0 - (double)compressSize / normalSize);
+                messages.AppendLine();
+            }
         }
 
         static void ProducerThread(object path)
@@ -129,14 +170,14 @@ namespace XPlaneGenConsole
             }
 
             StreamReader reader = new StreamReader(path as string);
-            Console.WriteLine("Producer is reading from {0}", path);
             int count = 0;
 
             bool AreThreadsSet = false;
 
             using (reader)
             {
-                Console.WriteLine("File size: {0}", reader.BaseStream.Length);
+                messages.AppendFormat("File size: {0} bytes", reader.BaseStream.Length);
+                messages.AppendLine();
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -154,7 +195,6 @@ namespace XPlaneGenConsole
 
             barrier.SignalAndWait();
             InputQueue = null;
-            Console.WriteLine("Read In {0} lines", count);
         }
 
 		static void ThreadRead()
@@ -180,8 +220,6 @@ namespace XPlaneGenConsole
                 if (InputQueue.TryDequeue(out result))
                 {
                     var value = result.Split(new char[] { ',' }, StringSplitOptions.None);
-
-
 
                     if (value.Length == Fields)
                     {

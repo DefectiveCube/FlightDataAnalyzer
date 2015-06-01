@@ -1,24 +1,206 @@
 ﻿<NavigationWindow x:Class="XPlaneWPF.AppWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:app="clr-namespace:XPlaneWPF.Controls"
-        Title="Flight Data Analyzer" WindowStartupLocation="CenterScreen" Background="{StaticResource WindowBackground}"                  
-        Source="Pages/StartupPage.xaml">
-
-    <NavigationWindow.Style>
-        <Style TargetType="NavigationWindow">      
-            <Style.Triggers>
-                <!--
-                <DataTrigger Binding="{Binding WindowState}" Value="Maximized">
-                    <Setter Property="ShowsNavigationUI" Value="True"/>
-                </DataTrigger>
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:Android="clr-namespace:XPlaneWPF.Extensions.Android"
+                  xmlns:Control="clr-namespace:XPlaneWPF.Controls"
+                  xmlns:Command="clr-namespace:XPlaneWPF.Commands"
+                  xmlns:Effect="clr-namespace:XPlaneWPF.Effects"
+                  xmlns:ViewModel="clr-namespace:XPlaneWPF.ViewModels"
+                  xmlns:SVG="clr-namespace:XPlaneWPF.Extensions.SVG"
+                  Title="Flight Data Analyzer"
+                  Background="#EEE"    
+                  WindowStyle="None"                  
+                  WindowStartupLocation="CenterScreen"
+                  WindowState="Normal"
+                  AllowsTransparency="True"
+                  ShowsNavigationUI="False"
+                  ShowInTaskbar="True"
+                  Source="Pages/StartupPage.xaml"
+                  Width="1440"
+                  Height="900"
+                  x:Name="navWindow" 
+                  MinHeight="600" 
+                  MinWidth="800">
+    
+    <NavigationWindow.DataContext>
+        <ViewModel:AppWindowViewModel x:Name="ViewModel"/>
+    </NavigationWindow.DataContext>  
+           
+    <NavigationWindow.InputBindings>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="ViewData" Key="F1"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="ImportData" Key="F2"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="ExportData" Key="F3"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="ViewQueries" Key="F5"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="BuildQuery" Key="F6"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="RunQuery" Key="F7"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="ViewModels" Key="F9"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="BuildModel" Key="F10"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="AnalyzeData" Key="F11"/>
+        <KeyBinding Command="{Binding PageChangeCommand}" CommandParameter="Calibration" Key="C" Modifiers="Alt"/>        
+        <KeyBinding Command="{Binding CloseCommand}" Key="Escape"/>       
+    </NavigationWindow.InputBindings>
+        
+    <NavigationWindow.Template>
+        <ControlTemplate TargetType="NavigationWindow">
+            <Canvas x:Name="WindowCanvas" Width="1440" Height="900" Background="{StaticResource Primary}">
+                <Grid x:Name="WindowGrid" Canvas.Left="0" Canvas.Top="0"
+                  Width="{Binding ElementName=WindowCanvas,Path=Width}" 
+                  Height="{Binding ElementName=WindowCanvas,Path=Height}"
+                  Background="{TemplateBinding Background}">     
                 
-                <DataTrigger Binding="{Binding WindowState}" Value="Normal">
-                    <Setter Property="ShowsNavigationUI" Value="False"/>
-                </DataTrigger>
-                -->
-            </Style.Triggers>
-        </Style>
-    </NavigationWindow.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="24"/>
+                </Grid.RowDefinitions>
+                                
+                <!-- Header -->
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /> <!-- Task Bar -->
+                        <RowDefinition Height="80" /> <!-- Title -->
+                        <RowDefinition Height="*"/> <!-- Menu -->
+                    </Grid.RowDefinitions>
+                   
+                    <Grid Background="{StaticResource Primary}" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>                            
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Background="{StaticResource Primary}">
+                            <Control:IconButton Command="{Binding PageChangeCommand}" CommandParameter="Home" Width="{Android:DevicePixel Value=56}" Height="{Android:DevicePixel Value=56}" Background="{StaticResource Primary}">
+                                <Image Source="{SVG:Svg Path=ic_menu_48px.svg}"/>
+                            </Control:IconButton>
+                        </StackPanel>
+                        
+                        <Rectangle Fill="{StaticResource Primary}" Width="Auto" Height="Auto" x:Name="Taskbar" MouseDown="TaskbarDrag_MouseDown" Grid.Column="1" ToolTip="Drag this window">
+                            <Rectangle.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)" To="#11000000" Duration="0:0:.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)" To="{StaticResource PrimaryColor}" Duration="0:0:.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Rectangle.Triggers>
+                        </Rectangle>
+
+                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding MinimizeCommand}">Minimize</Button>
+                            
+                            <Control:IconButton Command="{Binding MaximizeCommand}">
+                                <Image Source="{SVG:Svg Path=ic_fullscreen_48px.svg}"/>
+                            </Control:IconButton>
+                            
+                            <Control:IconButton Command="{Binding CloseCommand}">
+                                <Image Source="{SVG:Svg Path=ic_close_48px.svg}"/>
+                            </Control:IconButton>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <StackPanel Grid.Row="1" Background="{StaticResource Primary}" Grid.ColumnSpan="2" Height="80">
+                        <TextBlock Text="{Binding PageName}" FontSize="24" Foreground="{StaticResource Text}" FontFamily="/Fonts/#Roboto-Medium" VerticalAlignment="Center"/>
+                    </StackPanel>
+                                        
+                    <Menu Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource MaterialMenu}">
+                        <Menu.Effect>
+                            <DropShadowEffect Direction="270" Color="Silver" ShadowDepth="5" RenderingBias="Quality"/>
+                        </Menu.Effect>
+                        
+                        <MenuItem Header="Data">
+                            <MenuItem Header="View" Command="{Binding PageChangeCommand}" CommandParameter="ViewData" InputGestureText="F1"/>
+                            <MenuItem Header="Import" Command="{Binding PageChangeCommand}" CommandParameter="ImportData" InputGestureText="F2"/>
+                            <MenuItem Header="Export" Command="{Binding PageChangeCommand}" CommandParameter="ExportData" InputGestureText="F3"/>
+                        </MenuItem>
+                        <MenuItem Header="Query">
+                            <MenuItem Header="View" Command="{Binding PageChangeCommand}" CommandParameter="ViewQueries"/>
+                            <MenuItem Header="Create" Command="{Binding PageChangeCommand}" CommandParameter="BuildQuery"/>
+                            <MenuItem Header="Execute"/>
+                        </MenuItem>
+                        <MenuItem Header="Model">
+                            <MenuItem Header="View" Command="{Binding PageChangeCommand}" CommandParameter="ViewModels"/>
+                            <MenuItem Header="Create" Command="{Binding PageChangeCommand}" CommandParameter="BuildModel"/>
+                        </MenuItem>
+                    </Menu>                   
+                </Grid>
+                                
+                <ContentPresenter Grid.Column="1" Grid.Row="1"/>
+
+                <Popup x:Name="FloatMenu" Grid.Row="2" Grid.Column="1" IsOpen="False" Placement="Custom" AllowsTransparency="True" PlacementTarget="{Binding ElementName=WindowGrid}" HorizontalOffset="100" VerticalOffset="200" PopupAnimation="Fade">
+                    <Border BorderThickness="1" BorderBrush="Silver">
+                        <StackPanel>
+                            <Popup x:Name="SubFloatMenu" Placement="Top" PlacementTarget="{Binding ElementName=FloatMenuButton}">
+                                <StackPanel>
+                                    <Ellipse Width="100" Height="100" Fill="Blue"/>
+                                    <Ellipse Width="100" Height="100" Fill="Orange"/>
+                                    <Ellipse Width="100" Height="100" Fill="Yellow"/>
+                                    <Ellipse Width="100" Height="100" Fill="Green"/>
+                                </StackPanel>
+                            </Popup>
+
+                            <Button x:Name="FloatMenuButton" Command="{Binding FloatMenuOpenCommand}">
+                                <Ellipse Width="100" Height="100" Fill="Red"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+                <!--
+                <Control:ToastManager />
+                
+                <StackPanel Height="100" Margin="15" x:Name="ToastPanel" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" MinWidth="600">
+                    <Popup IsOpen="False" MinWidth="600" HorizontalAlignment="Stretch" Placement="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <Border Background="DimGray" BorderBrush="DimGray" BorderThickness="1">
+                            <Border.Effect>
+                                <DropShadowEffect/>
+                            </Border.Effect>
+
+                            <StackPanel>
+                                <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="24">Task Completed</TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </StackPanel>                
+                -->
+            </Grid>
+                                
+                <StackPanel x:Name="SnackBarPanel" Height="Auto" Canvas.Bottom="10" Width="{Binding Width,ElementName=WindowCanvas}">
+                    <Control:Snackbar Message="Message sent"/>
+                </StackPanel>
+
+                <Control:FloatingActionButton Canvas.Bottom="10" Canvas.Right="10" Image="{SVG:Svg Path=ic_add_48px.svg}"/>
+
+
+                <!--
+                <StackPanel Canvas.Bottom="10" Width="{Binding Width,ElementName=WindowCanvas}">
+                    <Border Background="#323232" MinWidth="288" MaxWidth="568" Width="600" MinHeight="48" CornerRadius="2">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Silver" Direction="270"/>
+                        </Border.Effect>
+                        <TextBlock Padding="24" FontFamily="/Fonts/#Roboto" FontWeight="Medium" Foreground="{StaticResource Text}" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Message sent"/>
+                    </Border>
+                </StackPanel>
+                -->
+            </Canvas>
+        </ControlTemplate>
+    </NavigationWindow.Template>
+   
 </NavigationWindow>

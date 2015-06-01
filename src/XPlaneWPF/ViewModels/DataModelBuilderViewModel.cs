@@ -23,5 +23,7 @@ namespace XPlaneWPF.ViewModels
         public UnitTypeInfo SelectedItem { get; set; }
 
         public ModelBuildParameters Parameters { get; set; }
+
+        public ModelBuildInfo Info { get; set; }
     }
 }

@@ -47,6 +47,30 @@ namespace XPlaneWPF.Extensions.Units
         }
     }
 
+    public class RatioExtension : UnitExtension<RatioUnit>
+    {
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return Ratio.From(Value, Unit);
+        }
+    }
+    
+    public class RotationalSpeedExtension : UnitExtension<RotationalSpeedUnit>
+    {
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return RotationalSpeed.From(Value, Unit);
+        }
+    }
+
+    public class SpeedExtension : UnitExtension<SpeedUnit>
+    {
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return Speed.From(Value, Unit);
+        }
+    }
+
     public class TemperatureExtension : UnitExtension<TemperatureUnit>
     {
         public override object ProvideValue(IServiceProvider serviceProvider)
