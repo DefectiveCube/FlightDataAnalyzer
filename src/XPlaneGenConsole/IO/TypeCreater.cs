@@ -118,10 +118,16 @@ namespace XPlaneGenConsole.IO
                     return typeof(Volume);
                 case "byte":
                     return typeof(byte);
+                case "int":
+                    return typeof(int);
                 case "float":
                     return typeof(float);
                 case "ushort":
                     return typeof(ushort);
+                case "DateTime":
+                    return typeof(DateTime);
+                case "TimeSpan":
+                    return typeof(TimeSpan);
                 default:
                     Console.WriteLine(name);
                     return null;
@@ -165,10 +171,17 @@ namespace XPlaneGenConsole.IO
                             var unitType = reader.GetAttribute("UnitType");
                             var unit = string.Empty;
                             var type = GetUnitType(unitType);
-                            
-                            if (!type.IsPrimitive)
+
+                            if (type != null)
                             {
-                                unit = reader.GetAttribute("Unit");
+                                if (!type.IsPrimitive)
+                                {
+                                    unit = reader.GetAttribute("Unit");
+                                }
+                            }
+                            else
+                            {
+                                // primitive
                             }
 
                             //CreateProperty(propertyName, type);

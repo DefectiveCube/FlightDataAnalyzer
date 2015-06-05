@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace XPlaneGenConsole
 {
-    public abstract class CsvDatapoint<T> : TextDatapoint
+    /*public abstract class CsvDatapoint<T> : TextDatapoint
         where T : CsvDatapoint<T>, new()
     {
-        public static CsvFactory<T> Factory = new CsvFactory<T>();
+        //public static CsvFactory<T> Factory = new CsvFactory<T>();
 
         protected static int Key;
 
@@ -25,15 +25,5 @@ namespace XPlaneGenConsole
         { 
 			throw new NotSupportedException(); 
 		}
-    }
-
-    public sealed class XmlDatapoint : TextDatapoint
-    {
-
-    }
-
-    public sealed class JsonDatapoint : TextDatapoint
-    {
-
-    }
+    }*/
 }

@@ -17,11 +17,22 @@
                 
                 <ResourceDictionary>
                     <Provider:PathProvider x:Key="PathProvider"/>
-                    <Provider:TypeVerificationProvider x:Key="TypeVerificationProvider"/>
+                    
+                    <!-- Provides XML-models -->
+                    <XmlDataProvider x:Key="ModelProvider" Source="C:\Users\KirkDietz\Documents\FlightDataAnalyzer\models\Prototype.EngineDatapoint.xml"/>
+                    
+                    <!-- Obsolete. Replaced with XML provider -->
                     <Provider:DatapointTypeProvider Path="C:\Users\KirkDietz\Documents\FlightDataAnalyzer\lib" x:Key="TypeProvider"/>
+                    
+                    <!-- Provides List of Unit Types (e.g. Acceleration, Angle, Volume) -->
                     <Provider:UnitTypeInfoProvider x:Key="UnitTypeInfoProvider"/>
+                    
+                    <!-- Provides List of Unit Information that belong to a Unit Type -->
                     <Provider:UnitInfoProvider x:Key="UnitInfoProvider"/>
+                    
+                    <!-- Provides List of relation operators -->
                     <Provider:LogicalRelationProvider x:Key="LogicalRelationProvider"/>
+                    
                     <Provider:DatapointSourceProvider x:Key="UnitDataProvider"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

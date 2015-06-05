@@ -2,7 +2,7 @@
 
 namespace XPlaneGenConsole
 {
-	public class CsvFactory<T> : DatapointFactory<T>
+	/*public class CsvFactory<T> : DatapointFactory<T>
 		where T : CsvDatapoint<T>, new()
 	{
 		public override T CreateFromString(string value)
@@ -18,5 +18,5 @@ namespace XPlaneGenConsole
 
 			return datapoint;
 		}
-	}
+	}*/
 }

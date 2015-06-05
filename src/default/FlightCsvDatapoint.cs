@@ -5,7 +5,7 @@ using XPlaneGenConsole;
 
 namespace Prototype
 {
-    public class FlightCsvDatapoint : CsvDatapoint<FlightCsvDatapoint>
+    /*public class FlightCsvDatapoint : CsvDatapoint<FlightCsvDatapoint>
     {
         private const int FIELDS_COUNT = 30;
 
@@ -50,7 +50,7 @@ namespace Prototype
             this.values = values;
         }
 
-        /*public void Parse(string[] values)
+        public void Parse(string[] values)
         {
             /*Timestamp = values[0].AsInt();
             DateTime = values[1].AsDateTime().Add(values[2].AsTimeSpan());
@@ -80,6 +80,6 @@ namespace Prototype
             AHRSSeq = values[26].GetHexBytes<byte>().FirstOrDefault();
             ADCSeq = values[27].AsByte();//ParseByte (values [27]);
             AHRSStartupMode = values[28].AsByte();//ParseByte (values [28]);           
-        }*/
-    }
+        }
+    }*/
 }

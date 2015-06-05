@@ -13,8 +13,8 @@ namespace XPlaneGenConsole
 	/// <summary>
 	/// For reading CSV files
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
-    [Obsolete()]
+	/// <typeparam name="T"></typeparam>*
+    /*[Obsolete()]
 	public class CSVReader<T> : IDisposable
 		where T : CsvDatapoint<T>, new()
 	{
@@ -116,7 +116,7 @@ namespace XPlaneGenConsole
 			}
 
 			return sb.ToString();
-		}*/
+		}
 
 		public T ReadLine()
 		{
@@ -146,5 +146,5 @@ namespace XPlaneGenConsole
 			Console.WriteLine ("Read: {0}",DateTime.Now.Subtract (start).TotalSeconds);
             yield break;
 		}
-	}
+	}*/
 }
