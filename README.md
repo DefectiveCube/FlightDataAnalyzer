@@ -1,4 +1,4 @@
-# XPlaneGen
+# Flight Data Analyzer
 
 ## Purpose
 The purpose of this solution is to store flight data in a structured binary format, instead of text-based formats, for performing easy data operations.
