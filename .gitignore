@@ -183,3 +183,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 *.userprefs
+src/App/bower_components/

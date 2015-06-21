@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app://something/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+
+
+
+  "window": {
+    "title": "Flight Data Analyzer",
+    "toolbar": false,
+    "frame": true,
+    "width": 1024,
+    "height": 768
+
+  }
+}
