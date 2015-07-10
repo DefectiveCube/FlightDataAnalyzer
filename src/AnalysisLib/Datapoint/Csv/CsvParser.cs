@@ -11,6 +11,8 @@ using UnitsNet.Units;
 
 namespace FDA
 {
+    // TODO: cleanup!
+
     public class CsvParser
     {
         private static MethodInfo ConversionMethod = 

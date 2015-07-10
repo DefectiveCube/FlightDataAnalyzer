@@ -83,7 +83,6 @@
     <Compile Include="Datapoint\Base\BinaryDatapoint.cs" />
     <Compile Include="Datapoint\Base\Datapoint.cs" />
     <Compile Include="Datapoint\Base\TextDatapoint.cs" />
-    <Compile Include="Datapoint\Csv\CsvFactory.cs" />
     <Compile Include="XPlane\NavType.cs" />
     <Compile Include="XPlane\Frequency.cs" />
     <Compile Include="XPlane\NavMode.cs" />

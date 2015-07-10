@@ -55,9 +55,17 @@
     <Compile Include="XmlModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\default\prototype.csproj">
+    <ProjectReference Include="..\AnalysisLib\AnalysisLib.csproj">
+      <Project>{7ef97ce7-dc97-4839-88a6-d4475f451b15}</Project>
+      <Name>AnalysisLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prototype\Prototype.csproj">
       <Project>{3ab5334c-7cdf-47a0-9729-a72568e25d1c}</Project>
-      <Name>prototype</Name>
+      <Name>Prototype</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XPlaneWPF\XPlaneWPF.csproj">
+      <Project>{887be285-c7f3-4a5a-bc51-4a42727c98d4}</Project>
+      <Name>XPlaneWPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

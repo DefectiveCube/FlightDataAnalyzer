@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6546B09-9C50-452D-AAAE-28D15B555DA0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{3AB5334C-7CDF-47A0-9729-A72568E25D1C}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Builder</RootNamespace>
-    <AssemblyName>Builder</AssemblyName>
+    <RootNamespace>Prototype</RootNamespace>
+    <AssemblyName>Prototype</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -45,17 +43,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="EngineDatapoint.cs" />
+    <Compile Include="FlightCsvDatapoint.cs" />
+    <Compile Include="FlightDatapoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemDatapoint.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XPlaneGenConsole\XPlaneGen.csproj">
+    <ProjectReference Include="..\AnalysisLib\AnalysisLib.csproj">
       <Project>{7ef97ce7-dc97-4839-88a6-d4475f451b15}</Project>
-      <Name>XPlaneGen</Name>
+      <Name>AnalysisLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

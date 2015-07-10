@@ -829,13 +829,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\default\prototype.csproj">
-      <Project>{3ab5334c-7cdf-47a0-9729-a72568e25d1c}</Project>
-      <Name>prototype</Name>
-    </ProjectReference>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <ProjectReference Include="..\AnalysisLib\AnalysisLib.csproj">
+      <Project>{7ef97ce7-dc97-4839-88a6-d4475f451b15}</Project>
+      <Name>AnalysisLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prototype\Prototype.csproj">
+      <Project>{3ab5334c-7cdf-47a0-9729-a72568e25d1c}</Project>
+      <Name>Prototype</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

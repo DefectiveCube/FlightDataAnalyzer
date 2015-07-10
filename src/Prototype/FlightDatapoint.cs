@@ -2,7 +2,7 @@
 using System.Globalization;
 using UnitsNet;
 using UnitsNet.Units;
-using XPlaneGenConsole;
+using FDA;
 
 [assembly: Datapoint(typeof(Prototype.FlightDatapoint))]
 
