@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using XPlaneGenConsole;
+using FDA;
 
 namespace XPlaneWPF.Providers
 {

@@ -833,10 +833,6 @@
       <Project>{3ab5334c-7cdf-47a0-9729-a72568e25d1c}</Project>
       <Name>prototype</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XPlaneGenConsole\XPlaneGen.csproj">
-      <Project>{7ef97ce7-dc97-4839-88a6-d4475f451b15}</Project>
-      <Name>XPlaneGen</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

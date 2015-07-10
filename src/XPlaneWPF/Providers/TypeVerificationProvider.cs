@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
-using XPlaneGenConsole;
+using FDA;
 using XPlaneWPF.ViewModels;
 
 namespace XPlaneWPF.Providers

@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using XPlaneGenConsole.IO;
+using FDA.IO;
 using XPlaneWPF.Commands;
 using XPlaneWPF.Pages;
 
@@ -39,9 +39,7 @@ namespace XPlaneWPF.ViewModels
 
         internal void AppWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //var creater = new TypeCreater();
-            //creater.LoadAsync(@"C:\Users\KirkDietz\Documents\FlightDataAnalyzer\models\Prototype.EngineDatapoint.xml");
-
+            // Create a type based off an XML document
             TypeCreater.LoadModels(@"C:\Users\KirkDietz\Documents\FlightDataAnalyzer\models");
 
             var asms = Assembly.GetExecutingAssembly().GetReferencedAssemblies();

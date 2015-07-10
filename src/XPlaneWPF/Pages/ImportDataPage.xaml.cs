@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using XPlaneGenConsole;
+using FDA;
 using XPlaneWPF.ViewModels;
 
 namespace XPlaneWPF.Pages
