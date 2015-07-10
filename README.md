@@ -18,6 +18,8 @@ __Status__: Alpha
 
 The entire UI is one WPF application. It is a single-window, multiple-page application using a NavigationWindow as the main window. Most pages are partially-functional but lack design completion. The application uses the Model-View-ViewModel design pattern to organize code and allow further enhancements to be straight-forward. The design pattern uses Google's Material Design for the majority of design styling choices.
 
+__Alternative__. A NW.JS-powered front-end application is being prototyped as a possible alternative to WPF.
+
 ### Pages
 * View Data
 * Import
