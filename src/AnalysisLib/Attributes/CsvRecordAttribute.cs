@@ -1,15 +1,22 @@
 ﻿using System;
 
-namespace FDA
+namespace FDA.Attributes
 {
-	public class CsvRecordAttribute : Attribute
+    /// <summary>
+    /// Indicates that a class represents a CSV record
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+	public sealed class CsvRecordAttribute : Attribute
 	{
-        public readonly int Count;
+        /// <summary>
+        /// The number of mapped CSV fields
+        /// </summary>
+        public int Count { get; private set; }
 
-/*		public CsvRecordAttribute ()
-		{
-		}*/
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
 		public CsvRecordAttribute (int count){
             Count = count;
 		}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using FDA.Attributes;
 using UnitsNet;
 using UnitsNet.Units;
 
@@ -12,10 +12,10 @@ namespace FDA
     public sealed class XPlaneDatapoint : XPlaneBaseDatapoint
     {
 
-        public override BinaryDatapoint Create()
+        /*public override BinaryDatapoint Create()
         {
             return new XPlaneDatapoint();
-        }
+        }*/
 
 		[CsvField(0)]
 		[Format(DurationUnit.Second)]

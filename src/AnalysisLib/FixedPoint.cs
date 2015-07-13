@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FDA
 {
+    // WARNING: incomplete
+
     /// <summary>
     /// Stores a float (4-byte) as a short (2-byte) value
     /// </summary>
@@ -14,7 +12,7 @@ namespace FDA
         public bool IsSigned;
         public float value;
 
-        public static FixedPoint operator + (FixedPoint a, FixedPoint b)
+        public static FixedPoint operator +(FixedPoint a, FixedPoint b)
         {
             return a;
         }

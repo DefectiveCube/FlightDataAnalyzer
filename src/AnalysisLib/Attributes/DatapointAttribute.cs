@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FDA
+namespace FDA.Attributes
 {
-    [AttributeUsage(AttributeTargets.Assembly,AllowMultiple =true)]
-    public class DatapointAttribute : Attribute
+    /// <summary>
+    /// Specifies one or many types of model datapoints that are contained within the target assembly
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+    public sealed class DatapointAttribute : Attribute
     {
-        public readonly Type Type;
+        public Type Type { get; private set; }
 
         public DatapointAttribute(Type DatapointType)
         {
             Type = DatapointType;
-        }            
+        }
     }
 }

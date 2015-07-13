@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using FDA;
+using FDA.Attributes;
 using UnitsNet;
 using UnitsNet.Units;
 
@@ -15,10 +16,10 @@ namespace Prototype
         public const int BYTES_COUNT = 105;
         public const int FIELDS_COUNT = 38;
 
-        public override BinaryDatapoint Create()
+        /*public override BinaryDatapoint Create()
         {
             throw new System.NotImplementedException();
-        }
+        }*/
 
         [CsvField(3)]
         [Format(TemperatureUnit.DegreeCelsius)]

@@ -3,6 +3,7 @@ using System.Globalization;
 using UnitsNet;
 using UnitsNet.Units;
 using FDA;
+using FDA.Attributes;
 
 [assembly: Datapoint(typeof(Prototype.FlightDatapoint))]
 
@@ -14,10 +15,10 @@ namespace Prototype
 		public const int FIELDS_COUNT = 30;
 		public const int BYTES_COUNT = 87;
 
-        public override BinaryDatapoint Create()
+        /*public override BinaryDatapoint Create()
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         [CsvField(3)]
         [Format(AccelerationUnit.Undefined, "9.81 * x", "#.###")]

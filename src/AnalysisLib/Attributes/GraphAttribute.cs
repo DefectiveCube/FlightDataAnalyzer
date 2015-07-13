@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FDA
+namespace FDA.Attributes
 {
-    public class GraphAttribute : Attribute
+    /// <summary>
+    /// Specfies that a property should be graphed as continuous, or discrete data
+    /// </summary>
+    public sealed class GraphAttribute : Attribute
     {
-        public readonly GraphData DataType;
+        public GraphData DataType { get; private set; }
 
         public GraphAttribute(GraphData data)
         {

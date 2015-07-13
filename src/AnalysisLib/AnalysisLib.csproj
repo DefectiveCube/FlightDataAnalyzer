@@ -49,18 +49,15 @@
     <Compile Include="Attributes\DatapointAttribute.cs" />
     <Compile Include="Attributes\GroupAttribute.cs" />
     <Compile Include="Attributes\ModelAttribute.cs" />
-    <Compile Include="Datapoint\Base\CSVDatapoint.cs" />
-    <Compile Include="Datapoint\Base\DatapointFactory.cs" />
+    <Compile Include="Attributes\XmlRecordAttribute.cs" />
     <Compile Include="Extensions\Units.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FileProcessor.cs" />
-    <Compile Include="Flight.cs" />
-    <Compile Include="FlightHeader.cs" />
     <Compile Include="IO\Hash.cs" />
     <Compile Include="IO\TypeCreater.cs" />
     <Compile Include="Marshalling\Marshal.cs" />
     <Compile Include="Marshalling\UntrustedCodeExecution.cs" />
+    <Compile Include="Node\Startup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\QueryExpression.cs" />
@@ -73,16 +70,10 @@
     <Compile Include="XPlane\XPlaneBaseDatapoint.cs" />
     <Compile Include="XPlane\XPlaneDatapoint.cs" />
     <Compile Include="XPlane\XPlaneFile.cs" />
-    <Compile Include="IO\DataWriter.cs" />
-    <Compile Include="IO\CSVAttribute.cs" />
-    <Compile Include="IO\CSVReader.cs" />
-    <Compile Include="IO\DataReader.cs" />
     <Compile Include="Query\Query.cs" />
     <Compile Include="XPlane\XPlaneHeader.cs" />
     <Compile Include="XPlane\XPlaneFileEnding.cs" />
-    <Compile Include="Datapoint\Base\BinaryDatapoint.cs" />
-    <Compile Include="Datapoint\Base\Datapoint.cs" />
-    <Compile Include="Datapoint\Base\TextDatapoint.cs" />
+    <Compile Include="Datapoint\BinaryDatapoint.cs" />
     <Compile Include="XPlane\NavType.cs" />
     <Compile Include="XPlane\Frequency.cs" />
     <Compile Include="XPlane\NavMode.cs" />
@@ -90,7 +81,7 @@
     <Compile Include="Attributes\GraphAttribute.cs" />
     <Compile Include="Attributes\FormatAttribute.cs" />
     <Compile Include="Attributes\StorageAttribute.cs" />
-    <Compile Include="Datapoint\Csv\CsvParser.cs" />
+    <Compile Include="Datapoint\CsvParser.cs" />
     <Compile Include="Attributes\CsvRecordAttribute.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="IO\CsvConverter.cs" />

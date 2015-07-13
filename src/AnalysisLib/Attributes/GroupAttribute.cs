@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FDA
+namespace FDA.Attributes
 {
-    public class GroupAttribute : Attribute
+    /// <summary>
+    /// Indicates a group that the target property belongs to
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class GroupAttribute : Attribute
     {
-        public readonly string Group;
+        public string Group { get; private set; }
 
         public GroupAttribute(string name)
         {

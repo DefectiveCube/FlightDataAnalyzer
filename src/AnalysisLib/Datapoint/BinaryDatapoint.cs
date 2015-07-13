@@ -5,22 +5,24 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using FDA.Attributes;
 
 namespace FDA
 {
     /// <summary>
     /// Represents a datapoint using binary types to store information
     /// </summary>
-    public abstract class BinaryDatapoint : Datapoint<BinaryDatapoint>
+    public abstract class BinaryDatapoint
     {
-        public virtual void Load(byte[] data) { }
-
-        public abstract BinaryDatapoint Create();
-
+        /// <summary>
+        /// Generates a Func delegate that will values for T through a BinaryReader
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static Func<BinaryReader, T> GetReadAction<T>()
             where T : BinaryDatapoint, new()
         {
-            // TODO: improve readability
+            // TODO: improve readability! This is HUGE
 
             Expression readExpression = null;
             MethodInfo readMethod;
@@ -30,9 +32,10 @@ namespace FDA
             var instance = Expression.Variable(typeof(T));
             var reader = Expression.Parameter(typeof(BinaryReader));
 
+            // Create a list of expressions
             List<Expression> exps = new List<Expression>()
             {
-                Expression.Assign(instance, Expression.New(typeof(T)))
+                Expression.Assign(instance, Expression.New(typeof(T))) // instance = new T();
             };
 
             var propertyInfo = typeof(T).GetProperties()
@@ -44,18 +47,24 @@ namespace FDA
                 Format = s.GetCustomAttribute<FormatAttribute>()
             })
             .Where(s => s.Storage != null || s.Format != null)
-            .OrderBy(s => s.Storage.Index);
+            .OrderBy(s => s.Storage.Index)
+            .Select(s => s);
 
             foreach (var item in propertyInfo)
             {
-                paramType = item.Storage.Type ?? item.Type;
+                paramType = item.Storage.Type ?? item.Type; // Storage.Type will be null if Item.Type is a primitive (i.e. not a UnitsNet type)
 
+                // Find a suitable Read method
                 var methods = typeof(BinaryReader).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(m => m.ReturnType == paramType && m.GetParameters().Count() == 0 && m.Name != "Read" && m.Name.StartsWith("Read"));
+                    .Where(m => 
+                        m.ReturnType == paramType &&
+                        m.GetParameters().Count() == 0 &&
+                        m.Name != "Read" &&
+                        m.Name.StartsWith("Read"));
 
                 if (methods.Count() != 1)
                 {
-                    throw new Exception();
+                    throw new Exception(string.Format("No read method found for {0}", paramType.FullName));
                 }
 
                 readMethod = methods.First();
@@ -64,9 +73,11 @@ namespace FDA
 
                 if (item.Format != null && item.Format.IsDefinedUnit ^ item.Format.IsCustomized)
                 {
+                    // UnitsNet types have a From method for conversions
                     var method = item.Type.GetMethod("From");
                     var unitType = method.GetParameters().Last().ParameterType;
 
+                    //
                     var readPrimitive = Expression.Convert(Expression.Call(reader, readMethod), typeof(double));
 
                     Expression unitValue = null;
@@ -89,19 +100,15 @@ namespace FDA
 
                     readExpression = Expression.Call(method, readPrimitive, unitValue);
                 }
-                else if (item.Type != typeof(DateTime))
-                {
-                    readExpression = Expression.Call(reader, readMethod);
-                }
                 else if (item.Type == typeof(DateTime))
                 {
-                    var readValue = Expression.Call(reader, readMethod);
+                    var readValue = Expression.Call(reader, readMethod);                
 
                     readExpression = Expression.Call(typeof(DateTime).GetMethod("FromBinary"), readValue);
                 }
-                else
+                else if (item.Type != typeof(DateTime))
                 {
-                    throw new Exception("Unknown Type");
+                    readExpression = Expression.Call(reader, readMethod);
                 }
 
                 if (readExpression != null)
@@ -112,11 +119,13 @@ namespace FDA
                 }
             }
 
+            // Last expression in the block is the return value
             exps.Add(instance);
 
             var block = Expression.Block(new[] { instance }, exps.ToArray());
-            var lambda = Expression.Lambda<Func<BinaryReader, T>>(block, reader);
 
+            var lambda = Expression.Lambda<Func<BinaryReader, T>>(block, reader);
+            
             return lambda.Compile();
         }
 

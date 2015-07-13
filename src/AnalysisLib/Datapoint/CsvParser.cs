@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-
+using FDA.Attributes;
 using UnitsNet;
 using UnitsNet.Units;
 
@@ -74,6 +74,7 @@ namespace FDA
             return Expression.Call(typeof(T).GetMethod("From"), exp, Expression.Constant(unit, typeof(U)));
         }
 
+        // TODO: create a return type, as Anon-Types cannot be returned and used
         private static dynamic GetPropertyInfo<T>()
             where T: BinaryDatapoint, new()
         {
@@ -164,7 +165,7 @@ namespace FDA
                     if (info.Format.IsDefinedUnit)
                     {
                         // Is supported unit
-                        methodCall = CallFrom(CallConvert(arrayIndex), info.Type, info.Format.value);
+                        methodCall = CallFrom(CallConvert(arrayIndex), info.Type, info.Format.Unit);
 
                         if (methodCall == null)
                         {

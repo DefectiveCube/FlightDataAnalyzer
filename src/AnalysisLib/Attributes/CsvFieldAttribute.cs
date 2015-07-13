@@ -1,26 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FDA
+namespace FDA.Attributes
 {
+    /// <summary>
+    /// Indicates a relationship between property and one-or-many CSV fields
+    /// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class CsvFieldAttribute : Attribute
+    public sealed class CsvFieldAttribute : Attribute
     {
-        public readonly int Index;
-        public readonly Type Type;
+        /// <summary>
+        /// The index of the CSV field
+        /// </summary>
+        public int Index { get; private set; }
 
-		public CsvFieldAttribute(){
+        /// <summary>
+        /// The type for the CSV field
+        /// </summary>
+        public Type Type { get; private set; }
 
-
-		}
         public CsvFieldAttribute(int index)
         {
             Index = index;
         }
 
+        // This constructor is REQUIRED when two fields are mapped to the same property
         public CsvFieldAttribute(int index, Type type) : this(index)
         {
             Type = type;

@@ -2,25 +2,25 @@
 using System.Globalization;
 using UnitsNet;
 using UnitsNet.Units;
-using FDA;
+//using FDA;
+using FDA.Attributes;
 
 [assembly: Datapoint(typeof(Prototype.EngineDatapoint))]
 
 namespace Prototype
 {
+    /// <summary>
+    /// Prototype Datapoint for Engine System
+    /// </summary>  
+   
     [CsvRecord(FIELDS_COUNT)]
-    public sealed class EngineDatapoint : BinaryDatapoint
+    public sealed class EngineDatapoint : Datapoint
     {
-        public const int BYTES_COUNT = 122;
+        public const int BYTES_COUNT = 122; // is this usable anymore?
         public const int FIELDS_COUNT = 33;
 
-        public override BinaryDatapoint Create()
-        {
-            throw new NotImplementedException();
-        }
-
         [CsvField(3)]
-        [Format(TemperatureUnit.DegreeFahrenheit, "", "###")]
+        [Format(TemperatureUnit.DegreeFahrenheit)]
         [Storage(24, typeof(short))]
         [Graph(GraphData.Continuous)]
         [Group("Oil")]

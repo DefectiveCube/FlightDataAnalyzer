@@ -43,8 +43,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Datapoint.cs" />
     <Compile Include="EngineDatapoint.cs" />
-    <Compile Include="FlightCsvDatapoint.cs" />
     <Compile Include="FlightDatapoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemDatapoint.cs" />

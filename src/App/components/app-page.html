@@ -1,7 +1,4 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<!--
-<link rel="import" href="../bower_components/">
--->
 <link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
@@ -111,11 +108,30 @@
       is: "app-page",
       ready: function () {
         this.Window = require('nw.gui').Window.get();
+        
+        var edge = require('edge');
+        var start = edge.func({
+          source: function () {/*
+            async (input) => {
+              return Environment.CurrentDirectory;
+            }
+          */}
+        });
+        
+
+        start("", function (error, result) {
+            if (error) throw error;
+            console.log(result);
+        });      
+        
+        //var units = edge.func('UnitsNet.dll');
       },
       reload: function () {
         this.Window.reload();
       },
       close: function () {
+        // Dispose objects
+        
         this.Window.close();
       },
       toggleFullscreen: function () {

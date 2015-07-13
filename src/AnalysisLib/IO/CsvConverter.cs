@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis; // SuppressMessageAttribute
 using System.IO;
 using System.IO.Compression;
 using System.Linq; // OrderBy
 using System.Reflection; // GetCustomAttribute<T>
 using System.Threading; // Thread, Barrier, CancellationToken
 using System.Threading.Tasks; // Task, TaskCreationOptions, TaskScheduler
+using FDA.Attributes;
 using FDA.IO; // Hash
 
 namespace FDA
@@ -102,6 +104,7 @@ namespace FDA
         /// Writes objects to a compressed filestream
         /// </summary>
         /// <param name="path">path of output</param>
+        [SuppressMessage("Microsoft.Usage","CA2202:Do not dispose objects multiple times")]
         private static void ConsumerThread(object path)
         {
             var ms = new MemoryStream();
@@ -121,8 +124,10 @@ namespace FDA
             // DateTime is not guaranteed to be unique
             // TimeStamp is unique by value, but values eventually cycle. Thus the order cannot be trusted
             var ordered = from dp in outputQueue
-                          orderby dp.DateTime, dp.Timestamp
+                          //orderby /*dp.DateTime,*/ dp.Timestamp
                           select dp;
+
+            // TODO: inheritance hierarchy was changed. Ordering is broken and needs to be fixed
 
             // TODO: Keep track of an index to improve lookup speeds.
 

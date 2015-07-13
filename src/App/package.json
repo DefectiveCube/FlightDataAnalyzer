@@ -8,15 +8,14 @@
   },
   "author": "",
   "license": "ISC",
-
-
-
   "window": {
     "title": "Flight Data Analyzer",
     "toolbar": false,
     "frame": true,
     "width": 1024,
     "height": 768
-
+  },
+  "dependencies": {
+    "edge": "^0.10.1"
   }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace FDA
 {
+    [Obsolete]
     public sealed class FileProcessor<T> where T : BinaryDatapoint
     {
         public readonly string prefix;

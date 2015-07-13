@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FDA
 {
-    public class QueryBuilder
+    public sealed class QueryBuilder
     {
         private static readonly Dictionary<string, QueryOperations> ops;
         private static Dictionary<string, Expression<Func<double, double>>> expressions = new Dictionary<string, Expression<Func<double, double>>>();
@@ -18,9 +18,12 @@ namespace FDA
         {
             ops = QueryOperator.Operations;
 
-            if (ops == null || ops.Count == 0) {
-                throw new Exception("No Operations Loaded");
-            }
+            // CA1065: Do not raise exceptions in unexpected locations
+            // ref: https://msdn.microsoft.com/en-us/library/bb386039.aspx
+
+            /*if (ops == null || ops.Count == 0) {
+                throw new ArgumentException("No Operations Loaded");
+            }*/
         }
 
         private static IEnumerable<ParameterExpression> BuildParameters(params Type[] parameters)

@@ -1,30 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnitsNet;
 using UnitsNet.Units;
 
-namespace FDA
+namespace FDA.Attributes
 {
-    public class StorageAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class StorageAttribute : Attribute
     {
-        public readonly int Index;
-        public readonly Type Type;
+        /// <summary>
+        /// The index in the order in which the target property is written
+        /// </summary>
+        public int Index { get; private set; }
 
+        /// <summary>
+        /// The type that the target property is serialized as
+        /// </summary>
+        public Type Type { get; private set; }
+
+        /// <summary>
+        /// Defines cardinality for persisting a property. Type is defined elsewhere
+        /// </summary>
+        /// <param name="index">Cardinality value</param>
         public StorageAttribute(int index)
         {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException("index");
+            }
+
             Index = index;
         }
 
+        /// <summary>
+        /// Defines cardinality for persisting a property
+        /// </summary>
+        /// <param name="index">Cardinality value</param>
+        /// <param name="type">Type to use for serialization</param>
         public StorageAttribute(int index, Type type) : this(index)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            if (!IsValidType(type))
+            {
+                throw new Exception("type");
+            }
+
             Type = type;
         }
 
+        // NOTE: Is this complete?
         public static bool IsValidType(Type type)
         {
+            Console.WriteLine(type.IsPrimitive);
+
             switch (type.Name)
             {
                 case "Byte":
