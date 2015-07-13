@@ -6,7 +6,7 @@ using FDA;
 namespace Test
 {
     [TestClass]
-    public class CsvConversion
+    public class CsvConversionTests
     {
         [TestMethod]
         public void RunsToCompletion()

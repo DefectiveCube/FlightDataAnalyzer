@@ -36,6 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="UnitsNet, Version=3.14.0.314, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UnitsNet.3.14.0\lib\net35\UnitsNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,8 +54,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CsvConversion.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="CsvConversionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryBuilderTests.cs" />
+    <Compile Include="FormatAttributeTests.cs" />
+    <Compile Include="StorageAttributeTests.cs" />
     <Compile Include="XmlModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +75,9 @@
       <Project>{887be285-c7f3-4a5a-bc51-4a42727c98d4}</Project>
       <Name>XPlaneWPF</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
