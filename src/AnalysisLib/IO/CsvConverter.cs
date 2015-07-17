@@ -10,6 +10,7 @@ using System.Threading; // Thread, Barrier, CancellationToken
 using System.Threading.Tasks; // Task, TaskCreationOptions, TaskScheduler
 using FDA.Attributes;
 using FDA.IO; // Hash
+using FDA.Extensions;
 
 namespace FDA
 {

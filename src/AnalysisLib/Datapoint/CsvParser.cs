@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using FDA.Attributes;
+using FDA.Extensions;
 using UnitsNet;
 using UnitsNet.Units;
 
@@ -16,7 +17,7 @@ namespace FDA
     public class CsvParser
     {
         private static MethodInfo ConversionMethod = 
-            typeof(Extensions)
+            typeof(UnitsExtensions)
                 .GetMethods (BindingFlags.Public | BindingFlags.Static)
 			    .Where (m => m.Name.Equals ("As") && m.GetGenericArguments ().Length == 0)
                 .First ();

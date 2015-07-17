@@ -49,7 +49,7 @@
     <Compile Include="Attributes\DatapointAttribute.cs" />
     <Compile Include="Attributes\GroupAttribute.cs" />
     <Compile Include="Attributes\ModelAttribute.cs" />
-    <Compile Include="Attributes\XmlRecordAttribute.cs" />
+    <Compile Include="Extensions\ExceptionHandlingExtensions.cs" />
     <Compile Include="Extensions\Units.cs">
       <SubType>Code</SubType>
     </Compile>

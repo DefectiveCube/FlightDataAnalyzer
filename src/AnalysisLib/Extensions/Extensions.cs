@@ -8,9 +8,9 @@ using System.Text;
 using UnitsNet;
 using UnitsNet.Units;
 
-namespace FDA
+namespace FDA.Extensions
 {
-	public static class Extensions
+	public static class UnitsExtensions
 	{
         public static string DefaultUnit()
         {

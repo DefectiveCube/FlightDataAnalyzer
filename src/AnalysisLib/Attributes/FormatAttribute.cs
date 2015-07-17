@@ -60,12 +60,22 @@ namespace FDA.Attributes
         /// <param name="unitValue">Value for the enum</param>
         private FormatAttribute(Type unitEnumType, string conversion, int unitValue)
         {
+            if (!unitEnumType.IsEnum)
+            {
+                throw new ArgumentOutOfRangeException("unitEnumType");
+            }
+
             Conversion = conversion;
             UnitEnumType = unitEnumType;
             Unit = unitValue;
 
             IsDefinedUnit = Unit != 0;
             IsCustomized = !string.IsNullOrEmpty(conversion);
+        }
+
+        public static FormatAttribute Create<T>(int unit)
+        {
+            return new FormatAttribute(typeof(T), "", unit);            
         }
 
         /// <summary>
@@ -81,6 +91,8 @@ namespace FDA.Attributes
             : this(typeof(AccelerationUnit), conversion, (int)unit)
         {
             UnitName = unit.ToString();
+
+            //Create<AccelerationUnit>((int)unit);
         }
 
         public FormatAttribute(AngleUnit unit, string conversion = "", string format = "")

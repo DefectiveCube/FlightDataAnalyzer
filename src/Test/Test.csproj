@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="UnitsNet, Version=3.14.0.314, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UnitsNet.3.14.0\lib\net35\UnitsNet.dll</HintPath>
@@ -60,6 +61,7 @@
     <Compile Include="QueryBuilderTests.cs" />
     <Compile Include="FormatAttributeTests.cs" />
     <Compile Include="StorageAttributeTests.cs" />
+    <Compile Include="ExtensionTests.cs" />
     <Compile Include="XmlModel.cs" />
   </ItemGroup>
   <ItemGroup>
